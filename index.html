@@ -1102,6 +1102,43 @@ kbd {
     background: var(--panel-2);
 }
 
+/* 设置页：规则 / 外观 / 音效 三段标签 */
+.set-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 16px 0 0;
+}
+
+.set-tab {
+    flex: 1 1 0;
+    min-height: 38px;
+    padding: 8px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--dim);
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: .14em;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background-color .15s;
+}
+
+.set-tab:hover,
+.set-tab.is-on {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 255, 255, .05);
+}
+
+.set-pane {
+    display: none;
+}
+
+.set-pane.is-on {
+    display: block;
+}
+
 /* ---------- sub screens ---------- */
 .sub {
     max-width: 940px;
@@ -2231,10 +2268,9 @@ kbd {
     left: 0;
     top: 0;
     border-radius: 50%;
-    will-change: transform;
+    will-change: transform, background;
     pointer-events: none;
     background: var(--target);
-    transition: background .2s linear;
 }
 
 /* HUD strip that only exists while the survival ruleset runs */
@@ -3045,6 +3081,8 @@ html[lang="zh-CN"] .brand-sub {
 }
 
 .bs-col-head {
+    position: relative;
+    z-index: 6;
     display: flex;
     align-items: baseline;
     gap: 8px;
@@ -3158,6 +3196,15 @@ html[lang="zh-CN"] .brand-sub {
     color: var(--dim);
 }
 
+.bs-feel.is-first {
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 14px;
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 14px;
+}
+
 .bf-switch {
     cursor: pointer;
     user-select: none;
@@ -3254,6 +3301,146 @@ html[lang="zh-CN"] .brand-sub {
     background: rgba(0, 255, 255, .05);
 }
 
+/* 灵敏度 / 平滑：五档点选 */
+.bf-pick-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bf-pick-lab {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    color: var(--ink);
+}
+
+.bf-pick-lab em {
+    margin-left: auto;
+    font-style: normal;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    color: var(--accent);
+}
+
+.bf-picks {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.bf-pick {
+    min-height: 30px;
+    padding: 5px 4px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background-color .15s, box-shadow .15s;
+}
+
+.bf-pick:hover,
+.bf-pick.is-on {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 255, 255, .05);
+    box-shadow: 0 0 12px rgba(0, 255, 255, .08);
+}
+
+/* 标题旁的感叹号 + 悬浮说明 */
+.bf-help {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    margin-left: 2px;
+    padding: 0;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--dim);
+    font: 600 9px/1 var(--mono, monospace);
+    letter-spacing: 0;
+    cursor: help;
+    transition: border-color .15s, color .15s, box-shadow .15s;
+}
+
+.bf-help:hover,
+.bf-help[aria-expanded="true"] {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 255, .18);
+}
+
+.bf-tip {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 9px);
+    box-sizing: border-box;
+    width: min(352px, calc(100vw - 56px));
+    z-index: 8;
+    padding: 12px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: #0a0c0d;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .6), inset 0 0 0 1px rgba(0, 255, 255, .05);
+    font-size: 11px;
+    line-height: 1.75;
+    letter-spacing: .02em;
+    color: var(--dim);
+    text-transform: none;
+    backdrop-filter: blur(6px);
+    pointer-events: none;
+}
+
+.bf-help:hover ~ .bf-tip,
+.bf-tip.is-open {
+    display: block;
+}
+
+/* 手机上不浮层遮挡控件，改成标题下方的内联说明 */
+@media (max-width: 700px) {
+    .bf-tip {
+        position: static;
+        width: 100%;
+        margin-top: 10px;
+        flex: 1 1 100%;
+        box-shadow: none;
+        background: rgba(255, 255, 255, .02);
+    }
+}
+
+.bf-tip p {
+    margin: 0 0 7px;
+}
+
+.bf-tip p:last-child {
+    margin-bottom: 0;
+}
+
+.bf-tip b {
+    margin-right: 6px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: .1em;
+}
+
+.bf-tip-foot {
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+}
+
 .bs-feel .bf-line {
     display: flex;
     flex-direction: column;
@@ -3315,6 +3502,7 @@ html[lang="zh-CN"] .brand-sub {
 }
 
 .bs-feel.is-muted .bf-chips,
+.bs-feel.is-muted .bf-picks,
 .bs-feel.is-muted .bf-line {
     opacity: .35;
     pointer-events: none;
@@ -3358,7 +3546,7 @@ html[lang="zh-CN"] .brand-sub {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: #c89600;
+    background: #3cdc78;
 }
 
 .bf-hp {
@@ -3666,6 +3854,47 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     pointer-events: none;
 }
 
+/* 倒计时圆环：每一秒从满圈走空，数字越大越快 */
+.st-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    transform: rotate(-90deg);
+    overflow: visible;
+    pointer-events: none;
+    filter: drop-shadow(0 0 14px rgba(216, 255, 90, .22));
+}
+
+.st-ring-track {
+    stroke: rgba(255, 255, 255, .10);
+}
+
+.st-ring-arc {
+    stroke: var(--cdc, #d8ff5a);
+    transition: stroke .18s linear;
+}
+
+.st-cd-num {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    font-style: normal;
+    color: var(--cdc, #d8ff5a);
+    text-shadow: 0 0 34px currentColor;
+}
+
+.st-cd-num.is-tick {
+    animation: st-cd-pop .38s ease-out;
+}
+
+@keyframes st-cd-pop {
+    0% { transform: scale(1.16); opacity: .62; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 .st-tip {
     display: none;
     margin: 6px 12px 0;
@@ -3798,19 +4027,19 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             </div>
 
                             <nav class="menu" id="menu" aria-label="主菜单">
-                                <button class="mi mi-primary" data-act="play" type="button">
-                                    <span class="mi-idx">01</span>
-                                    <span class="mi-label">开始</span>
-                                    <span class="mi-hint">R / 空格</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
                                 <button class="mi mi-feature" data-act="ballsheet" type="button">
-                                    <span class="mi-idx">02</span>
+                                    <span class="mi-idx">01</span>
                                     <span class="mi-title">
                                         <span class="mi-label">BallSheet</span>
                                         <span class="mi-tag">BIGBALL 版本</span>
                                     </span>
                                     <span class="mi-hint">生存 · 血量 + 每秒得分</span>
+                                    <span class="mi-go">▶</span>
+                                </button>
+                                <button class="mi" data-act="play" type="button">
+                                    <span class="mi-idx">02</span>
+                                    <span class="mi-label">速通</span>
+                                    <span class="mi-hint" id="menu-play-hint">100 球 · 球径 10%</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="schulte" type="button">
@@ -3819,38 +4048,26 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <span class="mi-hint">方格 · 顺序找数</span>
                                     <span class="mi-go">▶</span>
                                 </button>
-                                <button class="mi" data-act="mode" type="button">
-                                    <span class="mi-idx">04</span>
-                                    <span class="mi-label">模式</span>
-                                    <span class="mi-hint">规则 · 难度</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
                                 <button class="mi" data-act="stats" type="button">
-                                    <span class="mi-idx">05</span>
+                                    <span class="mi-idx">04</span>
                                     <span class="mi-label">数据</span>
                                     <span class="mi-hint">历史 · 节奏</span>
                                     <span class="mi-go">▶</span>
                                 </button>
-                                <button class="mi" data-act="look" type="button">
-                                    <span class="mi-idx">06</span>
-                                    <span class="mi-label">外观</span>
-                                    <span class="mi-hint">配色</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                <button class="mi" data-act="sfx" type="button">
-                                    <span class="mi-idx">07</span>
-                                    <span class="mi-label">音效</span>
-                                    <span class="mi-hint">导入 · 映射</span>
+                                <button class="mi" data-act="settings" type="button">
+                                    <span class="mi-idx">05</span>
+                                    <span class="mi-label">设置</span>
+                                    <span class="mi-hint">规则 · 外观 · 音效</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="help" type="button">
-                                    <span class="mi-idx">08</span>
+                                    <span class="mi-idx">06</span>
                                     <span class="mi-label">玩法</span>
                                     <span class="mi-hint">按键</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="about" type="button">
-                                    <span class="mi-idx">09</span>
+                                    <span class="mi-idx">07</span>
                                     <span class="mi-label">关于</span>
                                     <span class="mi-hint">版本 · 致谢</span>
                                     <span class="mi-go">▶</span>
@@ -3889,15 +4106,20 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                     </div>
                 </section>
 
-                <!-- ---------- mode ---------- -->
-                <section class="screen" data-screen="mode">
+                <!-- ---------- settings (rules / look / sfx) ---------- -->
+                <section class="screen" data-screen="settings">
                     <div class="sub">
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
-                            <h2>模式<span class="sub-note">规则与难度</span></h2>
+                            <h2>设置<span class="sub-note">规则 · 外观 · 音效</span></h2>
                             <div class="sub-meta" id="mode-meta">—</div>
                         </div>
-                        <div class="panel">
+                        <div class="set-tabs" id="set-tabs" aria-label="设置分类">
+                            <button class="set-tab is-on" data-tab="mode" type="button">规则</button>
+                            <button class="set-tab" data-tab="look" type="button">外观</button>
+                            <button class="set-tab" data-tab="sfx" type="button">音效</button>
+                        </div>
+                        <div class="panel set-pane is-on" data-pane="mode">
                             <div class="slot" id="slot-mode"></div>
                             <div class="bs-rules" id="bs-rules">
                                 <div class="bs-head">
@@ -3946,6 +4168,8 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <div class="st-chips" id="st-sizes"></div>
                                     <p class="st-cap">TYPE</p>
                                     <div class="st-types" id="st-types"></div>
+                                    <p class="st-cap">COUNTDOWN</p>
+                                    <div class="st-chips" id="st-cds"></div>
                                     <p class="st-summary" id="st-summary">Light · 5 × 5</p>
                                 </div>
                                 <p class="bs-foot">方格恒为 <b>425 px</b>，所有规则共用同一块场地。从 <b>Light</b> 开始：按顺序点，
@@ -3961,24 +4185,43 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <span>命中半径 = 球半径</span>
                                 </div>
                             </div>
+                            <p class="sub-foot">接球数决定一局长度；球径是 600 像素场地的百分比，同时就是命中半径。
+                                参数存在本地，下一局生效。</p>
                         </div>
-                        <div class="sub-foot">接球数决定一局长度；球径是 600 像素场地的百分比，同时就是命中半径。
-                            参数存在本地，下一局生效。</div>
-                    </div>
-                </section>
 
-                <!-- ---------- appearance ---------- -->
-                <section class="screen" data-screen="look">
-                    <div class="sub">
-                        <div class="sub-head">
-                            <button class="back" data-back type="button">← 菜单</button>
-                            <h2>外观<span class="sub-note">颜色覆盖</span></h2>
-                            <div class="sub-meta">实时</div>
-                        </div>
-                        <div class="panel">
+                        <div class="panel set-pane" data-pane="look">
                             <div class="slot" id="slot-look"></div>
+                            <p class="bs-col-note">配色按浏览器保存。菜单沿用同一套色板——背景、强调色、目标球色都与场地保持同步。</p>
                         </div>
-                        <div class="sub-foot">配色按浏览器保存。菜单沿用同一套色板——背景、强调色、目标球色都与场地保持同步。</div>
+
+                        <div class="panel set-pane" data-pane="sfx">
+                            <div class="sfx-slots" id="sfx-slots">
+                                <button class="sfx-slot is-on" data-slot="hit" type="button">
+                                    <b>接球</b><span id="sfx-hit-name">内置 boop</span>
+                                </button>
+                                <button class="sfx-slot" data-slot="hover" type="button">
+                                    <b>悬停</b><span id="sfx-hover-name">合成音</span>
+                                </button>
+                                <button class="sfx-slot" data-slot="click" type="button">
+                                    <b>点击</b><span id="sfx-click-name">合成音</span>
+                                </button>
+                            </div>
+                            <p class="sfx-tip">先点上面的槽位选中它，再点下面任意一条音效，单击即替换并马上试听。悬停音会在鼠标划过按钮、菜单项时播放。</p>
+
+                            <div class="sfx-actions">
+                                <label class="btn sfx-file" for="sfx-files">导入音频文件</label>
+                                <input id="sfx-files" type="file" accept="audio/*,.mp3,.ogg,.oga,.wav,.m4a,.aac,.flac,.opus" multiple hidden>
+                                <label class="btn sfx-file" for="sfx-dir">索引一个文件夹</label>
+                                <input id="sfx-dir" type="file" webkitdirectory directory multiple hidden>
+                                <button class="btn ghost" id="sfx-reset" type="button">全部恢复内置</button>
+                                <button class="btn ghost" id="sfx-clear" type="button">清空导入</button>
+                            </div>
+
+                            <div class="sfx-status" id="sfx-status"></div>
+
+                            <div class="sfx-list" id="sfx-list"></div>
+                            <p class="sfx-foot" id="sfx-foot">支持 MP3 / OGG / WAV / M4A / FLAC；单个 ≤ 1.6 MB，合计 ≤ 3.2 MB，最多 24 条。音效以 data URI 存在本机 localStorage，换浏览器或换电脑不会跟着走。</p>
+                        </div>
                     </div>
                 </section>
 
@@ -4044,7 +4287,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 </section>
                                 <section>
                                     <h3>第二套规则 · BallSheet</h3>
-                                    <p>菜单第 02 项是原始 ballsheet 的规则，跑在同一块 600 像素场地上：血量从 100 起，
+                                    <p>菜单第 01 项是原始 ballsheet 的规则，跑在同一块 600 像素场地上：血量从 100 起，
                                        从第一次碰到球开始按 <strong>压力 · ln(1 + t)</strong> 持续扣减——首次触碰只启动计时。
                                        之后每次吃球回分，反应低于快球阈值时只按 <strong>r / 阈值</strong> 结算，
                                        <strong>每秒得分</strong>是最近五秒内吃到的分数除以五。血量跌破零，本局结束。</p>
@@ -4055,45 +4298,6 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                        成绩按分类存放（球数 × 球径），换模式就是另一份记录。</p>
                                 </section>
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- ---------- sound effects ---------- -->
-                <section class="screen" data-screen="sfx">
-                    <div class="sub">
-                        <div class="sub-head">
-                            <button class="back" data-back type="button">← 菜单</button>
-                            <h2>音效<span class="sub-note">导入 · 映射</span></h2>
-                            <div class="sub-meta" id="sfx-size">内置</div>
-                        </div>
-                        <div class="panel">
-                            <div class="sfx-slots" id="sfx-slots">
-                                <button class="sfx-slot is-on" data-slot="hit" type="button">
-                                    <b>接球</b><span id="sfx-hit-name">内置 boop</span>
-                                </button>
-                                <button class="sfx-slot" data-slot="hover" type="button">
-                                    <b>悬停</b><span id="sfx-hover-name">合成音</span>
-                                </button>
-                                <button class="sfx-slot" data-slot="click" type="button">
-                                    <b>点击</b><span id="sfx-click-name">合成音</span>
-                                </button>
-                            </div>
-                            <p class="sfx-tip">先点上面的槽位选中它，再点下面任意一条音效，单击即替换并马上试听。悬停音会在鼠标划过按钮、菜单项时播放。</p>
-
-                            <div class="sfx-actions">
-                                <label class="btn sfx-file" for="sfx-files">导入音频文件</label>
-                                <input id="sfx-files" type="file" accept="audio/*,.mp3,.ogg,.oga,.wav,.m4a,.aac,.flac,.opus" multiple hidden>
-                                <label class="btn sfx-file" for="sfx-dir">索引一个文件夹</label>
-                                <input id="sfx-dir" type="file" webkitdirectory directory multiple hidden>
-                                <button class="btn ghost" id="sfx-reset" type="button">全部恢复内置</button>
-                                <button class="btn ghost" id="sfx-clear" type="button">清空导入</button>
-                            </div>
-
-                            <div class="sfx-status" id="sfx-status"></div>
-
-                            <div class="sfx-list" id="sfx-list"></div>
-                            <p class="sfx-foot" id="sfx-foot">支持 MP3 / OGG / WAV / M4A / FLAC；单个 ≤ 1.6 MB，合计 ≤ 3.2 MB，最多 24 条。音效以 data URI 存在本机 localStorage，换浏览器或换电脑不会跟着走。</p>
                         </div>
                     </div>
                 </section>
@@ -4160,7 +4364,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             <div class="pause-list">
                 <button class="btn primary" id="pause-resume" type="button">继续 <span class="k">ESC</span></button>
                 <button class="btn" id="pause-restart" type="button">重开 <span class="k">R</span></button>
-                <button class="btn" id="pause-mode" type="button">模式设置</button>
+                <button class="btn" id="pause-mode" type="button">设置</button>
                 <button class="btn ghost" id="pause-quit" type="button">退出到菜单</button>
             </div>
         </div>
@@ -4170,7 +4374,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         <div class="ov-card res">
             <div class="res-head">
                 <span class="res-tag" id="res-tag">本局完成</span>
-                <span class="res-mode" id="res-mode">—</span>
+                <span class="res-mode" id="res-mode-chip">—</span>
             </div>
             <div class="res-time">
                 <span class="big" id="res-time">0.00</span>
@@ -4181,7 +4385,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             <div class="res-chart"><canvas id="res-chart"></canvas></div>
             <div class="res-actions">
                 <button class="btn primary" id="res-retry" type="button">再来一局 <span class="k">R</span></button>
-                <button class="btn" id="res-mode" type="button">切换模式</button>
+                <button class="btn" id="res-mode" type="button">去设置</button>
                 <button class="btn" id="res-home" type="button">主菜单</button>
             </div>
         </div>
@@ -4196,7 +4400,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     <script>// Create a Mersenne Twister engine and auto-seed it
 var eng = Random.MersenneTwister19937.autoSeed();
 var myrandom = new Random.Random(eng);</script>
-    <script>const VERSION = "v0.5.3 (beta)";
+    <script>const VERSION = "v0.6.0 (beta)";
 </script>
     <script>const TITLE = `antiBallsheet game by dph, ${VERSION}`;
 const FIELD_SIZE_PX = 600;
@@ -5087,13 +5291,15 @@ const game = new AntiBallsheetGame(
     var LS_COLORS = 'bsBallColors';
     var COLOR_DEFAULT = {
         mode: 'hp',
-        base: '#c89600',     /* 200,150,0  */
-        gain: '#3cdc78',     /* score → green */
-        lose: '#e03b3b',     /* drain → red */
+        base: '#3cdc78',     /* 满血：绿 */
+        gain: '#a8ff76',     /* 得分：亮绿脉冲 */
+        lose: '#e03b3b',     /* 濒死：红（中间自然经过黄） */
         fixed: '#fa96c8',    /* 250,150,200 */
         edgeHi: '#3cdc78',   /* border at full hp */
         edgeLo: '#e03b3b'    /* border at 0 hp */
     };
+    /* 旧默认值迁移：源站的开局琥珀色 / 旧脉冲绿 */
+    var COLOR_LEGACY = { base: '#c89600', gain: '#3cdc78' };
 
     function readColorCfg() {
         var out = {}, k, raw, parsed;
@@ -5111,6 +5317,8 @@ const game = new AntiBallsheetGame(
                     out[k] = parsed[k];
                 }
             }
+            if (out.base === COLOR_LEGACY.base) { out.base = COLOR_DEFAULT.base; }
+            if (out.gain === COLOR_LEGACY.gain) { out.gain = COLOR_DEFAULT.gain; }
         }
         return out;
     }
@@ -5143,7 +5351,7 @@ const game = new AntiBallsheetGame(
         on: 1,
         curve: 'linear',
         gain: 1,
-        smooth: 0.12,
+        smooth: 0.15,
         split: 0,
         drain: 0.35,
         gainT: 0.06,
@@ -5234,17 +5442,62 @@ const game = new AntiBallsheetGame(
         return cur + (target - cur) * (1 - Math.exp(-dt / tau));
     }
     function mixFor(C, t, pulse) {
-        /* field mode: border goes red as t grows; hp mode: ball base → lose */
+        /* field mode: border goes red as t grows; hp mode: 满血绿 → 黄 → 濒死红 */
         if (C.mode === 'field') {
             return {
                 ball: rgbCss(C.fixed),
-                edge: rgbCss(mixRgb(C.edgeLo, C.edgeHi, clamp(1 - t, 0, 1)))
+                edge: rgbCss(mixRgb(C.edgeLo, C.edgeHi, clamp(1 - t, 0, 1))),
+                glow: 0
             };
         }
         var p = (typeof pulse === 'number') ? pulse : S.greenPulse;
-        var rgb = mixRgb(C.base, C.lose, clamp(t, 0, 1));
-        rgb = mixRgb(rgb, C.gain, clamp(p, 0, 1) * 0.8);
-        return { ball: rgbCss(rgb), edge: rgbCss(C.lose) };
+        /* hue-space walk: green → yellow → red, never a muddy grey midpoint */
+        var rgb = mixHue(C.base, C.lose, clamp(t, 0, 1));
+        rgb = mixRgb(rgb, C.gain, clamp(p, 0, 1) * 0.34);
+        return { ball: rgbCss(rgb), edge: rgbCss(C.lose), glow: clamp(p, 0, 1) };
+    }
+
+    /* ---------- hue interpolation ---------- */
+    function rgbToHsl(c) {
+        var r = c[0] / 255, g = c[1] / 255, b = c[2] / 255;
+        var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+        var l = (mx + mn) / 2, h = 0, s = 0, d = mx - mn;
+        if (d > 0.0001) {
+            s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+            if (mx === r) { h = ((g - b) / d + (g < b ? 6 : 0)) * 60; }
+            else if (mx === g) { h = ((b - r) / d + 2) * 60; }
+            else { h = ((r - g) / d + 4) * 60; }
+        }
+        return { h: h, s: s, l: l };
+    }
+    function hslToRgb(h, s, l) {
+        h = ((h % 360) + 360) % 360;
+        function hue2rgb(p, q, t) {
+            if (t < 0) { t += 1; }
+            if (t > 1) { t -= 1; }
+            if (t < 1 / 6) { return p + (q - p) * 6 * t; }
+            if (t < 1 / 2) { return q; }
+            if (t < 2 / 3) { return p + (q - p) * (2 / 3 - t) * 6; }
+            return p;
+        }
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p2 = 2 * l - q;
+        return [
+            hue2rgb(p2, q, h / 360 + 1 / 3) * 255,
+            hue2rgb(p2, q, h / 360) * 255,
+            hue2rgb(p2, q, h / 360 - 1 / 3) * 255
+        ];
+    }
+    function mixHue(a, b, k) {
+        var ha = rgbToHsl(a), hb = rgbToHsl(b);
+        /* 两端只要有一端接近灰（无彩），就老实用 RGB 直线插值 */
+        if (ha.s < 0.06 || hb.s < 0.06) { return mixRgb(a, b, k); }
+        var d = hb.h - ha.h;
+        if (d > 180) { d -= 360; } else if (d < -180) { d += 360; }
+        var h = ha.h + d * k;
+        var s = ha.s + (hb.s - ha.s) * k;
+        var l = ha.l + (hb.l - ha.l) * k;
+        return hslToRgb(h, s, l);
     }
 
     function hexToRgbArr(h, fallback) {
@@ -5383,7 +5636,9 @@ const game = new AntiBallsheetGame(
             el.container.style.borderColor = (C.mode === 'field') ? out.edge : '';
         }
         el.ball.style.background = out.ball;
-        el.ball.style.boxShadow = 'none';
+        el.ball.style.boxShadow = out.glow > 0.02
+            ? '0 0 ' + (8 + out.glow * 20).toFixed(0) + 'px rgba(150,255,160,' + (0.3 * out.glow).toFixed(2) + ')'
+            : 'none';
     }
 
     /* a fresh run (start or R restart) always puts the ball dead centre,
@@ -5558,6 +5813,10 @@ const game = new AntiBallsheetGame(
         S.active = false;
         S.paused = false;
         if (S.raf) { cancelAnimationFrame(S.raf); S.raf = 0; }
+        /* 死亡瞬间直接落到纯红，别停在平滑 / CSS 过渡的半截颜色上 */
+        S.mixT = 1;
+        S.greenPulse = 0;
+        paintBall(0);
         showStage(false);
         if (el.container) { el.container.style.borderColor = ''; }
         var cb = S.onFinish;
@@ -5747,7 +6006,8 @@ const game = new AntiBallsheetGame(
         { k: 'gorbow', n: 'Gorbow', d: '黑色升序、红色降序，两组交替点' }
     ];
 
-    var DEFAULTS = { size: 5, type: 'light' };
+    var DEFAULTS = { size: 5, type: 'light', count: 3 };
+    var COUNTS = [0, 2, 3, 5];
     var PALETTE = ['#111111', '#0f4f9e', '#0b7a4b', '#8a3ffc', '#a34700', '#b0216b'];
 
     var S = {
@@ -5762,6 +6022,9 @@ const game = new AntiBallsheetGame(
         errors: 0,
         size: 5,
         type: 'light',
+        count: 3,
+        lastN: 0,
+        numEl: null,
         seq: [],
         cells: [],
         splits: [],
@@ -5792,6 +6055,11 @@ const game = new AntiBallsheetGame(
         for (var i = 0; i < SIZES.length; i++) { if (SIZES[i] === v) { return v; } }
         return 5;
     }
+    function normCount(n) {
+        var v = Number(n);
+        for (var i = 0; i < COUNTS.length; i++) { if (COUNTS[i] === v) { return v; } }
+        return DEFAULTS.count;
+    }
 
     function grab() {
         el.container = document.querySelector('.game-container');
@@ -5810,7 +6078,7 @@ const game = new AntiBallsheetGame(
 
     /* ---------------- settings / records ---------------- */
     function readSettings() {
-        var out = { size: DEFAULTS.size, type: DEFAULTS.type };
+        var out = { size: DEFAULTS.size, type: DEFAULTS.type, count: DEFAULTS.count };
         try {
             var raw = localStorage.getItem(LS_SET);
             if (raw) {
@@ -5818,6 +6086,7 @@ const game = new AntiBallsheetGame(
                 if (o) {
                     if (isNum(Number(o.size))) { out.size = normSize(o.size); }
                     if (typeof o.type === 'string') { out.type = normType(o.type); }
+                    if (isNum(Number(o.count))) { out.count = normCount(o.count); }
                 }
             }
         } catch (e) { }
@@ -5829,6 +6098,7 @@ const game = new AntiBallsheetGame(
         if (!patch) { return s; }
         if (patch.size !== undefined) { s.size = normSize(patch.size); }
         if (patch.type !== undefined) { s.type = normType(patch.type); }
+        if (patch.count !== undefined) { s.count = normCount(patch.count); }
         try { localStorage.setItem(LS_SET, JSON.stringify(s)); } catch (e) { }
         return s;
     }
@@ -6021,6 +6291,21 @@ const game = new AntiBallsheetGame(
         count.className = 'st-count';
         count.id = 'st-count';
         count.style.display = 'none';
+        /* 倒计时圆环：SVG 弧长随时间收缩，比 conic 遮罩可靠 */
+        var ring = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        ring.setAttribute('viewBox', '0 0 200 200');
+        ring.setAttribute('class', 'st-ring');
+        ring.innerHTML =
+            '<circle class="st-ring-track" cx="100" cy="100" r="88" fill="none" stroke-width="6"/>' +
+            '<circle class="st-ring-arc" cx="100" cy="100" r="88" fill="none" stroke-width="6" ' +
+                'stroke-linecap="round" stroke-dasharray="552.9" stroke-dashoffset="0"/>';
+        count.appendChild(ring);
+        var arc = ring.querySelector('.st-ring-arc');
+        S.arc = arc;
+        var num = document.createElement('i');
+        num.className = 'st-cd-num';
+        count.appendChild(num);
+        S.numEl = num;
         wrap.appendChild(count);
 
         /* memory mode countdown card */
@@ -6220,8 +6505,10 @@ const game = new AntiBallsheetGame(
             if (memo) { memo.style.display = 'flex'; memo.textContent = '记 3 秒'; }
             return;
         }
+        if (S.count <= 0) { beginPlay(); return; }
         S.phase = 'count';
-        S.countEnd = performance.now() + 3000;
+        S.lastN = 0;
+        S.countEnd = performance.now() + S.count * 1000;
     }
 
     function beginPlay() {
@@ -6229,7 +6516,8 @@ const game = new AntiBallsheetGame(
         S.started = true;
         S.t0 = performance.now();
         var count = $('st-count');
-        if (count) { count.style.display = 'none'; count.textContent = ''; }
+        if (count) { count.style.display = 'none'; }
+        if (S.numEl) { S.numEl.textContent = ''; }
         if (S.type === 'reaction') { lightRandom(); }
     }
 
@@ -6240,7 +6528,22 @@ const game = new AntiBallsheetGame(
             var cbox = $('st-count');
             if (cbox) {
                 cbox.style.display = 'flex';
-                cbox.textContent = String(Math.max(1, Math.ceil(remain / 1000)));
+                var n = Math.max(1, Math.ceil(remain / 1000));
+                if (n !== S.lastN) {
+                    S.lastN = n;
+                    if (S.numEl) {
+                        S.numEl.textContent = String(n);
+                        S.numEl.classList.remove('is-tick');
+                        void S.numEl.offsetWidth;
+                        S.numEl.classList.add('is-tick');
+                    }
+                    cbox.setAttribute('data-n', String(n));
+                }
+                /* ring drains inside the current second, resets on each tick */
+                var p = ((remain % 1000) || 1000) / 1000;
+                cbox.style.setProperty('--cd', p.toFixed(3));
+                cbox.style.setProperty('--cdc', n <= 1 ? '#ff5a4a' : (n === 2 ? '#ffd24a' : '#d8ff5a'));
+                if (S.arc) { S.arc.setAttribute('stroke-dashoffset', (552.9 * (1 - p)).toFixed(1)); }
             }
             if (remain <= 0) { beginPlay(); }
         }
@@ -6303,10 +6606,12 @@ const game = new AntiBallsheetGame(
         if (cfgInline) {
             if (cfgInline.size !== undefined) { cfg.size = normSize(cfgInline.size); }
             if (cfgInline.type !== undefined) { cfg.type = normType(cfgInline.type); }
+            if (cfgInline.count !== undefined) { cfg.count = normCount(cfgInline.count); }
         }
         S.size = cfg.size;
         S.type = cfg.type;
-        saveSettings({ size: S.size, type: S.type });
+        S.count = normCount(cfg.count);
+        saveSettings({ size: S.size, type: S.type, count: S.count });
 
         S.active = true;
         S.paused = false;
@@ -6373,6 +6678,7 @@ const game = new AntiBallsheetGame(
         defaults: DEFAULTS,
         sizes: SIZES,
         types: TYPES,
+        counts: COUNTS,
         typeName: function (k) { return typeInfo(k).n; },
         settings: readSettings,
         saveSettings: saveSettings,
@@ -6653,10 +6959,37 @@ const game = new AntiBallsheetGame(
         });
         try { ui.scrollTop = 0; } catch (e) { }
 
-        if (name === 'mode') { updateModeMeta(); bsSyncSliders(); stSyncSlider(); }
+        if (name === 'settings') { setTab(st.setTab || 'mode'); }
         if (name === 'stats') { fillCats(); renderStats($('#stats-cat').value); }
-        if (name === 'sfx') { renderSfxList(); updateSfxUI(); }
         if (name === 'home') { refreshHome(); focusFirst(); }
+    }
+
+    /* 设置 is one screen with three tabs: 规则 / 外观 / 音效 */
+    var SET_TABS = ['mode', 'look', 'sfx'];
+
+    function setTab(tab) {
+        if (SET_TABS.indexOf(tab) < 0) { tab = 'mode'; }
+        st.setTab = tab;
+        $$('.set-tab', ui).forEach(function (b) {
+            b.classList.toggle('is-on', b.getAttribute('data-tab') === tab);
+        });
+        $$('.set-pane', ui).forEach(function (p) {
+            p.classList.toggle('is-on', p.getAttribute('data-pane') === tab);
+        });
+        var meta = $('#mode-meta');
+        if (tab === 'mode') {
+            updateModeMeta();
+            bsSyncSliders();
+            stSyncSlider();
+        } else if (tab === 'look') {
+            mountBallColors();
+            mountBallFeel();
+            if (meta) { meta.textContent = '颜色 · 实时'; }
+        } else {
+            renderSfxList();
+            updateSfxUI();
+            if (meta) { meta.textContent = '导入 · 映射'; }
+        }
     }
 
     function updateModeMeta() {
@@ -6665,6 +6998,9 @@ const game = new AntiBallsheetGame(
         if (meta) { meta.textContent = modeLabel(s); }
         var chip = $('#home-mode');
         if (chip) { chip.textContent = modeLabel(s); }
+
+        var playHint = $('#menu-play-hint');
+        if (playHint) { playHint.textContent = modeLabel(s); }
 
         var ball = $('#preview-ball');
         if (ball) {
@@ -7111,7 +7447,7 @@ const game = new AntiBallsheetGame(
 
     /* which mode / rule the finished run belonged to */
     function setResMode(name, detail) {
-        var el = $('#res-mode');
+        var el = $('#res-mode-chip');
         if (!el) { return; }
         el.innerHTML = '<b></b><i></i>';
         el.firstChild.textContent = name;
@@ -7795,7 +8131,7 @@ const game = new AntiBallsheetGame(
         if (!sch) { return; }
         var cfg = sch.settings();
         var sizes = sch.sizes, types = sch.types;
-        var boxS = $('#st-sizes'), boxT = $('#st-types');
+        var boxS = $('#st-sizes'), boxT = $('#st-types'), boxC = $('#st-cds');
         if (boxS && !boxS.childNodes.length) {
             sizes.forEach(function (n) {
                 var b = doc.createElement('button');
@@ -7829,6 +8165,25 @@ const game = new AntiBallsheetGame(
                 el.classList.toggle('is-on', Number(el.getAttribute('data-size')) === cfg.size);
             });
         }
+        if (boxC && !boxC.childNodes.length) {
+            (sch.counts || [0, 2, 3, 5]).forEach(function (n) {
+                var b = doc.createElement('button');
+                b.type = 'button';
+                b.className = 'st-chip';
+                b.setAttribute('data-cd', String(n));
+                b.textContent = n === 0 ? '关闭' : n + ' s';
+                bindTap(b, function () {
+                    sch.saveSettings({ count: n });
+                    stPaint();
+                });
+                boxC.appendChild(b);
+            });
+        }
+        if (boxC) {
+            Array.prototype.forEach.call(boxC.children, function (el) {
+                el.classList.toggle('is-on', Number(el.getAttribute('data-cd')) === cfg.count);
+            });
+        }
         if (boxT) {
             Array.prototype.forEach.call(boxT.children, function (el) {
                 el.classList.toggle('is-on', el.getAttribute('data-type') === cfg.type);
@@ -7836,7 +8191,8 @@ const game = new AntiBallsheetGame(
         }
         var sum = $('#st-summary');
         if (sum) {
-            sum.textContent = sch.typeName(cfg.type) + ' · ' + cfg.size + ' × ' + cfg.size + ' · ' + (cfg.size * cfg.size) + ' 格';
+            sum.textContent = sch.typeName(cfg.type) + ' · ' + cfg.size + ' × ' + cfg.size + ' · ' +
+                (cfg.size * cfg.size) + ' 格 · 倒计时 ' + (cfg.count ? cfg.count + ' s' : '关');
         }
     }
 
@@ -8267,7 +8623,7 @@ const game = new AntiBallsheetGame(
        ============================================================ */
     var BCOL_KEYS = ['base', 'gain', 'lose', 'fixed', 'edgeHi', 'edgeLo'];
     var BCOL_FALLBACK = {
-        mode: 'hp', base: '#c89600', gain: '#3cdc78',
+        mode: 'hp', base: '#3cdc78', gain: '#a8ff76',
         lose: '#e03b3b', fixed: '#fa96c8', edgeHi: '#3cdc78', edgeLo: '#e03b3b'
     };
 
@@ -8286,20 +8642,20 @@ const game = new AntiBallsheetGame(
         box.innerHTML =
             '<div class="bs-col-head"><b>BALLSHEET 球颜色</b><span>两套渐变 · 实时生效</span></div>' +
             '<div class="bs-col-modes">' +
-                '<button type="button" class="bs-mode" data-bcmode="hp">① 血量变色（球）</button>' +
+                '<button type="button" class="bs-mode" data-bcmode="hp">① 血量变色（球）· 绿→黄→红</button>' +
                 '<button type="button" class="bs-mode" data-bcmode="field">② 球固定 · 边框报告血量</button>' +
             '</div>' +
             '<div class="bs-col-group" data-bcgroup="hp">' +
-                '<label><span>开局色 <em>200,150,0</em></span><input type="color" id="bc-base"></label>' +
-                '<label><span>得分变绿</span><input type="color" id="bc-gain"></label>' +
-                '<label><span>掉血慢慢变红</span><input type="color" id="bc-lose"></label>' +
+                '<label><span>满血绿（开局） <em>60,220,120</em></span><input type="color" id="bc-base"></label>' +
+                '<label><span>得分脉冲（亮绿）</span><input type="color" id="bc-gain"></label>' +
+                '<label><span>濒死红</span><input type="color" id="bc-lose"></label>' +
             '</div>' +
             '<div class="bs-col-group" data-bcgroup="field">' +
                 '<label><span>球固定色 <em>250,150,200</em></span><input type="color" id="bc-fixed"></label>' +
                 '<label><span>满血边框（绿）</span><input type="color" id="bc-edgeHi"></label>' +
                 '<label><span>濒死边框（红）</span><input type="color" id="bc-edgeLo"></label>' +
             '</div>' +
-            '<p class="bs-col-note">默认值照搬源站；只影响 BALLSHEET，速通配色不动。</p>';
+            '<p class="bs-col-note">血量变色走「满血绿 → 黄 → 濒死红」的色相过渡，回到 BIGBALL 原生存逻辑；只影响 BALLSHEET，速通配色不动。</p>';
         host.appendChild(box);
 
         BCOL_KEYS.forEach(function (k) {
@@ -8354,11 +8710,27 @@ const game = new AntiBallsheetGame(
         { id: 'step', label: '跳变', hint: '跌破一半才骤变' },
         { id: 'custom', label: '自定义', hint: '拖动画布上的两点' }
     ];
+    /* 灵敏度 / 平滑 各给五档，不再用连续滑块 */
+    var BF_GAINS = [
+        { v: 0.6, label: '0.6×', hint: '迟钝' },
+        { v: 0.8, label: '0.8×', hint: '偏慢' },
+        { v: 1, label: '1×', hint: '标准' },
+        { v: 1.4, label: '1.4×', hint: '灵敏' },
+        { v: 2, label: '2×', hint: '极敏' }
+    ];
+    var BF_SMOOTHS = [
+        { v: 0, label: '瞬变', hint: '跟手' },
+        { v: 0.06, label: '0.06', hint: '轻' },
+        { v: 0.15, label: '0.15', hint: '顺' },
+        { v: 0.35, label: '0.35', hint: '滞后' },
+        { v: 0.6, label: '0.6', hint: '极柔' }
+    ];
 
     function mountBallFeel() {
         if ($('#bs-feel-box') || !window.BallSheet) { return; }
+        var pane = $('.set-pane[data-pane="look"]');
         var host = $('#slot-look .slot-content') || $('.settings-container') || $('#slot-look');
-        if (!host) { return; }
+        if (!pane && !host) { return; }
         var api = window.BallSheet;
         var FEEL = api.feel();
 
@@ -8367,7 +8739,14 @@ const game = new AntiBallsheetGame(
         box.id = 'bs-feel-box';
         box.innerHTML =
             '<div class="bs-col-head"><b>变色动态</b><span>曲线 + 灵敏度 · 实时预览</span>' +
-                '<button type="button" class="bf-reset" id="bf-reset">恢复默认</button></div>' +
+                '<button type="button" class="bf-help" id="bf-help" aria-label="变色动态说明" aria-expanded="false">!</button>' +
+                '<button type="button" class="bf-reset" id="bf-reset">恢复默认</button>' +
+                '<div class="bf-tip" id="bf-tip" role="tooltip">' +
+                    '<p><b>曲线</b>决定「掉血 → 变色」的形状：早敏一掉血就变，跳变要跌破一半才骤变，自定义可以把两点拖成任意弯度。</p>' +
+                    '<p><b>灵敏度</b>把整条曲线放大：0.6× 迟钝（掉一半血才刚起色）、1× 标准、2× 极敏（掉 50% 就已经全红）。</p>' +
+                    '<p><b>平滑</b>是颜色追赶血量的速度：瞬变最跟手；0.35 s 之后掉血时颜色明显滞后；0.6 s 像慢慢呼吸。</p>' +
+                    '<p class="bf-tip-foot">建议：先挑曲线，再把灵敏度调到「掉血 30–50% 就明显看出颜色」的程度，平滑留 0.15 s 手感最顺；练反应时直接用瞬变。</p>' +
+                '</div></div>' +
             '<label class="bf-switch"><input type="checkbox" id="bf-on"><i></i><span>启用动态变色（关＝源站线性）</span></label>' +
             '<div class="bf-chips">' +
                 BF_CURVES.map(function (c) {
@@ -8375,10 +8754,18 @@ const game = new AntiBallsheetGame(
                 }).join('') +
             '</div>' +
             '<p class="bf-hint" id="bf-hint"></p>' +
-            '<label class="bf-line"><span>灵敏度 <em id="bf-gain-v">1.00×</em></span>' +
-                '<input type="range" id="bf-gain" min="0.4" max="2" step="0.02" value="1"></label>' +
-            '<label class="bf-line"><span>平滑 <em id="bf-smooth-v">0.12 s</em></span>' +
-                '<input type="range" id="bf-smooth" min="0" max="0.6" step="0.01" value="0.12"></label>' +
+            '<div class="bf-pick-row"><span class="bf-pick-lab">灵敏度<em id="bf-gain-v">1×</em></span>' +
+                '<div class="bf-picks" id="bf-gain-picks">' +
+                    BF_GAINS.map(function (g) {
+                        return '<button type="button" class="bf-pick" data-gain="' + g.v + '">' + g.label + '</button>';
+                    }).join('') +
+                '</div></div>' +
+            '<div class="bf-pick-row"><span class="bf-pick-lab">平滑<em id="bf-smooth-v">0.15 s</em></span>' +
+                '<div class="bf-picks" id="bf-smooth-picks">' +
+                    BF_SMOOTHS.map(function (s) {
+                        return '<button type="button" class="bf-pick bf-pick-s" data-smooth="' + s.v + '">' + s.label + '</button>';
+                    }).join('') +
+                '</div></div>' +
             '<label class="bf-switch"><input type="checkbox" id="bf-split"><i></i><span>掉血 / 回血分开速率</span></label>' +
             '<label class="bf-line bf-sub" id="bf-drain-row"><span>掉血滞后 <em id="bf-drain-v">0.35 s</em></span>' +
                 '<input type="range" id="bf-drain" min="0" max="0.8" step="0.01" value="0.35"></label>' +
@@ -8392,19 +8779,42 @@ const game = new AntiBallsheetGame(
                 '</div>' +
             '</div>' +
             '<p class="bs-col-note">横轴＝已掉血量 0→100%，纵轴＝变色程度。预览球按当前设置循环掉血 / 回血。</p>';
-        host.appendChild(box);
+        if (pane) {
+            /* 外观的第一层：先进变色动态，再是主题色与 BallSheet 球颜色 */
+            pane.insertBefore(box, pane.firstChild);
+            box.classList.add('is-first');
+        } else {
+            host.appendChild(box);
+        }
 
         function fmt(v, n) { return v.toFixed(n); }
+
+        /* 旧版本可能存着滑块留下的任意值：就近吸附到五档之一 */
+        function nearest(list, v) {
+            var best = list[0].v, d = Math.abs(list[0].v - v), i, x;
+            for (i = 1; i < list.length; i++) {
+                x = Math.abs(list[i].v - v);
+                if (x < d) { best = list[i].v; d = x; }
+            }
+            return best;
+        }
+        (function snap() {
+            var patch = {}, changed = false, i;
+            var hasG = false, hasS = false;
+            for (i = 0; i < BF_GAINS.length; i++) { if (Math.abs(BF_GAINS[i].v - FEEL.gain) < 0.001) { hasG = true; } }
+            for (i = 0; i < BF_SMOOTHS.length; i++) { if (Math.abs(BF_SMOOTHS[i].v - FEEL.smooth) < 0.001) { hasS = true; } }
+            if (!hasG) { patch.gain = nearest(BF_GAINS, FEEL.gain); changed = true; }
+            if (!hasS) { patch.smooth = nearest(BF_SMOOTHS, FEEL.smooth); changed = true; }
+            if (changed) { FEEL = api.setFeel(patch); }
+        })();
 
         function refresh() {
             FEEL = api.feel();
             $('#bf-on').checked = !!FEEL.on;
             $('#bf-split').checked = !!FEEL.split;
-            $('#bf-gain').value = String(FEEL.gain);
-            $('#bf-smooth').value = String(FEEL.smooth);
             $('#bf-drain').value = String(FEEL.drain);
             $('#bf-gaint').value = String(FEEL.gainT);
-            $('#bf-gain-v').textContent = fmt(FEEL.gain, 2) + '×';
+            $('#bf-gain-v').textContent = String(FEEL.gain).replace(/\.0$/, '') + '×';
             $('#bf-smooth-v').textContent = FEEL.smooth < 0.005 ? '瞬变' : fmt(FEEL.smooth, 2) + ' s';
             $('#bf-drain-v').textContent = fmt(FEEL.drain, 2) + ' s';
             $('#bf-gaint-v').textContent = fmt(FEEL.gainT, 2) + ' s';
@@ -8413,6 +8823,12 @@ const game = new AntiBallsheetGame(
             box.classList.toggle('is-muted', !FEEL.on);
             $$('.bf-chip', box).forEach(function (b) {
                 b.classList.toggle('is-on', b.getAttribute('data-bfcurve') === FEEL.curve);
+            });
+            $$('.bf-pick', box).forEach(function (b) {
+                var g = b.getAttribute('data-gain'), s = b.getAttribute('data-smooth');
+                var on = g !== null ? Math.abs(Number(g) - FEEL.gain) < 0.001 :
+                    Math.abs(Number(s) - FEEL.smooth) < 0.001;
+                b.classList.toggle('is-on', on);
             });
             var hint = '';
             BF_CURVES.forEach(function (c) { if (c.id === FEEL.curve) { hint = c.hint; } });
@@ -8433,8 +8849,23 @@ const game = new AntiBallsheetGame(
                 apply({ curve: b.getAttribute('data-bfcurve') });
             });
         });
-        $('#bf-gain').addEventListener('input', function () { apply({ gain: Number(this.value) }); });
-        $('#bf-smooth').addEventListener('input', function () { apply({ smooth: Number(this.value) }); });
+        $$('.bf-pick', box).forEach(function (b) {
+            bindTap(b, function () {
+                sfx(560);
+                var g = b.getAttribute('data-gain');
+                if (g !== null) { apply({ gain: Number(g) }); }
+                else { apply({ smooth: Number(b.getAttribute('data-smooth')) }); }
+            });
+        });
+        var helpBtn = $('#bf-help'), tipEl = $('#bf-tip');
+        if (helpBtn && tipEl) {
+            /* 悬浮由 CSS 负责；点一下给触屏留一个钉住开关 */
+            bindTap(helpBtn, function () {
+                sfx(560);
+                var pin = tipEl.classList.toggle('is-open');
+                helpBtn.setAttribute('aria-expanded', pin ? 'true' : 'false');
+            });
+        }
         $('#bf-drain').addEventListener('input', function () { apply({ drain: Number(this.value) }); });
         $('#bf-gaint').addEventListener('input', function () { apply({ gainT: Number(this.value) }); });
         bindTap($('#bf-reset'), function () {
@@ -8808,6 +9239,13 @@ const game = new AntiBallsheetGame(
             bindTap(btn, function () { sfx(380); goBack(); });
         });
 
+        $$('.set-tab', ui).forEach(function (btn) {
+            bindTap(btn, function () {
+                sfx(520);
+                setTab(btn.getAttribute('data-tab'));
+            });
+        });
+
         bindTap($('#btn-sound'), function () {
             st.muted = !st.muted;
             store.set('abs-muted', st.muted ? '1' : '0');
@@ -8827,7 +9265,8 @@ const game = new AntiBallsheetGame(
             ovLive(false);
             ovPause.classList.remove('is-open');
             ui.classList.remove('is-hidden');
-            showScreen('mode');
+            st.setTab = 'mode';
+            showScreen('settings');
         });
         bindTap($('#pause-quit'), function () { sfx(320); quitToMenu(); });
 
@@ -8839,7 +9278,8 @@ const game = new AntiBallsheetGame(
             ovLive(false);
             ovResults.classList.remove('is-open');
             ui.classList.remove('is-hidden');
-            showScreen('mode');
+            st.setTab = 'mode';
+            showScreen('settings');
         });
         bindTap($('#res-home'), function () { sfx(380); quitToMenu(); });
 
