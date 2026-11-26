@@ -1,24 +1,120 @@
-中文三合一改版正式发布。单文件 `index.html`，下载后双击即玩，也可以在线访问 https://kiryugit.github.io/abs-menu/
+<p align="center">
+  <a href="https://kiryugit.github.io/abs-menu/">
+    <img src="gh-pages/docs/preview-home.png" width="880" alt="antiBallsheet 中文主菜单">
+  </a>
+  <br>
+  <sub>四套反应力玩法 · 7:5 满高驾驶舱 · 单文件离线运行</sub>
+</p>
 
-## 舒尔特方格（新增玩法）
-- 尺寸：3×3 / 4×4 / 5×5 / 7×7 / 10×10，方格恒为 425 px
-- 规则九种：Light、Classic、Light Reverse、Classic Reverse、Memory、Reaction、Letters、Colors、Gorbow
-- Memory：开始后 3 秒记忆窗，数字隐藏后凭记忆点
-- Letters：A…Z 用完接 AA、AB…（10×10 用满双字母）
-- Gorbow：黑色升序 + 红色降序，两组交替点击
-- 记录按「尺寸 + 规则」分开统计，数据页新增「规则」列
+<h1 align="center">antiBallsheet · 中文四合一</h1>
 
-## 操作手感
-- 按地即判：手指接触格子就计数，不再等待抬手；一次手势只算一次，连点互不阻塞
-- 开局对齐源站：开始 → 3·2·1 倒计时 → 起表；空格 / R 重开回到准备态
-- 点错：红描边 + 数字闪隐 260 ms，错误数变红
+<p align="center">
+  <a href="https://kiryugit.github.io/abs-menu/"><img alt="在线试玩" src="https://img.shields.io/badge/PLAY-%E5%9C%A8%E7%BA%BF%E8%AF%95%E7%8E%A9-22d3ee?style=flat-square"></a>
+  <img alt="version" src="https://img.shields.io/badge/version-v0.7.5%20beta-f472b6?style=flat-square">
+  <img alt="single file" src="https://img.shields.io/badge/build-single%20HTML-8b5cf6?style=flat-square">
+  <img alt="language" src="https://img.shields.io/badge/lang-%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD-38bdf8?style=flat-square">
+</p>
 
-## 界面与适配
-- 舒尔特为深色场地 + 纯白圆角卡片，计时数字与目标用柠檬绿
-- 手机 / 小屏：600 px 场地等比缩放，横屏排版、刘海安全区、真实触控层
-- BIGBALL 视觉：球径 60 px、活动区 535 px
+> 浏览器里的反应力训练场：速通、生存、舒尔特、反应测试，四套玩法装进一个 HTML。无需安装、无需联网，双击即玩，手机也能用。
 
-## 其他
-- BallSheet 球色两套模式：血量渐变 / 球固定 + 边框报告血量，全部可自定义
-- 三套玩法独立存档，可导出 JSON
-- 来源：基于 dphdmn/antiBallsheet 的中文改版，版权归原作者
+这是对 [dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet) 的非官方中文重构版：保留原作的速通手感与成绩系统，新增中文主菜单、生存模式、舒尔特方格、反应测试，以及双语、统计、主题、音效和小屏适配。
+
+**在线试玩**：<https://kiryugit.github.io/abs-menu/>
+
+## 为什么是单文件
+
+- **一个 `index.html` 就是完整游戏**：Chart.js、random-js、光标、音效全部内嵌，不依赖 CDN、`node_modules` 或本地服务器。
+- **离线可用**：拷到 U 盘、断网、`file://` 双击，行为一致。
+- **易部署**：GitHub Pages、Cloudflare Pages、任意静态空间，传上去就能玩。
+
+## 四套玩法
+
+| 模式 | 玩法 | 主要记录 |
+| --- | --- | --- |
+| **BALLSHEET** | 固定球数，光标触球即得分，越快吃完越好；支持球数与球径调节 | 总时长、平均 / 最快 / 最慢反应、逐球曲线 |
+| **BALLSHEET · BIGBALL** | 血量随压力持续下降，吃球回血；球色严格跟随原作 `EPS − pressure` 公式 | 存活时长、吃球数、每秒得分、最高秒得分 |
+| **舒尔特方格** | 3×3 – 10×10，9 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
+| **反应测试** | 点击后才随机等待 1.2–4 秒，屏幕变绿立即点击；支持 1–100 次，默认 5 次 | 平均、最快 / 最慢单次、有效次数、抢跑次数 |
+
+## 界面
+
+主菜单固定八项：顶部 **BIGBALL / BALLSHEET** 共用一个外框，标准 BALLSHEET 用青色播放按钮标为主操作；其后是 **舒尔特 / 反应测试 / 数据 / 设置 / 玩法 / 关于**。桌面为 7:5 满高双栏：左栏标题、菜单与按键提示，右栏数据卡与趋势图拉满页面；高度不足时自动回退为正常滚动，不会压住页脚。
+
+| English | 设置 |
+| --- | --- |
+| <img src="gh-pages/docs/preview-english.png" width="420" alt="English menu"> | <img src="gh-pages/docs/preview-settings.png" width="420" alt="设置页"> |
+
+- **中文 / English**：顶栏 `EN` / `ZH` 一键切换，菜单、设置、HUD、结算、统计、玩法与关于同步换语言。
+- **设置集中在一个入口**：规则 / 外观 / 音效三个页签；规则页再按四套玩法分开，只显示当前模式参数。
+- **数据留在本机**：四套玩法独立存档，趋势图、历史记录、JSON 导出与清除都在「数据」页。
+- **外观与音效**：主题色、场地、球色、光标尺寸可调；接球 / 悬停 / 点击三个音效槽位可导入本地音频。
+
+## 操作
+
+| 场景 | 按键 |
+| --- | --- |
+| 主菜单 | `↑` `↓` 选择，`Enter` 确认，`Esc` 返回 |
+| 游戏中 | `R` / `空格` 开始或重开，`Esc` 暂停 |
+| 全屏 | `F11` |
+| 手机 | 直接点按；暂停与返回使用屏幕按钮 |
+
+## 运行
+
+```bash
+git clone https://github.com/Kiryugit/abs-menu.git
+cd abs-menu
+```
+
+直接双击 `index.html`；或起一个本地静态服务：
+
+```bash
+python -m http.server 8000
+# http://localhost:8000/
+```
+
+## 构建
+
+源码在 `antiBallsheet-menu/`，构建脚本会把引擎、菜单层、玩法、双语与资源拼回根目录的 `index.html`：
+
+```powershell
+cd antiBallsheet-menu
+node --check src\i18n.js
+node --check src\menu.js
+node --check src\reaction.js
+pwsh -NoProfile -File .\build.ps1
+```
+
+构建不需要安装依赖；`gh-pages/` 是可直接发布的同步副本。
+
+## 目录
+
+| 路径 | 说明 |
+| --- | --- |
+| `index.html` | 构建产物，完整游戏 |
+| `antiBallsheet-main/` | 原版引擎、样式与版本脚本（构建输入） |
+| `antiBallsheet-menu/` | 中文菜单、四套玩法、i18n 与构建脚本 |
+| `gh-pages/` | GitHub Pages 发布副本与 README 预览图 |
+
+更细的源码说明见 [`antiBallsheet-menu/README.md`](antiBallsheet-menu/README.md)；发布版说明与完整更新日志见 [`gh-pages/README.md`](gh-pages/README.md)。
+
+## 部署
+
+`index.html` 不经过构建也能直接运行。GitHub Pages 二选一：
+
+- **根目录发布**：Settings → Pages → Deploy from a branch → `main` / `/(root)`。
+- **发布 `gh-pages/`**：Settings → Pages → `main` / `/gh-pages`，该目录已包含完整 `index.html`。
+
+## 来源与致谢
+
+- 原作：[dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet)，基于 [ballsheet](https://github.com/dphdmn/ballsheet) 的速通改版。
+- BallSheet 生存玩法与球色公式参考 [helloimxtal](https://github.com/helloimxtal) 的 p5 版 ballsheet。
+- 舒尔特方格参考 [schulte-table.com](https://schulte-table.com/)；反应测试流程参考 [Human Benchmark](https://humanbenchmark.com/tests/reactiontime)。
+- 中文菜单、四套玩法的整合、双语层、统计与响应式界面为本仓库新增内容。
+
+原作仓库未附 LICENSE。本仓库是非官方二次创作，未单独声明开源许可；欢迎学习、Fork 与提交 Issue，商用或再分发前请先确认原作者授权。
+
+## 版本
+
+当前 `v0.7.5 (beta)`：7:5 满高双栏驾驶舱、顶部双 BALLSHEET 合并、趋势图自适应、短屏回退。
+
+完整版本记录见 [`gh-pages/README.md`](gh-pages/README.md#版本)。
