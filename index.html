@@ -574,6 +574,82 @@ body {
     background: var(--panel);
 }
 
+/* repo link in the top bar */
+.chip.gh {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.chip.gh b {
+    color: var(--accent);
+    font-weight: 400;
+}
+
+.chip.gh:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: var(--panel);
+}
+
+/* ---------- soft round cursor (menu layer) ---------- */
+/* hide the system arrow from the very first frame, not only after the
+   pointer moves — some browsers paint the native cursor once on entry */
+@media (hover: hover) and (pointer: fine) {
+
+    html:has(#abs-ui:not(.is-hidden)),
+    body:has(#abs-ui:not(.is-hidden)),
+    body:has(#abs-ui:not(.is-hidden)) *,
+    .ui-root:not(.is-hidden),
+    .ui-root:not(.is-hidden) * {
+        cursor: none;
+    }
+
+    .ui-root.is-hidden,
+    .ui-root.is-hidden * {
+        cursor: auto;
+    }
+}
+
+.mcur {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    width: 24px;
+    height: 24px;
+    margin: -12px 0 0 -12px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle,
+            color-mix(in srgb, var(--accent) 34%, transparent) 0%,
+            color-mix(in srgb, var(--accent) 18%, transparent) 56%,
+            color-mix(in srgb, var(--accent) 0%, transparent) 100%);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 46%, transparent),
+        inset 0 0 0 1.5px color-mix(in srgb, var(--accent) 70%, transparent);
+    transition: width .12s ease, height .12s ease, margin .12s ease,
+        box-shadow .12s ease;
+    will-change: transform;
+}
+
+.mcur.is-on {
+    opacity: 1;
+}
+
+.mcur.is-hot {
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    box-shadow: 0 0 26px color-mix(in srgb, var(--accent) 52%, transparent),
+        inset 0 0 0 1px color-mix(in srgb, var(--accent) 75%, transparent);
+}
+
+.ui-root.is-hidden .mcur {
+    opacity: 0;
+}
+
 /* ---------- stage / screens ---------- */
 .stage {
     flex: 1 1 auto;
@@ -637,16 +713,24 @@ body {
     align-items: baseline;
     font-size: clamp(36px, 5.6vw, 76px);
     line-height: .92;
-    letter-spacing: -.015em;
+    letter-spacing: 0;
     font-weight: 800;
     text-transform: uppercase;
     user-select: none;
 }
 
+/* ANTI: frosted glass fill instead of a bare wireframe outline */
 .logo-anti {
+    letter-spacing: .03em;
+    margin-right: .1em;
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--dim);
-    margin-right: .06em;
+    background: linear-gradient(176deg,
+            color-mix(in srgb, var(--ink) 88%, transparent) 0%,
+            color-mix(in srgb, var(--ink) 40%, transparent) 52%,
+            color-mix(in srgb, var(--accent) 34%, transparent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px color-mix(in srgb, var(--accent) 10%, transparent));
 }
 
 .logo-rest {
@@ -1614,12 +1698,41 @@ kbd {
     text-shadow: 0 0 20px var(--glow-target);
 }
 
-.pause-time,
-.res-cat {
+.pause-time {
     font-family: var(--mono);
     font-size: 9.5px;
     letter-spacing: .14em;
     color: var(--dim);
+}
+
+/* result overlay: which mode / rule this run belonged to */
+.res-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    max-width: 68%;
+    padding: 4px 9px 3px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    color: var(--dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.res-mode b {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: .14em;
+}
+
+.res-mode i {
+    font-style: normal;
+    opacity: .8;
 }
 
 .pause-list {
@@ -3308,6 +3421,8 @@ body.st-skin #slot-timer #timer {
             <div class="bg-vignette"></div>
         </div>
 
+        <div class="mcur" id="mcur" aria-hidden="true"></div>
+
         <div class="shell">
             <header class="topbar">
                 <div class="brand">
@@ -3318,6 +3433,9 @@ body.st-skin #slot-timer #timer {
                     </div>
                 </div>
                 <div class="top-actions">
+                    <a class="chip gh" id="btn-github" href="https://github.com/Kiryugit/abs-menu"
+                        target="_blank" rel="noopener noreferrer" tabindex="-1"
+                        title="GitHub 仓库 · Kiryugit/abs-menu">GitHub <b>↗</b></a>
                     <button class="chip" id="btn-sound" type="button">音效 <b>开</b></button>
                     <button class="chip" id="btn-fs" type="button">全屏</button>
                 </div>
@@ -3714,7 +3832,7 @@ body.st-skin #slot-timer #timer {
         <div class="ov-card res">
             <div class="res-head">
                 <span class="res-tag" id="res-tag">本局完成</span>
-                <span class="res-cat" id="res-cat">—</span>
+                <span class="res-mode" id="res-mode">—</span>
             </div>
             <div class="res-time">
                 <span class="big" id="res-time">0.00</span>
@@ -6437,7 +6555,10 @@ const game = new AntiBallsheetGame(
         showScreen('home');
     }
 
-    function showUi() { ui.classList.remove('is-hidden'); }
+    function showUi() {
+        ui.classList.remove('is-hidden');
+        if (mcurSync) { mcurSync(); }
+    }
 
     function closeOverlays() {
         ovPause.classList.remove('is-open');
@@ -6470,12 +6591,21 @@ const game = new AntiBallsheetGame(
         renderResults(total, avg, min, max, prevPB, cat, rt);
     }
 
+    /* which mode / rule the finished run belonged to */
+    function setResMode(name, detail) {
+        var el = $('#res-mode');
+        if (!el) { return; }
+        el.innerHTML = '<b></b><i></i>';
+        el.firstChild.textContent = name;
+        el.lastChild.textContent = detail || '';
+    }
+
     function renderResults(total, avg, min, max, prevPB, cat, rt) {
         var isPB = prevPB === null || total < prevPB;
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局完成';
         tag.classList.toggle('gold', isPB);
-        $('#res-cat').textContent = game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%';
+        setResMode('速通', game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%');
         $('#res-time').textContent = fmt(total);
 
         var delta = $('#res-delta');
@@ -6520,7 +6650,7 @@ const game = new AntiBallsheetGame(
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局结束';
         tag.classList.toggle('gold', isPB);
-        $('#res-cat').textContent = 'BallSheet · 生存';
+        setResMode('BallSheet 生存', '血量 · 每秒得分');
         $('#res-time').textContent = fmt(run.time);
 
         var delta = $('#res-delta');
@@ -6568,7 +6698,7 @@ const game = new AntiBallsheetGame(
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局完成';
         tag.classList.toggle('gold', isPB);
-        $('#res-cat').textContent = '舒尔特方格 · ' + run.size + ' × ' + run.size;
+        setResMode('舒尔特 · ' + sch.typeName(run.type), run.size + ' × ' + run.size + ' · ' + cellsTotal + ' 格');
         $('#res-time').textContent = fmt(run.time);
 
         var delta = $('#res-delta');
@@ -8069,6 +8199,67 @@ const game = new AntiBallsheetGame(
     }, true);
 
     /* ============================================================
+       soft round cursor
+       ============================================================ */
+    var mcurSync = null;
+
+    function bindCursor() {
+        var cur = $('#mcur');
+        if (!cur || !window.matchMedia) { return; }
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) { return; }
+
+        var raf = 0;
+        var px = -100;
+        var py = -100;
+        var known = false;
+
+        function place() {
+            raf = 0;
+            cur.style.transform = 'translate3d(' + px + 'px,' + py + 'px,0)';
+        }
+
+        function show() {
+            if (!known) { return; }
+            cur.classList.add('is-on');
+            place();
+        }
+
+        function track(e) {
+            if (e.pointerType && e.pointerType !== 'mouse') { return; }
+            if (typeof e.clientX !== 'number') { return; }
+            px = e.clientX;
+            py = e.clientY;
+            known = true;
+            if (ui.classList.contains('is-hidden')) { return; }
+            cur.classList.add('is-on');
+            if (!raf) { raf = requestAnimationFrame(place); }
+            var t = e.target;
+            var hot = !!(t && t.closest && t.closest('button, a, .mi, .chip, .card, .st-type, .st-chip'));
+            cur.classList.toggle('is-hot', hot);
+        }
+
+        /* capture phase + over/enter so the circle is drawn on the very
+           first event after the pointer arrives, without a fade-in gap */
+        doc.addEventListener('pointermove', track, { passive: true, capture: true });
+        doc.addEventListener('pointerover', track, { passive: true, capture: true });
+        doc.addEventListener('pointerenter', track, { passive: true, capture: true });
+        doc.addEventListener('mouseover', track, { passive: true, capture: true });
+
+        doc.addEventListener('pointerleave', function () { cur.classList.remove('is-on'); });
+        doc.addEventListener('pointerdown', function (e) {
+            if (e.pointerType && e.pointerType !== 'mouse') { return; }
+            px = e.clientX;
+            py = e.clientY;
+            known = true;
+            cur.classList.add('is-on');
+            place();
+        }, { passive: true });
+        window.addEventListener('blur', function () { cur.classList.remove('is-on'); });
+
+        mcurSync = show;
+    }
+
+    /* ============================================================
        boot
        ============================================================ */
     function boot() {
@@ -8084,6 +8275,7 @@ const game = new AntiBallsheetGame(
         applyTheme();
         patchEngine();
         bindUI();
+        bindCursor();
         applyMute();
         initSfx();
         showUi();
