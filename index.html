@@ -3124,6 +3124,274 @@ html[lang="zh-CN"] .brand-sub {
 }
 
 /* ============================================================
+   BALLSHEET 变色动态 · 曲线 / 灵敏度 / 平滑 + 实时预览
+   ============================================================ */
+.bs-feel {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* the engine's .panel label rules would otherwise hijack every row here */
+.bs-feel label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+    margin-bottom: 0;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: .02em;
+    text-transform: none;
+    color: var(--dim);
+    text-align: left;
+}
+
+.bs-feel label span {
+    font-size: 11px;
+    letter-spacing: .02em;
+    color: var(--dim);
+}
+
+.bf-switch {
+    cursor: pointer;
+    user-select: none;
+}
+
+.bf-reset {
+    margin-left: auto;
+    padding: 2px 6px;
+    border: 0;
+    background: transparent;
+    color: var(--dim);
+    font-family: inherit;
+    font-size: 10.5px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: color .15s;
+}
+
+.bf-reset:hover {
+    color: var(--accent);
+}
+
+.bf-hint {
+    margin: -2px 0 0;
+    font-size: 10.5px;
+    line-height: 1.5;
+    color: var(--dim);
+}
+
+.bf-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.bf-switch i {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    position: relative;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.bf-switch i::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dim);
+    transition: left .15s, background-color .15s;
+}
+
+.bf-switch input:checked + i {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0, 255, 255, .16);
+}
+
+.bf-switch input:checked + i::after {
+    left: 14px;
+    background: var(--accent);
+}
+
+.bf-chips {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.bf-chip {
+    min-height: 32px;
+    padding: 6px 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background-color .15s;
+}
+
+.bf-chip:hover,
+.bf-chip.is-on {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 255, 255, .05);
+}
+
+.bs-feel .bf-line {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.bf-line > span {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.bf-line em {
+    font-style: normal;
+    font-family: var(--mono);
+    color: var(--ink);
+    opacity: .8;
+}
+
+.bf-line input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--line-strong);
+    border-radius: 2px;
+    outline: none;
+}
+
+.bf-line input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--glow-accent);
+    cursor: pointer;
+}
+
+.bf-line input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+.bf-sub {
+    padding-left: 12px;
+    border-left: 2px solid var(--line);
+    transition: opacity .15s;
+}
+
+.bf-sub.is-off {
+    display: none;
+}
+
+.bs-feel.is-muted .bf-chips,
+.bs-feel.is-muted .bf-line {
+    opacity: .35;
+    pointer-events: none;
+}
+
+.bf-live {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+#bf-curve {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 104px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, .02);
+    touch-action: none;
+}
+
+.bf-stage {
+    flex: 0 0 122px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.bf-field {
+    width: 118px;
+    height: 96px;
+    border: 2px solid var(--line-strong);
+    border-radius: 2px;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bf-ball {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #c89600;
+}
+
+.bf-hp {
+    width: 118px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line-strong);
+    overflow: hidden;
+}
+
+.bf-hp i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: var(--accent);
+}
+
+@media (max-width: 640px) {
+    .bf-chips {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bf-live {
+        flex-direction: column;
+    }
+
+    .bf-stage {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+/* ============================================================
    Schulte skin · stage (white cards on near-black, 参考
    schulte-table.com 的 Light 主题：纯白圆角卡片 + 黑色粗数字)
    ============================================================ */
@@ -3153,6 +3421,74 @@ body.st-skin #hud-mode {
 /* the clock borrows the site's lime read-out */
 body.st-skin #slot-timer #timer {
     color: #d8ff5a;
+}
+
+/* ---------- themed pointer for the schulte stage ----------
+   white cards make a plain white cursor invisible, so the ring is
+   lime with a dark outer edge: readable on the black field and on
+   the cards both */
+.st-cur {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9998;
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle,
+            color-mix(in srgb, #d8ff5a 22%, transparent) 0%,
+            color-mix(in srgb, #d8ff5a 8%, transparent) 62%,
+            transparent 74%);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, #050505 70%, transparent),
+        0 0 0 3px color-mix(in srgb, #d8ff5a 78%, transparent),
+        0 0 16px color-mix(in srgb, #d8ff5a 38%, transparent);
+    transition: opacity .1s linear, width .1s ease, height .1s ease, margin .1s ease;
+    will-change: transform;
+}
+
+body.st-live .st-cur.is-on,
+body.ov-live .st-cur.is-on {
+    opacity: 1;
+}
+
+body.st-live .st-cur.is-hot,
+body.ov-live .st-cur.is-hot {
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, #050505 60%, transparent),
+        0 0 0 3px color-mix(in srgb, #d8ff5a 90%, transparent),
+        0 0 24px color-mix(in srgb, #d8ff5a 52%, transparent);
+}
+
+/* outside schulte the overlay cursor borrows the menu's cyan accent */
+body.ov-live:not(.st-skin) .st-cur {
+    background: radial-gradient(circle,
+            color-mix(in srgb, var(--accent) 26%, transparent) 0%,
+            color-mix(in srgb, var(--accent) 10%, transparent) 62%,
+            transparent 74%);
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, #050505 70%, transparent),
+        0 0 0 2.5px color-mix(in srgb, var(--accent) 72%, transparent),
+        0 0 16px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+body.ov-live:not(.st-skin) .st-cur.is-hot {
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, #050505 60%, transparent),
+        0 0 0 3px color-mix(in srgb, var(--accent) 88%, transparent),
+        0 0 24px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    body.st-live,
+    body.st-live *,
+    body.ov-live,
+    body.ov-live * {
+        cursor: none !important;
+    }
 }
 
 /* ============================================================
@@ -3406,6 +3742,8 @@ body.st-skin #slot-timer #timer {
         <div class="hud-bar"><i id="hud-bar-fill"></i></div>
         <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
     </div>
+
+    <div class="st-cur" id="st-cur" aria-hidden="true"></div>
 
     <!-- ============================================================
          main menu
@@ -3805,7 +4143,7 @@ body.st-skin #slot-timer #timer {
                 <span>↑↓ 选择</span>
                 <span>回车 确认</span>
                 <span>ESC 返回</span>
-                <span class="foot-r">引擎 v0.5.1 · 菜单层</span>
+                <span class="foot-r" id="foot-ver">引擎 v0.5.2 · 菜单层</span>
             </footer>
         </div>
     </div>
@@ -3858,7 +4196,8 @@ body.st-skin #slot-timer #timer {
     <script>// Create a Mersenne Twister engine and auto-seed it
 var eng = Random.MersenneTwister19937.autoSeed();
 var myrandom = new Random.Random(eng);</script>
-    <script>const VERSION = "v0.5.1 (beta)";</script>
+    <script>const VERSION = "v0.5.3 (beta)";
+</script>
     <script>const TITLE = `antiBallsheet game by dph, ${VERSION}`;
 const FIELD_SIZE_PX = 600;
 const DEFAULTS = {
@@ -4788,6 +5127,126 @@ const game = new AntiBallsheetGame(
         try { localStorage.setItem(LS_COLORS, JSON.stringify(s)); } catch (e) { }
         return s;
     }
+    /* ---------------- colour feel ----------------
+       变色动态：how the ball / border colour reacts to hp.
+         curve  linear  — straight hp → colour (the source behaviour)
+                natural — sensitive early: a little drain reads immediately
+                step    — S curve: almost no change until hp crosses ~45%
+                custom  — two draggable control points
+         gain   output multiplier, 0.4× .. 2.0×  (how far the colour travels)
+         smooth lag in seconds, 0 .. 0.6      (how fast it chases the target)
+         split  separate lag for drain / refill
+       on = 0 falls back to plain linear + no smoothing.
+       ------------------------------------------------------- */
+    var LS_FEEL = 'bsColorFeel';
+    var FEEL_DEFAULT = {
+        on: 1,
+        curve: 'linear',
+        gain: 1,
+        smooth: 0.12,
+        split: 0,
+        drain: 0.35,
+        gainT: 0.06,
+        c1x: 0.30, c1y: 0.26,
+        c2x: 0.72, c2y: 0.82
+    };
+    var FEEL_CURVES = { linear: 1, natural: 1, step: 1, custom: 1 };
+    var FEEL_NUM = ['on', 'gain', 'smooth', 'split', 'drain', 'gainT',
+                    'c1x', 'c1y', 'c2x', 'c2y'];
+
+    function readFeel() {
+        var out = {}, k, i, raw, p = null;
+        for (k in FEEL_DEFAULT) { if (FEEL_DEFAULT.hasOwnProperty(k)) { out[k] = FEEL_DEFAULT[k]; } }
+        try {
+            raw = localStorage.getItem(LS_FEEL);
+            p = raw ? JSON.parse(raw) : null;
+        } catch (e) { p = null; }
+        if (p && typeof p === 'object') {
+            if (typeof p.curve === 'string' && FEEL_CURVES[p.curve]) { out.curve = p.curve; }
+            for (i = 0; i < FEEL_NUM.length; i++) {
+                k = FEEL_NUM[i];
+                if (typeof p[k] === 'boolean') { out[k] = p[k] ? 1 : 0; }
+                else if (typeof p[k] === 'number' && isFinite(p[k])) { out[k] = p[k]; }
+            }
+        }
+        out.on = out.on ? 1 : 0;
+        out.split = out.split ? 1 : 0;
+        out.gain = clamp(out.gain, 0.4, 2.0);
+        out.smooth = clamp(out.smooth, 0, 0.6);
+        out.drain = clamp(out.drain, 0, 0.8);
+        out.gainT = clamp(out.gainT, 0, 0.8);
+        out.c1x = clamp(out.c1x, 0.12, 0.48);
+        out.c2x = clamp(out.c2x, 0.52, 0.90);
+        if (out.c2x < out.c1x + 0.10) { out.c2x = out.c1x + 0.10; }
+        out.c1y = clamp(out.c1y, 0, 1);
+        out.c2y = clamp(out.c2y, 0, 1);
+        return out;
+    }
+    function saveFeel(patch) {
+        var s = readFeel(), i, k;
+        if (patch && typeof patch === 'object') {
+            if (typeof patch.curve === 'string' && FEEL_CURVES[patch.curve]) { s.curve = patch.curve; }
+            for (i = 0; i < FEEL_NUM.length; i++) {
+                k = FEEL_NUM[i];
+                if (typeof patch[k] === 'boolean') { s[k] = patch[k] ? 1 : 0; }
+                else if (typeof patch[k] === 'number' && isFinite(patch[k])) { s[k] = patch[k]; }
+            }
+        }
+        try { localStorage.setItem(LS_FEEL, JSON.stringify(s)); } catch (e) { }
+        return readFeel();
+    }
+    function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+    function polyline(x, pts) {
+        var i, a, b, k;
+        for (i = 1; i < pts.length; i++) {
+            a = pts[i - 1];
+            b = pts[i];
+            if (x <= b[0] || i === pts.length - 1) {
+                k = b[0] > a[0] ? (x - a[0]) / (b[0] - a[0]) : 0;
+                k = clamp(k, 0, 1);
+                return a[1] + (b[1] - a[1]) * k;
+            }
+        }
+        return 1;
+    }
+    /* d = drained share (0 = full hp, 1 = dead) → colour mix 0..1 */
+    function curveValue(d, F) {
+        d = clamp(d, 0, 1);
+        if (!F || !F.on) { return d; }
+        var y;
+        if (F.curve === 'natural') {
+            y = 1 - Math.pow(1 - d, 2);            /* fast early, saturates late */
+        } else if (F.curve === 'step') {
+            var z0 = sigmoid(-5.5), z1 = sigmoid(4.5);
+            y = (sigmoid((d - 0.55) * 10) - z0) / (z1 - z0);
+        } else if (F.curve === 'custom') {
+            y = polyline(d, [[0, 0], [F.c1x, F.c1y], [F.c2x, F.c2y], [1, 1]]);
+        } else {
+            y = d;
+        }
+        return clamp(clamp(y, 0, 1) * F.gain, 0, 1);
+    }
+    function smoothValue(cur, target, dt, F) {
+        if (!F || !F.on) { return target; }
+        var tau = F.smooth;
+        if (F.split) { tau = target > cur ? F.drain : F.gainT; }
+        if (tau <= 0.001 || dt <= 0) { return target; }
+        return cur + (target - cur) * (1 - Math.exp(-dt / tau));
+    }
+    function mixFor(C, t, pulse) {
+        /* field mode: border goes red as t grows; hp mode: ball base → lose */
+        if (C.mode === 'field') {
+            return {
+                ball: rgbCss(C.fixed),
+                edge: rgbCss(mixRgb(C.edgeLo, C.edgeHi, clamp(1 - t, 0, 1)))
+            };
+        }
+        var p = (typeof pulse === 'number') ? pulse : S.greenPulse;
+        var rgb = mixRgb(C.base, C.lose, clamp(t, 0, 1));
+        rgb = mixRgb(rgb, C.gain, clamp(p, 0, 1) * 0.8);
+        return { ball: rgbCss(rgb), edge: rgbCss(C.lose) };
+    }
+
     function hexToRgbArr(h, fallback) {
         if (typeof h !== 'string') { return fallback ? fallback.slice() : null; }
         var m = h.replace('#', '');
@@ -4839,6 +5298,8 @@ const game = new AntiBallsheetGame(
         onFinish: null,
         muted: false,
         colors: null,
+        feel: null,
+        mixT: 0,
         ballMix: null,
         greenPulse: 0
     };
@@ -4906,29 +5367,22 @@ const game = new AntiBallsheetGame(
         }
     }
 
-    function paintBall(t) {
+    function paintBall(dt) {
         if (!el.ball) { return; }
         var r = ballRadius();
         el.ball.style.transform = 'translate3d(' + (S.x - r).toFixed(2) + 'px,' +
             (S.y - r).toFixed(2) + 'px,0)';
 
         var C = S.colors || colorState(COLOR_DEFAULT);
-        var rgb, edge;
+        var F = S.feel || readFeel();
+        var target = curveValue(1 - hpRatio(), F);
+        S.mixT = dt > 0 ? smoothValue(S.mixT, target, dt, F) : target;
+        var out = mixFor(C, S.mixT);
 
-        if (C.mode === 'field') {
-            /* ball keeps one colour, the field border reports hp */
-            rgb = C.fixed;
-            edge = mixRgb(C.edgeLo, C.edgeHi, hpRatio());
-            if (el.container) { el.container.style.borderColor = rgbCss(edge); }
-        } else {
-            /* base → red as hp drains, green pulse on every catch */
-            var drained = 1 - hpRatio();
-            rgb = mixRgb(C.base, C.lose, clamp(drained, 0, 1));
-            rgb = mixRgb(rgb, C.gain, clamp(S.greenPulse, 0, 1) * 0.8);
-            if (el.container) { el.container.style.borderColor = ''; }
+        if (el.container) {
+            el.container.style.borderColor = (C.mode === 'field') ? out.edge : '';
         }
-
-        el.ball.style.background = rgbCss(rgb);
+        el.ball.style.background = out.ball;
         el.ball.style.boxShadow = 'none';
     }
 
@@ -5062,7 +5516,7 @@ const game = new AntiBallsheetGame(
         if (eps > S.maxEps) { S.maxEps = eps; }
         if (S.greenPulse > 0) { S.greenPulse *= Math.exp(-dt * 3.2); if (S.greenPulse < 0.02) { S.greenPulse = 0; } }
         paintHud(t, eps);
-        paintBall(t);
+        paintBall(dt);
         if (S.started && S.hp < 0) { finish(); return; }
         S.raf = requestAnimationFrame(tick);
     }
@@ -5136,6 +5590,8 @@ const game = new AntiBallsheetGame(
         S.lastFrame = performance.now();
         S.onFinish = onFinish || null;
         S.colors = colorState(readColorCfg());
+        S.feel = readFeel();
+        S.mixT = 0;
         S.greenPulse = 0;
         if (el.container) { el.container.style.borderColor = ''; }
 
@@ -5223,11 +5679,36 @@ const game = new AntiBallsheetGame(
             var cfg = saveColorCfg(patch || {});
             S.colors = colorState(cfg);
             if (el.container) { el.container.style.borderColor = ''; }
-            if (S.active && !S.paused) { paintBall(elapsedSec(performance.now())); }
+            if (S.active && !S.paused) { paintBall(0); }
             return cfg;
         },
         refreshColors: function () {
             S.colors = colorState(readColorCfg());
+        },
+        /* colour-feel API, used by the 变色动态 panel */
+        feelDefaults: FEEL_DEFAULT,
+        feel: readFeel,
+        saveFeel: saveFeel,
+        curveValue: curveValue,
+        setFeel: function (patch) {
+            var f = saveFeel(patch || {});
+            S.feel = f;
+            if (S.active && !S.paused) { paintBall(0); }
+            return f;
+        },
+        /* preview helper: d = drained share, dt = frame seconds,
+           st = { v } the caller keeps between frames */
+        samplePreview: function (d, dt, st) {
+            var F = readFeel();
+            var t = curveValue(d, F);
+            if (!st) { st = { v: t }; }
+            st.v = dt > 0 ? smoothValue(st.v, t, dt, F) : t;
+            var C = colorState(readColorCfg());
+            var out = mixFor(C, st.v, 0);
+            out.mode = C.mode;
+            out.t = st.v;
+            out.state = st;
+            return out;
         }
     };
 })();
@@ -6227,6 +6708,7 @@ const game = new AntiBallsheetGame(
             ui.classList.add('is-hidden');
             hud.classList.add('is-on', 'is-dim');
             ovPause.classList.add('is-open');
+            if (st.game === 'st') { stLive(true); } else { ovLive(true); }
             try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
             return;
         }
@@ -6234,6 +6716,7 @@ const game = new AntiBallsheetGame(
             st.returnTo = null;
             ui.classList.add('is-hidden');
             ovResults.classList.add('is-open');
+            if (st.game === 'st') { stLive(true); } else { ovLive(true); }
             return;
         }
         showScreen('home');
@@ -6328,6 +6811,8 @@ const game = new AntiBallsheetGame(
     function startFreshRun() {
         closeOverlays();
         clearFieldTint();
+        stLive(false);
+        ovLive(false);
         stSkin(false);
         st.game = 'abs';
         st.lastGame = 'abs';
@@ -6370,9 +6855,30 @@ const game = new AntiBallsheetGame(
         }
     }
 
+    /* schulte gets a themed lime ring instead of the system arrow */
+    function stLive(on) {
+        doc.body.classList.toggle('st-live', !!on);
+        if (!on) {
+            var c = $('#st-cur');
+            if (c) { c.classList.remove('is-on', 'is-hot'); }
+        }
+    }
+
+    /* overlays (pause / results) keep a themed pointer too: lime while a
+       schulte run is alive, cyan for the other two modes */
+    function ovLive(on) {
+        doc.body.classList.toggle('ov-live', !!on);
+        if (!on) {
+            var c = $('#st-cur');
+            if (c) { c.classList.remove('is-on', 'is-hot'); }
+        }
+    }
+
     function startBsRun() {
         if (!bs) { return; }
         closeOverlays();
+        stLive(false);
+        ovLive(false);
         stSkin(false);
         st.game = 'bs';
         st.lastGame = 'bs';
@@ -6394,11 +6900,14 @@ const game = new AntiBallsheetGame(
         if (!sch) { return; }
         closeOverlays();
         clearFieldTint();
+        stLive(false);
+        ovLive(false);
         stSkin(true);
         st.game = 'st';
         st.lastGame = 'st';
         st.paused = false;
         st.playing = true;
+        stLive(true);
         ui.classList.add('is-hidden');
         hud.classList.add('is-on');
         hud.classList.remove('is-dim');
@@ -6436,6 +6945,7 @@ const game = new AntiBallsheetGame(
             $('#pause-time').textContent = fmt(bs.state().t) + ' 秒';
             hud.classList.add('is-dim');
             ovPause.classList.add('is-open');
+            ovLive(true);
             try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
             return;
         }
@@ -6454,6 +6964,7 @@ const game = new AntiBallsheetGame(
         $('#pause-time').textContent = fmt((st.pauseAt - game.startTime) / 1000) + ' 秒';
         hud.classList.add('is-dim');
         ovPause.classList.add('is-open');
+        ovLive(true);
         try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
     }
 
@@ -6464,6 +6975,7 @@ const game = new AntiBallsheetGame(
             st.paused = false;
             ovPause.classList.remove('is-open');
             hud.classList.remove('is-dim');
+            ovLive(false);
             return;
         }
         if (st.game === 'st' && sch) {
@@ -6471,6 +6983,7 @@ const game = new AntiBallsheetGame(
             st.paused = false;
             ovPause.classList.remove('is-open');
             hud.classList.remove('is-dim');
+            stLive(true);
             return;
         }
         var delta = performance.now() - st.pauseAt;
@@ -6480,6 +6993,7 @@ const game = new AntiBallsheetGame(
         st.paused = false;
         ovPause.classList.remove('is-open');
         hud.classList.remove('is-dim');
+        ovLive(false);
     }
 
     /* ============================================================
@@ -6518,6 +7032,7 @@ const game = new AntiBallsheetGame(
         st.paused = false;
         flashReset();
         closeOverlays();
+        ovLive(false);
         if (st.game === 'bs' && bs) {
             st.playing = true;
             hud.classList.remove('is-dim');
@@ -6528,6 +7043,7 @@ const game = new AntiBallsheetGame(
             st.playing = true;
             hud.classList.remove('is-dim');
             sch.restart();
+            stLive(true);
             return;
         }
         game.startGame();
@@ -6544,6 +7060,8 @@ const game = new AntiBallsheetGame(
         stopHudLoop();
         hideHud();
         hudLabels(false);
+        stLive(false);
+        ovLive(false);
         stSkin(false);
         game.gameContainer.style.display = 'none';
         fitStage();
@@ -6635,6 +7153,7 @@ const game = new AntiBallsheetGame(
         ui.classList.add('is-hidden');
         hideHud();
         ovResults.classList.add('is-open');
+        ovLive(true);
 
         requestAnimationFrame(function () { drawResultsChart(rt); });
         try { $('#res-retry').focus({ preventScroll: true }); } catch (e) { }
@@ -6680,6 +7199,7 @@ const game = new AntiBallsheetGame(
         ui.classList.add('is-hidden');
         hideHud();
         ovResults.classList.add('is-open');
+        ovLive(true);
 
         requestAnimationFrame(function () { drawResultsChart(data.reactions, 'ms'); });
         refreshHome();
@@ -6732,6 +7252,7 @@ const game = new AntiBallsheetGame(
         ui.classList.add('is-hidden');
         hideHud();
         ovResults.classList.add('is-open');
+        ovLive(true);
         refreshHome();
         try { $('#res-retry').focus({ preventScroll: true }); } catch (e) { }
     }
@@ -7737,6 +8258,7 @@ const game = new AntiBallsheetGame(
         if (oldStart) { oldStart.remove(); }
         zhifyPanels();
         mountBallColors();
+        mountBallFeel();
     }
 
     /* ============================================================
@@ -7821,6 +8343,282 @@ const game = new AntiBallsheetGame(
 
         syncMode();
     }
+
+    /* ============================================================
+       BallSheet 变色动态 — curve presets + gain + smoothing, with a
+       live sweeping ball so every option can be seen before playing
+       ============================================================ */
+    var BF_CURVES = [
+        { id: 'linear', label: '线性', hint: '掉多少血，变多少色' },
+        { id: 'natural', label: '早敏', hint: '掉一点就明显变色' },
+        { id: 'step', label: '跳变', hint: '跌破一半才骤变' },
+        { id: 'custom', label: '自定义', hint: '拖动画布上的两点' }
+    ];
+
+    function mountBallFeel() {
+        if ($('#bs-feel-box') || !window.BallSheet) { return; }
+        var host = $('#slot-look .slot-content') || $('.settings-container') || $('#slot-look');
+        if (!host) { return; }
+        var api = window.BallSheet;
+        var FEEL = api.feel();
+
+        var box = doc.createElement('div');
+        box.className = 'bs-feel';
+        box.id = 'bs-feel-box';
+        box.innerHTML =
+            '<div class="bs-col-head"><b>变色动态</b><span>曲线 + 灵敏度 · 实时预览</span>' +
+                '<button type="button" class="bf-reset" id="bf-reset">恢复默认</button></div>' +
+            '<label class="bf-switch"><input type="checkbox" id="bf-on"><i></i><span>启用动态变色（关＝源站线性）</span></label>' +
+            '<div class="bf-chips">' +
+                BF_CURVES.map(function (c) {
+                    return '<button type="button" class="bf-chip" data-bfcurve="' + c.id + '">' + c.label + '</button>';
+                }).join('') +
+            '</div>' +
+            '<p class="bf-hint" id="bf-hint"></p>' +
+            '<label class="bf-line"><span>灵敏度 <em id="bf-gain-v">1.00×</em></span>' +
+                '<input type="range" id="bf-gain" min="0.4" max="2" step="0.02" value="1"></label>' +
+            '<label class="bf-line"><span>平滑 <em id="bf-smooth-v">0.12 s</em></span>' +
+                '<input type="range" id="bf-smooth" min="0" max="0.6" step="0.01" value="0.12"></label>' +
+            '<label class="bf-switch"><input type="checkbox" id="bf-split"><i></i><span>掉血 / 回血分开速率</span></label>' +
+            '<label class="bf-line bf-sub" id="bf-drain-row"><span>掉血滞后 <em id="bf-drain-v">0.35 s</em></span>' +
+                '<input type="range" id="bf-drain" min="0" max="0.8" step="0.01" value="0.35"></label>' +
+            '<label class="bf-line bf-sub" id="bf-gaint-row"><span>回血跟上 <em id="bf-gaint-v">0.06 s</em></span>' +
+                '<input type="range" id="bf-gaint" min="0" max="0.8" step="0.01" value="0.06"></label>' +
+            '<div class="bf-live">' +
+                '<canvas id="bf-curve"></canvas>' +
+                '<div class="bf-stage">' +
+                    '<div class="bf-field" id="bf-field"><div class="bf-ball" id="bf-ball"></div></div>' +
+                    '<div class="bf-hp"><i id="bf-hp"></i></div>' +
+                '</div>' +
+            '</div>' +
+            '<p class="bs-col-note">横轴＝已掉血量 0→100%，纵轴＝变色程度。预览球按当前设置循环掉血 / 回血。</p>';
+        host.appendChild(box);
+
+        function fmt(v, n) { return v.toFixed(n); }
+
+        function refresh() {
+            FEEL = api.feel();
+            $('#bf-on').checked = !!FEEL.on;
+            $('#bf-split').checked = !!FEEL.split;
+            $('#bf-gain').value = String(FEEL.gain);
+            $('#bf-smooth').value = String(FEEL.smooth);
+            $('#bf-drain').value = String(FEEL.drain);
+            $('#bf-gaint').value = String(FEEL.gainT);
+            $('#bf-gain-v').textContent = fmt(FEEL.gain, 2) + '×';
+            $('#bf-smooth-v').textContent = FEEL.smooth < 0.005 ? '瞬变' : fmt(FEEL.smooth, 2) + ' s';
+            $('#bf-drain-v').textContent = fmt(FEEL.drain, 2) + ' s';
+            $('#bf-gaint-v').textContent = fmt(FEEL.gainT, 2) + ' s';
+            $('#bf-drain-row').classList.toggle('is-off', !FEEL.split);
+            $('#bf-gaint-row').classList.toggle('is-off', !FEEL.split);
+            box.classList.toggle('is-muted', !FEEL.on);
+            $$('.bf-chip', box).forEach(function (b) {
+                b.classList.toggle('is-on', b.getAttribute('data-bfcurve') === FEEL.curve);
+            });
+            var hint = '';
+            BF_CURVES.forEach(function (c) { if (c.id === FEEL.curve) { hint = c.hint; } });
+            var hintEl = $('#bf-hint');
+            if (hintEl) { hintEl.textContent = FEEL.on ? hint : '关掉了：颜色只按血量线性走，不做平滑。'; }
+        }
+
+        function apply(patch) {
+            api.setFeel(patch);
+            refresh();
+        }
+
+        $('#bf-on').addEventListener('change', function () { apply({ on: this.checked ? 1 : 0 }); });
+        $('#bf-split').addEventListener('change', function () { apply({ split: this.checked ? 1 : 0 }); });
+        $$('.bf-chip', box).forEach(function (b) {
+            bindTap(b, function () {
+                sfx(560);
+                apply({ curve: b.getAttribute('data-bfcurve') });
+            });
+        });
+        $('#bf-gain').addEventListener('input', function () { apply({ gain: Number(this.value) }); });
+        $('#bf-smooth').addEventListener('input', function () { apply({ smooth: Number(this.value) }); });
+        $('#bf-drain').addEventListener('input', function () { apply({ drain: Number(this.value) }); });
+        $('#bf-gaint').addEventListener('input', function () { apply({ gainT: Number(this.value) }); });
+        bindTap($('#bf-reset'), function () {
+            sfx(560);
+            api.saveFeel(api.feelDefaults);
+            apply({});
+        });
+
+        /* ---- live preview ---- */
+        var cv = $('#bf-curve');
+        var ctx = cv && cv.getContext ? cv.getContext('2d') : null;
+        var ballEl = $('#bf-ball'), fieldEl = $('#bf-field'), hpEl = $('#bf-hp');
+        var cw = 0, ch = 0;
+        var st = { v: 0 };
+        var last = 0, clock = null;
+        var drag = null;
+
+        function fit() {
+            var w = cv.clientWidth, h = cv.clientHeight;
+            if (!w || !h) { return false; }
+            var dpr = Math.min(2, window.devicePixelRatio || 1);
+            if (Math.abs(w - cw) > 0.5 || Math.abs(h - ch) > 0.5) {
+                cw = w; ch = h;
+                cv.width = Math.round(w * dpr);
+                cv.height = Math.round(h * dpr);
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            return true;
+        }
+
+        function geo() {
+            var padL = 10, padR = 12, padT = 17, padB = 17;
+            return { x0: padL, y0: ch - padB, w: cw - padL - padR, h: ch - padT - padB };
+        }
+
+        function draw(posD, posT) {
+            if (!ctx || !cw) { return; }
+            var g = geo();
+            ctx.clearRect(0, 0, cw, ch);
+
+            /* grid */
+            ctx.strokeStyle = 'rgba(255,255,255,.10)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            var i, k;
+            for (i = 0; i <= 4; i++) {
+                k = i / 4;
+                ctx.moveTo(g.x0 + g.w * k, g.y0);
+                ctx.lineTo(g.x0 + g.w * k, g.y0 - g.h);
+                ctx.moveTo(g.x0, g.y0 - g.h * k);
+                ctx.lineTo(g.x0 + g.w, g.y0 - g.h * k);
+            }
+            ctx.stroke();
+
+            /* curve */
+            var pts = [], n = 64, d, t;
+            for (i = 0; i <= n; i++) {
+                d = i / n;
+                t = api.curveValue(d, FEEL);
+                pts.push([g.x0 + g.w * d, g.y0 - g.h * t]);
+            }
+            ctx.beginPath();
+            ctx.moveTo(g.x0, g.y0);
+            pts.forEach(function (p) { ctx.lineTo(p[0], p[1]); });
+            ctx.lineTo(g.x0 + g.w, g.y0);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(0,255,255,.07)';
+            ctx.fill();
+
+            ctx.beginPath();
+            pts.forEach(function (p, j) { if (j) { ctx.lineTo(p[0], p[1]); } else { ctx.moveTo(p[0], p[1]); } });
+            ctx.strokeStyle = FEEL.on ? '#00ffff' : 'rgba(234,242,245,.45)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            /* sweep cursor */
+            if (posD >= 0) {
+                var mx = g.x0 + g.w * posD, my = g.y0 - g.h * posT;
+                ctx.strokeStyle = 'rgba(0,255,255,.35)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(mx, g.y0);
+                ctx.lineTo(mx, g.y0 - g.h);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(mx, my, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#00ffff';
+                ctx.fill();
+            }
+
+            /* custom handles */
+            if (FEEL.on && FEEL.curve === 'custom') {
+                [[FEEL.c1x, FEEL.c1y], [FEEL.c2x, FEEL.c2y]].forEach(function (p) {
+                    var px = g.x0 + g.w * p[0], py = g.y0 - g.h * p[1];
+                    ctx.beginPath();
+                    ctx.arc(px, py, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0,255,255,.15)';
+                    ctx.fill();
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth = 1.2;
+                    ctx.stroke();
+                });
+            }
+
+            /* axis ticks */
+            ctx.fillStyle = 'rgba(234,242,245,.42)';
+            ctx.font = '9px ui-monospace, monospace';
+            ctx.fillText('0', g.x0 - 1, g.y0 + 12);
+            ctx.fillText('掉血 100%', g.x0 + g.w - 46, g.y0 + 12);
+            ctx.fillText('变色 100%', g.x0 - 1, g.y0 - g.h - 5);
+        }
+
+        function loop(ts) {
+            requestAnimationFrame(loop);
+            var vis = box.isConnected && box.offsetWidth > 0 && !document.hidden;
+            if (!vis || !ctx) { last = ts; clock = null; st.v = 0; return; }
+            if (!fit()) { return; }
+            if (clock === null) { clock = ts; last = ts; st.v = 0; }
+            var dt = Math.min(0.05, (ts - last) / 1000);
+            last = ts;
+
+            var cyc = 4.2, ph = ((ts - clock) / 1000) % cyc, d;
+            if (ph < 2.2) { d = ph / 2.2; }
+            else if (ph < 2.9) { d = 1; }
+            else if (ph < 3.6) { d = 1 - (ph - 2.9) / 0.7; }
+            else { d = 0; }
+
+            var out = api.samplePreview(d, dt, st);
+            if (ballEl) { ballEl.style.background = out.ball; }
+            if (fieldEl) {
+                fieldEl.style.borderColor = out.mode === 'field' ? out.edge : 'rgba(255,255,255,.22)';
+            }
+            if (hpEl) { hpEl.style.width = Math.round((1 - d) * 100) + '%'; }
+            draw(d, out.t);
+        }
+
+        /* custom curve: drag the two handles straight on the canvas */
+        function pick(e) {
+            var g = geo(), rect = cv.getBoundingClientRect();
+            var px = e.clientX - rect.left, py = e.clientY - rect.top;
+            var c1 = [g.x0 + g.w * FEEL.c1x, g.y0 - g.h * FEEL.c1y];
+            var c2 = [g.x0 + g.w * FEEL.c2x, g.y0 - g.h * FEEL.c2y];
+            if (Math.hypot(px - c1[0], py - c1[1]) <= 16) { return 'c1'; }
+            if (Math.hypot(px - c2[0], py - c2[1]) <= 16) { return 'c2'; }
+            return null;
+        }
+        cv.addEventListener('pointerdown', function (e) {
+            if (!FEEL.on || FEEL.curve !== 'custom') { return; }
+            var hit = pick(e);
+            if (!hit) { return; }
+            drag = hit;
+            try { cv.setPointerCapture(e.pointerId); } catch (err) { }
+            e.preventDefault();
+        });
+        cv.addEventListener('pointermove', function (e) {
+            if (!drag) {
+                if (FEEL.on && FEEL.curve === 'custom') {
+                    cv.style.cursor = pick(e) ? 'grab' : 'default';
+                }
+                return;
+            }
+            var g = geo(), rect = cv.getBoundingClientRect();
+            var x = clamp01((e.clientX - rect.left - g.x0) / g.w);
+            var y = clamp01((g.y0 - (e.clientY - rect.top)) / g.h);
+            var patch = {};
+            if (drag === 'c1') {
+                patch.c1x = Math.min(x, 0.46);
+                patch.c1y = y;
+            } else {
+                patch.c2x = Math.max(x, 0.54);
+                patch.c2y = y;
+            }
+            api.setFeel(patch);
+            FEEL = api.feel();
+        });
+        ['pointerup', 'pointercancel'].forEach(function (ev) {
+            cv.addEventListener(ev, function () { drag = null; });
+        });
+
+        refresh();
+        requestAnimationFrame(loop);
+    }
+
+    function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
 
     /* engine labels still arrive in English — rewrite them once after the
        panels are re-homed, so the settings/colour screens read as Chinese */
@@ -8025,6 +8823,8 @@ const game = new AntiBallsheetGame(
         bindTap($('#pause-mode'), function () {
             sfx(560);
             st.returnTo = 'pause';
+            stLive(false);
+            ovLive(false);
             ovPause.classList.remove('is-open');
             ui.classList.remove('is-hidden');
             showScreen('mode');
@@ -8035,6 +8835,8 @@ const game = new AntiBallsheetGame(
         bindTap($('#res-mode'), function () {
             sfx(560);
             st.returnTo = 'results';
+            stLive(false);
+            ovLive(false);
             ovResults.classList.remove('is-open');
             ui.classList.remove('is-hidden');
             showScreen('mode');
@@ -8260,12 +9062,51 @@ const game = new AntiBallsheetGame(
     }
 
     /* ============================================================
+       schulte pointer: lime ring that reads on black and on the cards
+       ============================================================ */
+    function bindStCursor() {
+        var cur = $('#st-cur');
+        if (!cur || !window.matchMedia) { return; }
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) { return; }
+
+        var raf = 0;
+        var px = 0;
+        var py = 0;
+
+        function place() {
+            raf = 0;
+            cur.style.transform = 'translate3d(' + px + 'px,' + py + 'px,0)';
+        }
+
+        function track(e) {
+            if (e.pointerType && e.pointerType !== 'mouse') { return; }
+            var live = doc.body.classList.contains('st-live') || doc.body.classList.contains('ov-live');
+            if (!live) { return; }
+            if (typeof e.clientX !== 'number') { return; }
+            px = e.clientX;
+            py = e.clientY;
+            cur.classList.add('is-on');
+            if (!raf) { raf = requestAnimationFrame(place); }
+            var t = e.target;
+            cur.classList.toggle('is-hot', !!(t && t.closest && t.closest('.st-cell, .btn, button, a, .mi, .chip')));
+        }
+
+        doc.addEventListener('pointermove', track, { passive: true, capture: true });
+        doc.addEventListener('pointerover', track, { passive: true, capture: true });
+        doc.addEventListener('pointerdown', track, { passive: true, capture: true });
+        doc.addEventListener('pointerleave', function () { cur.classList.remove('is-on'); });
+        window.addEventListener('blur', function () { cur.classList.remove('is-on'); });
+    }
+
+    /* ============================================================
        boot
        ============================================================ */
     function boot() {
-        var v = typeof VERSION !== 'undefined' ? VERSION : 'v0.5.1';
+        var v = typeof VERSION !== 'undefined' ? VERSION : 'v0.5.2';
         $('#brand-ver').textContent = v;
         $('#about-ver').textContent = '引擎 ' + v;
+        var footVer = $('#foot-ver');
+        if (footVer) { footVer.textContent = '引擎 ' + v + ' · 菜单层'; }
 
         relinkPanels();
         zhifyPanels();
@@ -8276,6 +9117,7 @@ const game = new AntiBallsheetGame(
         patchEngine();
         bindUI();
         bindCursor();
+        bindStCursor();
         applyMute();
         initSfx();
         showUi();
