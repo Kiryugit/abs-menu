@@ -794,10 +794,150 @@ body {
     gap: 8px;
 }
 
+/* top row: BallSheet split into two half-width entries */
+.menu-duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.menu-duo .mi {
+    grid-template-columns: 28px 22px minmax(0, 1fr) 18px;
+    grid-template-rows: auto auto;
+    column-gap: 8px;
+    row-gap: 2px;
+    padding: 11px 12px;
+    align-content: center;
+}
+
+.menu-duo .mi:hover,
+.menu-duo .mi:focus-visible {
+    transform: translateY(-2px);
+}
+
+.menu-duo .mi-idx {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
+    font-size: 9.5px;
+}
+
+.menu-duo .mi-icon {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    width: 22px;
+    height: 22px;
+}
+
+.menu-duo .mi-icon svg {
+    width: 13px;
+    height: 13px;
+}
+
+.menu-duo .mi-go {
+    grid-column: 4;
+    grid-row: 1 / 3;
+    align-self: center;
+    font-size: 11px;
+}
+
+.menu-duo .mi-title {
+    grid-column: 3;
+    grid-row: 1 / 3;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+}
+
+.menu-duo .mi-title .mi-label {
+    font-size: 12px;
+    letter-spacing: .12em;
+}
+
+.menu-duo .mi-title .mi-tag {
+    display: inline-block;
+    font-size: 7.5px;
+    letter-spacing: .1em;
+    padding: 1px 5px 0;
+}
+
+.menu-duo .mi > .mi-label {
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    letter-spacing: .12em;
+}
+
+.menu-duo .mi > .mi-hint {
+    display: block;
+    grid-column: 3;
+    grid-row: 2;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 8px;
+    letter-spacing: .08em;
+}
+
+.menu-duo .mi-feature > .mi-hint,
+.menu-duo .mi-en {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .menu-duo {
+        gap: 7px;
+    }
+
+    .menu-duo .mi {
+        grid-template-columns: 20px 20px minmax(0, 1fr);
+        column-gap: 6px;
+        padding: 10px;
+    }
+
+    .menu-duo .mi-go {
+        display: none;
+    }
+
+    .menu-duo .mi-idx {
+        font-size: 8.5px;
+    }
+
+    .menu-duo .mi-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .menu-duo .mi-icon svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .menu-duo .mi-title .mi-label,
+    .menu-duo .mi > .mi-label {
+        font-size: 11px;
+        letter-spacing: .06em;
+    }
+
+    .menu-duo .mi-title .mi-tag {
+        font-size: 7px;
+    }
+
+    .menu-duo .mi > .mi-hint {
+        font-size: 7.5px;
+        letter-spacing: .04em;
+    }
+}
+
 .mi {
     position: relative;
     display: grid;
-    grid-template-columns: 38px minmax(0, 1fr) auto 22px;
+    grid-template-columns: 38px 26px minmax(0, 1fr) auto 22px;
     align-items: center;
     gap: 14px;
     width: 100%;
@@ -845,6 +985,59 @@ body {
     font-size: 10px;
     letter-spacing: .06em;
     color: var(--dim);
+}
+
+/* mode thumbnails: one small square badge left of every mode name */
+.mi-icon {
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, .025);
+    color: var(--dim);
+}
+
+.mi-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mi-icon.ic-bs {
+    color: var(--target);
+    border-color: rgba(250, 150, 200, .5);
+    background: rgba(250, 150, 200, .08);
+}
+
+.mi-icon.ic-speed {
+    color: var(--accent);
+    border-color: var(--accent-soft);
+    background: rgba(0, 255, 255, .07);
+}
+
+.mi-icon.ic-st {
+    color: #d9ff3c;
+    border-color: rgba(217, 255, 60, .42);
+    background: rgba(217, 255, 60, .06);
+}
+
+.mi-icon.ic-rt {
+    color: #52e39a;
+    border-color: rgba(82, 227, 154, .42);
+    background: rgba(82, 227, 154, .07);
+}
+
+.mi-icon.ic-util {
+    color: #a9c0cc;
+    border-color: rgba(169, 192, 204, .32);
+    background: rgba(169, 192, 204, .045);
 }
 
 .mi-label {
@@ -1156,6 +1349,65 @@ kbd {
     border-color: var(--accent);
     color: var(--accent);
     background: rgba(0, 255, 255, .05);
+}
+
+/* 规则页内的玩法切换：速通 / 生存 / 舒尔特 / 反应 */
+.mode-switch {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0 0 18px;
+}
+
+.mode-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--dim);
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: .1em;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background-color .15s;
+}
+
+.mode-ic {
+    width: 13px;
+    height: 13px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .75;
+}
+
+.mode-tab.is-on .mode-ic {
+    opacity: 1;
+}
+
+.mode-tab:hover,
+.mode-tab.is-on {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 255, 255, .05);
+}
+
+[data-modecard].is-off {
+    display: none !important;
+}
+
+@media (max-width: 560px) {
+    .mode-switch {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .set-pane {
@@ -2045,7 +2297,17 @@ kbd {
     }
 
     .mi {
-        grid-template-columns: 26px minmax(0, 1fr) 18px;
+        grid-template-columns: 26px 22px minmax(0, 1fr) 18px;
+    }
+
+    .mi-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .mi-icon svg {
+        width: 13px;
+        height: 13px;
     }
 
     .mi-hint {
@@ -2912,8 +3174,18 @@ html[lang="zh-CN"] .brand-sub {
     .mi {
         min-height: 52px;
         padding: 12px 14px;
-        grid-template-columns: 26px minmax(0, 1fr) 18px;
-        gap: 10px;
+        grid-template-columns: 26px 22px minmax(0, 1fr) 18px;
+        gap: 9px;
+    }
+
+    .mi-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .mi-icon svg {
+        width: 13px;
+        height: 13px;
     }
 
     .mi-label {
@@ -4011,19 +4283,11 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     }
 
     .set-pane[data-pane="mode"].is-on {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-        align-items: stretch;
-    }
-
-    .set-pane[data-pane="mode"] .set-speed,
-    .set-pane[data-pane="mode"] .sub-foot {
-        grid-column: 1 / -1;
+        display: block;
     }
 
     .set-pane[data-pane="mode"] .bs-rules {
-        margin-top: 0;
+        margin-top: 18px;
     }
 
     .set-speed-body {
@@ -4146,6 +4410,598 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         flex: 0 0 132px;
     }
 }
+
+/* ============================================================
+   fourth ruleset · reaction time
+   ============================================================ */
+.rt-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #f5fbff;
+    background: #080d0f;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.rt-wrap.is-on { display: flex; }
+.rt-wrap.phase-idle {
+    background:
+        radial-gradient(circle at 50% 38%, rgba(61, 220, 199, .13) 0%, rgba(8, 13, 15, 0) 58%),
+        #080d0f;
+}
+.rt-wrap.phase-wait { background: #741722; }
+.rt-wrap.phase-go { background: #0a8a45; }
+.rt-wrap.phase-result { background: #0a1214; }
+.rt-wrap.phase-early { background: #795000; }
+.rt-wrap.phase-done { background: #080d0f; }
+
+.rt-stage {
+    width: min(920px, 92vw);
+    margin: auto;
+    padding: clamp(76px, 10vh, 118px) 20px 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.rt-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .26em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .56);
+}
+
+.rt-big {
+    font-size: clamp(46px, 8vw, 94px);
+    font-weight: 800;
+    line-height: .96;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+    text-shadow: 0 0 36px rgba(0, 0, 0, .28);
+}
+.rt-wrap.phase-go .rt-big {
+    animation: none;
+}
+.rt-wrap.phase-idle .rt-big { color: var(--accent); }
+
+.rt-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: rgba(255, 255, 255, .78);
+}
+
+.rt-progress {
+    width: min(380px, 64vw);
+    height: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .17);
+}
+.rt-progress i {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #fff;
+    transition: width .2s ease-out;
+}
+
+.rt-tip {
+    min-height: 1.4em;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    color: rgba(255, 255, 255, .55);
+}
+
+.rt-row { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* reaction setting card: shown alone when 反应测试 is selected */
+.set-pane[data-pane="mode"] .rt-rules {
+    margin-top: 18px;
+}
+
+.rt-set { gap: 10px; }
+
+.rt-count-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: var(--mono);
+}
+.rt-count-line label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--dim);
+}
+#rt-count {
+    width: 82px;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: var(--panel);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+}
+#rt-count:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-soft);
+}
+.rt-count-unit {
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--dim);
+}
+.rt-count-note {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: .1em;
+    color: var(--dim);
+}
+.rt-presets .st-chip {
+    flex: 0 0 auto;
+    min-width: 66px;
+}
+.rt-rules .st-chip.is-on {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+.rt-summary {
+    margin: 2px 0 0;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .1em;
+    color: var(--dim);
+}
+.rt-rules .pill { white-space: nowrap; }
+
+@media (max-width: 640px) {
+    .rt-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .rt-stage { padding-top: 86px; padding-bottom: 92px; gap: 12px; }
+    .rt-big { font-size: clamp(42px, 12vw, 62px); }
+    .rt-tip { font-size: 9px; }
+    .rt-count-note { margin-left: 0; width: 100%; }
+}
+
+/* ============================================================
+   v0.7.5 · home layout A
+   7:5 full-height cockpit, one BALLSHEET module, filled data rail
+   ============================================================ */
+.screen[data-screen="home"].is-active {
+    height: 100%;
+}
+
+.home {
+    grid-template-columns: minmax(0, 7fr) minmax(300px, 5fr);
+    gap: clamp(26px, 3.2vw, 48px);
+    align-items: stretch;
+    height: 100%;
+}
+
+.home-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+}
+
+.home .hero {
+    padding-top: 0;
+}
+
+.home .logo {
+    font-size: clamp(34px, 4.6vw, 58px);
+}
+
+.home .tagline {
+    margin-top: 10px;
+}
+
+.home .mode-line {
+    margin-top: 16px;
+}
+
+.home .menu {
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    margin-top: clamp(18px, 2.8vh, 26px);
+    gap: 8px;
+}
+
+.home .menu > .mi {
+    flex: 1 1 0;
+    min-height: 58px;
+    max-height: 84px;
+    padding: 15px 18px;
+}
+
+.home .menu > .mi > .mi-label {
+    font-size: 14.5px;
+}
+
+/* two halves, one module: no double border */
+.menu-duo {
+    position: relative;
+    flex: 1.15 1 0;
+    gap: 0;
+    min-height: 76px;
+    max-height: 94px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    overflow: hidden;
+    background:
+        linear-gradient(104deg,
+            rgba(250, 150, 200, .12) 0%,
+            rgba(255, 255, 255, .02) 42%,
+            rgba(0, 255, 255, .10) 100%);
+    box-shadow: 0 20px 46px -34px #000;
+}
+
+.menu-duo .mi {
+    min-height: 0;
+    height: 100%;
+    padding: 13px 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.menu-duo .mi + .mi {
+    border-left: 1px solid var(--line);
+}
+
+.menu-duo .mi::after {
+    left: 14px;
+    right: 14px;
+}
+
+.menu-duo .mi-feature {
+    border-left: 0;
+    background: linear-gradient(90deg, rgba(250, 150, 200, .16) 0%, rgba(250, 150, 200, .04) 62%, transparent 100%);
+    box-shadow: none;
+}
+
+.menu-duo .mi-launch {
+    background: linear-gradient(270deg, rgba(0, 255, 255, .14) 0%, transparent 68%);
+}
+
+.menu-duo .mi-launch::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 18px var(--glow-accent);
+}
+
+.menu-duo .mi:hover,
+.menu-duo .mi:focus-visible {
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+.menu-duo .mi-feature:hover,
+.menu-duo .mi-feature:focus-visible {
+    background: linear-gradient(90deg, rgba(250, 150, 200, .25) 0%, rgba(250, 150, 200, .06) 64%, transparent 100%);
+    box-shadow: none;
+}
+
+.menu-duo .mi-launch:hover,
+.menu-duo .mi-launch:focus-visible {
+    background: linear-gradient(270deg, rgba(0, 255, 255, .22) 0%, transparent 72%);
+}
+
+.menu-duo .mi:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: -3px;
+}
+
+.menu-duo .mi-title .mi-label,
+.menu-duo .mi > .mi-label {
+    font-size: 14.5px;
+    letter-spacing: .10em;
+}
+
+.menu-duo .mi-title .mi-tag {
+    font-size: 9px;
+    padding: 2px 7px 1px;
+}
+
+.menu-duo .mi > .mi-hint {
+    font-size: 9.5px;
+    letter-spacing: .08em;
+}
+
+.menu-duo .mi-launch .mi-go {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 9px;
+    opacity: 1;
+}
+
+.menu-duo .mi-launch:hover .mi-go {
+    transform: none;
+    box-shadow: 0 0 14px var(--glow-accent);
+}
+
+.home-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: clamp(14px, 2vh, 20px);
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--dim);
+}
+
+.home-keys span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.home-keys kbd {
+    font-size: 9px;
+}
+
+/* right rail fills the page height; trend chart takes the remaining room */
+.home-side {
+    height: 100%;
+    min-height: 0;
+    gap: 12px;
+}
+
+.home-side .card-current {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.home-side .card-current .spark-wrap {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 96px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+}
+
+.spark-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+    color: var(--dim);
+    text-transform: uppercase;
+}
+
+.home-side .card-current #spark {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 64px;
+}
+
+.home-side .side-best {
+    flex: 0 0 auto;
+}
+
+/* only tall desktop viewports get the fixed cockpit shell; shorter ones keep page flow */
+@media (min-width: 881px) and (min-height: 900px) {
+    .ui-root:has(.screen[data-screen="home"].is-active) .shell {
+        height: 100vh;
+    }
+
+    .ui-root:has(.screen[data-screen="home"].is-active) .stage {
+        display: flex;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .ui-root:has(.screen[data-screen="home"].is-active) .screen[data-screen="home"] {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 880px) {
+    .screen[data-screen="home"].is-active {
+        height: auto;
+    }
+
+    .home {
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+        height: auto;
+        gap: 20px;
+    }
+
+    .home-main {
+        height: auto;
+    }
+
+    .home .logo {
+        font-size: clamp(34px, 8.5vw, 52px);
+    }
+
+    .home .menu {
+        flex: 0 0 auto;
+        justify-content: flex-start;
+    }
+
+    .home .menu > .mi {
+        flex: 0 0 auto;
+    }
+
+    .menu-duo {
+        flex: 0 0 auto;
+        height: auto;
+    }
+
+    .home-keys {
+        display: none;
+    }
+
+    .home-side {
+        height: auto;
+    }
+
+    .home-side .card-current {
+        flex: 0 0 auto;
+    }
+
+    .home-side .card-current .spark-wrap {
+        flex: 0 0 auto;
+        min-height: 0;
+    }
+
+    .home-side .card-current #spark {
+        flex: 0 0 62px;
+        height: 62px;
+    }
+
+    .side-recent,
+    .side-recent-list {
+        flex: 0 0 auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .home .menu {
+        gap: 7px;
+    }
+
+    .home .menu > .mi {
+        min-height: 52px;
+        padding: 12px 14px;
+    }
+
+    .menu-duo {
+        flex: 0 0 auto;
+        height: auto;
+        min-height: 0;
+    }
+
+    .menu-duo .mi {
+        min-height: 60px;
+        padding: 10px;
+    }
+
+    .menu-duo .mi-title .mi-label,
+    .menu-duo .mi > .mi-label {
+        font-size: 12.5px;
+        letter-spacing: .05em;
+    }
+
+    .menu-duo .mi-title .mi-tag {
+        font-size: 8.5px;
+        padding: 1px 6px 0;
+    }
+
+    .menu-duo .mi > .mi-hint {
+        font-size: 8.5px;
+        letter-spacing: .03em;
+    }
+
+    .menu-duo .mi-launch .mi-go {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .screen[data-screen="home"].is-active,
+    .home,
+    .home-main,
+    .home-side {
+        height: auto;
+    }
+
+    .home {
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, .85fr);
+        align-items: start;
+        gap: 14px;
+    }
+
+    .home .logo {
+        font-size: 38px;
+    }
+
+    .home .menu {
+        flex: 0 0 auto;
+        gap: 6px;
+    }
+
+    .home .menu > .mi {
+        min-height: 44px;
+        padding: 9px 12px;
+    }
+
+    .menu-duo,
+    .menu-duo .mi {
+        min-height: 50px;
+    }
+
+    .home-keys {
+        display: none;
+    }
+
+    .home-side .card-current {
+        flex: 0 0 auto;
+    }
+
+    .home-side .card-current .spark-wrap {
+        flex: 0 0 auto;
+        min-height: 0;
+    }
+
+    .home-side .card-current #spark {
+        flex: 0 0 54px;
+        height: 54px;
+    }
+
+    .side-recent,
+    .side-recent-list {
+        flex: 0 0 auto;
+    }
+}
 </style>
 </head>
 
@@ -4169,6 +5025,19 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         <div id="bs-zone"></div>
         <div id="bs-ball"></div>
         <div id="reset-flash" aria-hidden="true"><span>GAME OVER</span></div>
+    </div>
+
+    <!-- ============================================================
+         reaction time stage: full-screen, one click per trial
+         ============================================================ -->
+    <div id="rt-wrap" class="rt-wrap" aria-hidden="true" aria-live="assertive">
+        <div class="rt-stage">
+            <div class="rt-kicker" id="rt-kicker">REACTION TEST</div>
+            <div class="rt-big" id="rt-big">点击开始</div>
+            <div class="rt-sub" id="rt-sub">共 10 次 · 取平均</div>
+            <div class="rt-progress"><i id="rt-fill"></i></div>
+            <div class="rt-tip" id="rt-tip">变绿后立刻点击；抢跑本次重来</div>
+        </div>
     </div>
 
     <!-- ============================================================
@@ -4200,6 +5069,12 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             <div class="bs-cell"><span>方格</span><b id="st-gridsize">—</b></div>
             <div class="bs-cell"><span>错误</span><b id="st-err">0</b></div>
             <div class="bs-cell"><span>找</span><b id="st-next">1</b></div>
+        </div>
+        <div class="bs-row rt-row" id="rt-row">
+            <div class="bs-cell"><span>上次</span><b id="rt-last">—</b></div>
+            <div class="bs-cell"><span>均分</span><b id="rt-avg">—</b></div>
+            <div class="bs-cell"><span>最快</span><b id="rt-best">—</b></div>
+            <div class="bs-cell"><span>抢跑</span><b id="rt-early">0</b></div>
         </div>
         <p class="st-tip" id="st-tip"></p>
         <div class="hud-bar"><i id="hud-bar-fill"></i></div>
@@ -4262,56 +5137,78 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             </div>
 
                             <nav class="menu" id="menu" aria-label="主菜单">
-                                <button class="mi mi-feature" data-act="ballsheet" type="button">
-                                    <span class="mi-idx">01</span>
-                                    <span class="mi-title">
-                                        <span class="mi-label">BallSheet<em class="mi-en">Survival</em></span>
-                                        <span class="mi-tag">BIGBALL 版本</span>
-                                    </span>
-                                    <span class="mi-hint">生存 · 血量 + 每秒得分</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                <button class="mi" data-act="play" type="button">
-                                    <span class="mi-idx">02</span>
-                                    <span class="mi-label">速通<em class="mi-en">Speedrun</em></span>
-                                    <span class="mi-hint" id="menu-play-hint">100 球 · 球径 10%</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
+                                <div class="menu-duo">
+                                    <button class="mi mi-feature" data-act="ballsheet" type="button">
+                                        <span class="mi-idx">01</span>
+                                        <span class="mi-icon ic-bs" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"></circle><path d="M3 17h3l1.6-3.2 2.6 4.4 2-2.6 1.2 1.4H21"></path></svg></span>
+                                        <span class="mi-title">
+                                            <span class="mi-label">BallSheet<em class="mi-en">Survival</em></span>
+                                            <span class="mi-tag">BIGBALL</span>
+                                        </span>
+                                        <span class="mi-hint">生存 · 血量 + 每秒得分</span>
+                                        <span class="mi-go">▶</span>
+                                    </button>
+                                    <button class="mi mi-launch" data-act="play" type="button">
+                                        <span class="mi-idx">02</span>
+                                        <span class="mi-icon ic-speed" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="6"></circle><path d="M12 9.5v3.9l2.4 1.7"></path><path d="M9.5 2.5h5M12 2.5v2.5"></path></svg></span>
+                                        <span class="mi-label">BALLSHEET</span>
+                                        <span class="mi-hint" id="menu-play-hint">100 球 · 球径 10%</span>
+                                        <span class="mi-go">▶</span>
+                                    </button>
+                                </div>
                                 <button class="mi" data-act="schulte" type="button">
                                     <span class="mi-idx">03</span>
+                                    <span class="mi-icon ic-st" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16"></path></svg></span>
                                     <span class="mi-label">舒尔特<em class="mi-en">Schulte Grid</em></span>
                                     <span class="mi-hint">方格 · 顺序找数</span>
                                     <span class="mi-go">▶</span>
                                 </button>
-                                <button class="mi" data-act="stats" type="button">
+                                <button class="mi" data-act="reaction" type="button">
                                     <span class="mi-idx">04</span>
+                                    <span class="mi-icon ic-rt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 14h5.4L9.5 22l8.5-12h-5.2z"></path></svg></span>
+                                    <span class="mi-label">反应测试<em class="mi-en">Reaction Test</em></span>
+                                    <span class="mi-hint" id="menu-rt-hint">10 次 · 均分</span>
+                                    <span class="mi-go">▶</span>
+                                </button>
+                                <button class="mi" data-act="stats" type="button">
+                                    <span class="mi-idx">05</span>
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6.5 20v-6M11 20v-10M15.5 20v-4M20 20v-8"></path></svg></span>
                                     <span class="mi-label">数据<em class="mi-en">Stats</em></span>
                                     <span class="mi-hint">历史 · 节奏</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="settings" type="button">
-                                    <span class="mi-idx">05</span>
+                                    <span class="mi-idx">06</span>
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3.2"></circle></svg></span>
                                     <span class="mi-label">设置<em class="mi-en">Settings</em></span>
                                     <span class="mi-hint">规则 · 外观 · 音效</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="help" type="button">
-                                    <span class="mi-idx">06</span>
+                                    <span class="mi-idx">07</span>
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.5-1 5.2-1 8 .8v13c-2.8-1.8-5.5-1.8-8-.8z"></path><path d="M20 5.5c-2.5-1-5.2-1-8 .8v13c2.8-1.8 5.5-1.8 8-.8z"></path><path d="M12 6.3v13"></path></svg></span>
                                     <span class="mi-label">玩法<em class="mi-en">How to Play</em></span>
                                     <span class="mi-hint">按键</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="about" type="button">
-                                    <span class="mi-idx">07</span>
+                                    <span class="mi-idx">08</span>
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"></circle><path d="M12 10.8v5.4"></path><circle cx="12" cy="7.6" r=".9" fill="currentColor" stroke="none"></circle></svg></span>
                                     <span class="mi-label">关于<em class="mi-en">About</em></span>
                                     <span class="mi-hint">版本 · 致谢</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                             </nav>
+
+                            <div class="home-keys" aria-label="按键">
+                                <span><kbd>R</kbd> / <kbd>空格</kbd> 开始 · 重开</span>
+                                <span><kbd>ESC</kbd> 暂停 · 返回</span>
+                                <span><kbd>F11</kbd> 全屏</span>
+                            </div>
                         </div>
 
                         <aside class="home-side">
-                            <section class="card">
+                            <section class="card card-current">
                                 <div class="card-head">
                                     <span>本局</span>
                                     <span class="pill" id="side-state">空闲</span>
@@ -4322,20 +5219,19 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 <div class="kv"><span>上一局</span><b id="side-last">—</b></div>
                                 <div class="kv"><span>局数</span><b id="side-runs">0</b></div>
                                 <div class="kv"><span>最佳平均反应</span><b id="side-avg">—</b></div>
-                                <div class="kv"><span>BallSheet 最好</span><b id="side-bs">—</b></div>
-                                <div class="kv"><span>舒尔特最好</span><b id="side-st">—</b></div>
                                 <div class="spark-wrap">
+                                    <div class="spark-head"><span>最近 12 局 · 用时</span><span>秒</span></div>
                                     <svg id="spark" viewBox="0 0 240 62" preserveAspectRatio="none"
                                         aria-label="最近走势"></svg>
                                     <div class="spark-x"><span>−12</span><span>现在</span></div>
                                 </div>
                             </section>
 
-                            <section class="card tips">
-                                <div class="card-head"><span>按键</span></div>
-                                <p><kbd>R</kbd> / <kbd>空格</kbd> 开始 · 重开</p>
-                                <p><kbd>ESC</kbd> 暂停 · 返回</p>
-                                <p><kbd>F11</kbd> 全屏</p>
+                            <section class="card side-best">
+                                <div class="card-head"><span>其它最好</span></div>
+                                <div class="kv"><span>BIGBALL 最好</span><b id="side-bs">—</b></div>
+                                <div class="kv"><span>舒尔特最好</span><b id="side-st">—</b></div>
+                                <div class="kv"><span>反应测试最好</span><b id="side-rt">—</b></div>
                             </section>
                         </aside>
                     </div>
@@ -4346,7 +5242,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                     <div class="sub">
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
-                            <h2>设置<span class="sub-note">规则 · 外观 · 音效</span></h2>
+                            <h2>设置<span class="sub-note">按玩法 · 外观 · 音效</span></h2>
                             <div class="sub-meta" id="mode-meta">—</div>
                         </div>
                         <div class="set-tabs" id="set-tabs" aria-label="设置分类">
@@ -4355,10 +5251,16 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             <button class="set-tab" data-tab="sfx" type="button">音效</button>
                         </div>
                         <div class="panel set-pane is-on" data-pane="mode">
-                            <div class="set-block set-speed">
+                            <div class="mode-switch" id="set-modes" role="tablist" aria-label="按玩法设置">
+                                <button class="mode-tab is-on" data-modeset="speed" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="6"></circle><path d="M12 9.5v3.9l2.4 1.7"></path><path d="M9.5 2.5h5M12 2.5v2.5"></path></svg><span>BALLSHEET</span></button>
+                                <button class="mode-tab" data-modeset="bs" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"></circle><path d="M3 17h3l1.6-3.2 2.6 4.4 2-2.6 1.2 1.4H21"></path></svg><span>BALLSHEET BIGBALL</span></button>
+                                <button class="mode-tab" data-modeset="st" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16"></path></svg><span>舒尔特</span></button>
+                                <button class="mode-tab" data-modeset="rt" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><path d="M13.5 2 5 14h5.4L9.5 22l8.5-12h-5.2z"></path></svg><span>反应测试</span></button>
+                            </div>
+                            <div class="set-block set-speed" data-modecard="speed">
                                 <div class="bs-head">
                                     <div>
-                                        <h3>速通</h3>
+                                        <h3>BALLSHEET</h3>
                                         <p>固定球数 · 独立记录</p>
                                     </div>
                                     <span class="pill">计时 + 反应</span>
@@ -4377,10 +5279,10 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     </div>
                                 </div>
                             </div>
-                            <div class="bs-rules" id="bs-rules">
+                            <div class="bs-rules" id="bs-rules" data-modecard="bs">
                                 <div class="bs-head">
                                     <div>
-                                        <h3>BallSheet <em>生存</em></h3>
+                                        <h3>BALLSHEET <em>BIGBALL</em></h3>
                                         <p>第二套规则 · 同一块 600 像素场地 · 独立记录</p>
                                     </div>
                                     <span class="pill">血量 + 秒得分</span>
@@ -4411,7 +5313,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     首次触碰只启动计时。之后每次吃球回分，反应低于快球阈值时只按
                                     <b>r / 阈值</b> 结算。两套规则的参数互不影响。</p>
                             </div>
-                            <div class="bs-rules" id="st-rules">
+                            <div class="bs-rules" id="st-rules" data-modecard="st">
                                 <div class="bs-head">
                                     <div>
                                         <h3>舒尔特 <em>方格</em></h3>
@@ -4431,8 +5333,29 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 <p class="bs-foot">方格恒为 <b>425 px</b>，所有规则共用同一块场地。从 <b>Light</b> 开始：按顺序点，
                                     点错只记<b>错误次数</b>、不罚时。计时从第一次点对开始，点完最后一格结束。</p>
                             </div>
-                            <p class="sub-foot">接球数决定一局长度；球径是 600 像素场地的百分比，同时就是命中半径。
-                                参数存在本地，下一局生效。</p>
+                            <div class="bs-rules rt-rules" id="rt-rules" data-modecard="rt">
+                                <div class="bs-head">
+                                    <div>
+                                        <h3>反应测试 <em>Reflex</em></h3>
+                                        <p>第四套玩法 · 全屏点击 · 独立记录</p>
+                                    </div>
+                                    <span class="pill">毫秒 + 均分</span>
+                                </div>
+                                <div class="bs-set rt-set">
+                                    <div class="rt-count-line">
+                                        <label for="rt-count">测试次数</label>
+                                        <input id="rt-count" type="number" min="1" max="100" step="1" value="5"
+                                            inputmode="numeric" aria-label="测试次数">
+                                        <span class="rt-count-unit">次</span>
+                                        <span class="rt-count-note">自定义 1–100</span>
+                                    </div>
+                                    <div class="st-chips rt-presets" id="rt-presets"></div>
+                                    <p class="rt-summary" id="rt-summary">5 次 · 每局按有效反应取平均</p>
+                                </div>
+                                <p class="bs-foot">每次点击后随机等待 <b>1.2–4 秒</b>，变绿再点击；抢跑停在提示页，
+                                    点击重试。N 次结束后按有效单次取平均，成绩单独存档。</p>
+                            </div>
+                            <p class="sub-foot">参数存在本地，下一局生效。</p>
                         </div>
 
                         <div class="panel set-pane" data-pane="look">
@@ -4493,8 +5416,8 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             </div>
                             <div class="runs" id="stats-runs"></div>
                         </div>
-                        <div class="sub-foot">三套存档：速通用 <b>GameStats_&lt;球数&gt;, &lt;球径&gt;</b>（原版键名），
-                            生存用 <b>BallSheetRuns</b>，舒尔特用 <b>schulteRuns</b>。各玩法互不影响。</div>
+                        <div class="sub-foot">四套存档：BALLSHEET 用 <b>GameStats_&lt;球数&gt;, &lt;球径&gt;</b>（原版键名），
+                            BIGBALL 用 <b>BallSheetRuns</b>，舒尔特用 <b>schulteRuns</b>，反应测试用 <b>reactionRuns</b>。各玩法互不影响。</div>
                     </div>
                 </section>
 
@@ -4532,11 +5455,17 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                        最快 / 最慢是两端的极端值。球数越少，一次失误的代价越大。</p>
                                 </section>
                                 <section>
-                                    <h3>第二套规则 · BallSheet</h3>
+                                    <h3>第二套规则 · BIGBALL</h3>
                                     <p>菜单第 01 项是原始 ballsheet 的规则，跑在同一块 600 像素场地上：血量从 100 起，
                                        从第一次碰到球开始按 <strong>压力 · ln(1 + t)</strong> 持续扣减——首次触碰只启动计时。
                                        之后每次吃球回分，反应低于快球阈值时只按 <strong>r / 阈值</strong> 结算，
                                        <strong>每秒得分</strong>是最近五秒内、除最新一颗外的吃分总和，固定除以五。血量跌破零，本局结束。</p>
+                                </section>
+                                <section>
+                                    <h3>第四套 · 反应测试</h3>
+                                    <p>每次点击后才开始随机等待 1.2–4 秒，屏幕从红色变成绿色后立刻点击，记录这一次的毫秒数；
+                                       绿色出现前点击算<strong>抢跑</strong>，停在提示页，点击重试且不计入。完成设定的 N 次后，
+                                       只按有效单次取平均，可单独查看最好、最快、最慢与抢跑次数。</p>
                                 </section>
                                 <section class="full">
                                     <h3>原版说明</h3>
@@ -4565,18 +5494,23 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                        <strong>dph</strong>（dphdmn）制作。</p>
                                     <p>这一版在外面加了一层菜单：标题页、模式与配色面板、历史浏览、暂停与结算页。
                                        玩法代码、命中判定、设置键名、成绩存储全部保持原样。</p>
-                                    <p>可选的 <strong>BallSheet</strong> 项是把 <strong>helloimxtal</strong> 的 p5 版 ballsheet
+                                    <p>可选的 <strong>BIGBALL</strong> 项是把 <strong>helloimxtal</strong> 的 p5 版 ballsheet
                                         （由 dphdmn 收录进 antiBallsheet 仓库）规则移植到同一块场地和同一套 HUD 上——只有血量、
-                                        压力、每秒得分和快球折扣，成绩单独存档，不会碰速通的记录。</p>
+                                        压力、每秒得分和快球折扣，成绩单独存档，不会碰 BALLSHEET 的记录。</p>
+                                    <p>第四项 <strong>反应测试</strong> 按 Human Benchmark 的经典流程重做：随机等待、变绿点击、
+                                        抢跑重来，自定义次数后按有效单次取平均。</p>
                                 </section>
                                 <section>
                                     <h3>来源</h3>
                                     <p><a class="link" href="https://github.com/dphdmn/antiBallsheet"
                                             target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a>
-                                        <span class="sub-note">速通本体</span></p>
+                                        <span class="sub-note">BALLSHEET 本体</span></p>
                                     <p><a class="link" href="https://github.com/helloimxtal"
                                             target="_blank" rel="noopener">github.com/helloimxtal</a>
-                                        <span class="sub-note">BallSheet 生存玩法原作</span></p>
+                                        <span class="sub-note">BIGBALL 规则原作</span></p>
+                                    <p><a class="link" href="https://humanbenchmark.com/tests/reactiontime"
+                                            target="_blank" rel="noopener">humanbenchmark.com/tests/reactiontime</a>
+                                        <span class="sub-note">反应测试流程参考</span></p>
                                 </section>
                                 <section>
                                     <h3>实现</h3>
@@ -4628,7 +5562,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             </div>
             <div class="res-time">
                 <span class="big" id="res-time">0.00</span>
-                <span class="unit">秒</span>
+                <span class="unit" id="res-unit">秒</span>
                 <span class="res-delta" id="res-delta"></span>
             </div>
             <div class="res-grid" id="res-grid"></div>
@@ -4667,6 +5601,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         /* nav / chrome */
         '速通': 'Speedrun',
         '舒尔特': 'Schulte',
+        '反应测试': 'Reaction Test',
         '数据': 'Stats',
         '设置': 'Settings',
         '玩法': 'How to Play',
@@ -4687,7 +5622,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '上一局': 'Last run',
         '局数': 'Runs',
         '最佳平均反应': 'Best avg reaction',
-        'BallSheet 最好': 'BallSheet best',
+        'BIGBALL 最好': 'BIGBALL best',
         '舒尔特最好': 'Schulte best',
         '现在': 'now',
         '按键': 'Keys',
@@ -4705,11 +5640,11 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '速通系统 · 本地记录': 'SPEEDRUN SYSTEM · LOCAL RECORDS',
         '反应力速通': 'Reflex speedrun',
         '手快，计时短': 'Quick hands, short clock',
-        'BIGBALL 版本': 'BIGBALL EDITION',
         '生存 · 血量 + 每秒得分': 'Survival · HP + score/sec',
         '方格 · 顺序找数': 'Grid · find in order',
         '历史 · 节奏': 'History · pace',
         '规则 · 外观 · 音效': 'Rules · Look · Sound',
+        '按玩法 · 外观 · 音效': 'By mode · Look · Sound',
         '本模式第一局': 'First run in this mode',
         '还没有记录 —— 去立个标杆': 'No runs yet — set a benchmark',
         '第一局已记录 · 再来一次': 'First run saved · go again',
@@ -4730,7 +5665,6 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '错误': 'Errors',
         '找': 'Find',
         'ESC · 暂停': 'ESC · Pause',
-        'BallSheet · 生存': 'BallSheet · Survival',
         '完成': 'done',
 
         /* settings */
@@ -4851,6 +5785,34 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '落后 B=-50': 'Behind B=-50',
         '原作者公式：B = 每秒得分 − 压力，球色 = rgb(200−B, 150+3B, 0)，每帧按 0–255 截断。每秒得分只取最近 5 秒、固定除以 5，且不计最新一颗——所以不是吃球闪绿，颜色会慢半拍并逐帧浮动；只影响 BALLSHEET。': 'Source formula: B = score per second − pressure; ball = rgb(200−B, 150+3B, 0), clamped per channel to 0–255 every frame. Score per second uses the last 5 s only, always divides by 5, and excludes the newest catch — so there is no green flash on a catch; the colour lags by one catch and floats every frame. BALLSHEET only.',
         '球固定色': 'Fixed ball colour',
+        '反应测试最好': 'Best reaction test',
+        '其它最好': 'Other bests',
+        '最近 12 局 · 用时': 'Last 12 runs · time',
+        '点击 · 均分': 'Click · mean',
+        '第四套玩法 · 全屏点击 · 独立记录': 'Fourth mode · full-screen clicking · separate records',
+        '毫秒 + 均分': 'ms + mean',
+        '测试次数': 'Trials',
+        '次': 'trials',
+        '自定义 1–100': 'Custom 1–100',
+        '次 · 每局按有效反应取平均': 'trials · mean of valid reactions',
+        '屏幕变绿后立刻点击；抢跑会重来且不计入。每次随机等待 1.2–4 秒，N 次结束后按有效单次取平均，成绩单独存档。': 'Click as soon as the screen turns green. A click before green restarts that trial and never enters the mean. Each wait is random 1.2–4 s; after N valid trials the mean is recorded in its own bucket.',
+        '反应测试流程参考': 'Reaction-test flow reference',
+        '轮次': 'Round',
+        '平均 / 毫秒': 'Avg / ms',
+        '上次': 'Last',
+        '抢跑': 'Too soon',
+        '有效次数': 'Valid trials',
+        '最快单次': 'Fastest trial',
+        '最慢单次': 'Slowest trial',
+        '均分': 'Mean',
+        '次数': 'Trials',
+        '有效': 'Valid',
+        '累计局数': 'Total runs',
+        '测试完成': 'Test complete',
+        '第一次反应测试记录': 'First reaction-test record',
+        '最好均分': 'Best mean',
+        '总平均': 'Overall mean',
+        '毫秒': 'ms',
         '满血边框（绿）': 'Full HP border (green)',
         '濒死边框（红）': 'Near-death border (red)',
         '变色动态': 'Colour dynamics',
@@ -4926,7 +5888,8 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         [/^原始音效 · (.*)$/, 'Built-in · $1'],
         [/^舒尔特 · (.*)$/, 'Schulte · $1'],
         [/^舒尔特方格 · 无记录$/, 'Schulte Grid · no runs'],
-        [/^BallSheet · 生存(.*)$/, 'BallSheet · Survival$1'],
+        [/^反应测试 · 无记录$/, 'Reaction Test · no runs'],
+        [/^BALLSHEET · BIGBALL(.*)$/, 'BALLSHEET · BIGBALL$1'],
         [/^速通 · ([\d]+) 球样本$/, 'Speedrun · $1-ball sample'],
         [/^生存 · 压力 ([\d]+)$/, 'Survival · pressure $1'],
         [/^([\d.]+) 秒 · 错误 ([\d]+)$/, '$1 s · $2 errors'],
@@ -4960,18 +5923,21 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             '<li><kbd>F11</kbd> — browser fullscreen</li>',
             '</ul></section>',
             '<section><h3>Reading the numbers</h3><p><strong>Time</strong> is the whole run, <strong>avg reaction</strong> is the mean gap between balls, fastest / slowest are the extremes. Fewer balls means every miss costs more.</p></section>',
-            '<section><h3>Second ruleset · BallSheet</h3><p>Menu item 01 is the original ballsheet rules on the same 600 px field: HP starts at 100 and drains as <strong>pressure · ln(1 + t)</strong> from the first touch — the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <strong>r / threshold</strong>. <strong>Score/sec</strong> is the sum of catches in the last five seconds except the newest one, always divided by five. Run ends when HP drops below zero.</p></section>',
+            '<section><h3>Second ruleset · BIGBALL</h3><p>Menu item 01 is the original ballsheet rules on the same 600 px field: HP starts at 100 and drains as <strong>pressure · ln(1 + t)</strong> from the first touch — the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <strong>r / threshold</strong>. <strong>Score/sec</strong> is the sum of catches in the last five seconds except the newest one, always divided by five. Run ends when HP drops below zero.</p></section>',
+            '<section><h3>Fourth ruleset · Reaction test</h3><p>Each click starts a random 1.2–4 s wait; the screen turns from red to green and you click the moment it does. A click before green is <strong>too soon</strong>: the screen waits at a retry prompt and that trial never enters the mean. After the configured N valid trials, the score is the mean of the individual times, with best, fastest, slowest and early clicks recorded separately.</p></section>',
             '<section class="full"><h3>Original notes</h3><p>Cursor size is visual only; hit detection always uses ball size. Restarting mid-run discards that run and nothing is saved until the last ball. Records are grouped by balls × ball size, so changing the mode changes the record set.</p></section>'
         ].join(''),
         '[data-screen="about"] .doc': [
             '<section class="full"><h3>What this is</h3>',
             '<p>antiBallsheet is a reflex-speedrun remake of <strong>ballsheet</strong>: catch N balls as fast as possible, no pressure formula, no canvas — just DOM and transform. The original game, engine and score system are by <strong>dph</strong> (dphdmn).</p>',
             '<p>This build adds a menu layer on top: title screen, mode and colour panels, history browser, pause and results screens. Gameplay code, hit detection, setting keys and score storage are untouched.</p>',
-            '<p>The optional <strong>BallSheet</strong> item ports <strong>helloimxtal</strong>’s p5 ballsheet rules (as collected by dphdmn in the antiBallsheet repo) onto the same field and HUD — only HP, pressure, score/sec and the fast-ball discount, with separate records that never touch speedrun scores.</p>',
+            '<p>The optional <strong>BIGBALL</strong> item ports <strong>helloimxtal</strong>’s p5 ballsheet rules (as collected by dphdmn in the antiBallsheet repo) onto the same field and HUD — only HP, pressure, score/sec and the fast-ball discount, with separate records that never touch BALLSHEET scores.</p>',
+            '<p>The fourth item, <strong>Reaction Test</strong>, follows the Human Benchmark idea but each trial waits for your click: random wait, click on green, retry on a false start, and a custom trial count scored by the mean.</p>',
             '</section>',
             '<section><h3>Sources</h3>',
-            '<p><a class="link" href="https://github.com/dphdmn/antiBallsheet" target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a> <span class="sub-note">speedrun original</span></p>',
-            '<p><a class="link" href="https://github.com/helloimxtal" target="_blank" rel="noopener">github.com/helloimxtal</a> <span class="sub-note">BallSheet survival original</span></p>',
+            '<p><a class="link" href="https://github.com/dphdmn/antiBallsheet" target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a> <span class="sub-note">BALLSHEET original</span></p>',
+            '<p><a class="link" href="https://github.com/helloimxtal" target="_blank" rel="noopener">github.com/helloimxtal</a> <span class="sub-note">BIGBALL original</span></p>',
+            '<p><a class="link" href="https://humanbenchmark.com/tests/reactiontime" target="_blank" rel="noopener">humanbenchmark.com/tests/reactiontime</a> <span class="sub-note">reaction-test flow reference</span></p>',
             '</section>',
             '<section><h3>Implementation</h3><ul>',
             '<li>Vanilla JS + DOM transform, no build step at runtime</li>',
@@ -4980,14 +5946,15 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             '<li>One file, offline, double-click to play</li>',
             '</ul></section>'
         ].join(''),
-        '[data-screen="settings"] .sub-foot': 'Ball count sets run length; ball size is a percentage of the 600 px field and is also the hit radius. Parameters are stored locally and apply from the next run.',
-        '[data-screen="stats"] .sub-foot': 'Three stores: speedrun uses <b>GameStats_&lt;balls&gt;, &lt;size&gt;</b> (original keys), survival uses <b>BallSheetRuns</b>, Schulte uses <b>schulteRuns</b>. They never affect each other.',
+        '[data-screen="settings"] .sub-foot': 'Parameters are stored locally and apply from the next run.',
+        '[data-screen="stats"] .sub-foot': 'Four stores: BALLSHEET uses <b>GameStats_&lt;balls&gt;, &lt;size&gt;</b> (original keys), BIGBALL uses <b>BallSheetRuns</b>, Schulte uses <b>schulteRuns</b>, reaction test uses <b>reactionRuns</b>. They never affect each other.',
         '#bs-rules .bs-foot': 'HP drains as <b>pressure · ln(1 + t)</b> from the first touch; the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <b>r / threshold</b>. The two rulesets keep separate parameters.',
         '#st-rules .bs-foot': 'The grid is always <b>425 px</b>; all rules share the same field. Start with <b>Light</b>: tap in order, a wrong tap only adds an <b>error</b> with no time penalty. The clock starts on the first correct tap and stops after the last cell.',
+        '#rt-rules .bs-foot': 'Each click starts a random <b>1.2–4 s</b> wait; click when it turns green. An early click stays on a retry prompt. After N valid trials the mean is recorded in its own bucket.',
         '[data-pane="look"] > .bs-col-note': 'Colours are stored by the browser. The menu uses the same palette — background, accent and target colour stay in sync with the field.',
         '#bs-col-box .bs-col-note': 'Source formula: B = score per second − pressure; ball = rgb(200−B, 150+3B, 0), clamped per channel to 0–255 every frame. Score per second uses the last 5 s only, always divides by 5, and excludes the newest catch — so there is no green flash on a catch; the colour lags by one catch and floats every frame. BALLSHEET only.',
         '#bs-feel-box .bs-col-note': 'X = HP lost 0→100%, Y = colour shift. The preview ball drains and heals on a loop using the current curve; the bar above it mirrors HP.',
-        '.card.tips': '<div class="card-head"><span>Keys</span></div><p><kbd>R</kbd> / <kbd>space</kbd> start · restart</p><p><kbd>ESC</kbd> pause · back</p><p><kbd>F11</kbd> fullscreen</p>',
+        '.home-keys': '<span><kbd>R</kbd> / <kbd>space</kbd> start · restart</span><span><kbd>ESC</kbd> pause · back</span><span><kbd>F11</kbd> fullscreen</span>',
         '.sfx-tip': 'Select a slot above, then click any sound below to replace it and hear it immediately. The hover sound plays when the pointer crosses buttons and menu items.',
         '.sfx-foot': 'MP3 / OGG / WAV / M4A / FLAC; max 1.6 MB each, 3.2 MB total, 24 clips. Sounds are stored as data URIs in this browser’s localStorage and do not travel with the file.',
         '#bf-tip': [
@@ -5105,7 +6072,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     <script>// Create a Mersenne Twister engine and auto-seed it
 var eng = Random.MersenneTwister19937.autoSeed();
 var myrandom = new Random.Random(eng);</script>
-    <script>const VERSION = "v0.6.6 (beta)";
+    <script>const VERSION = "v0.7.5 (beta)";
 </script>
     <script>const TITLE = `antiBallsheet game by dph, ${VERSION}`;
 const FIELD_SIZE_PX = 600;
@@ -7442,6 +8409,413 @@ const game = new AntiBallsheetGame(
 })();
 </script>
     <script>/* ============================================================
+   Reaction time test · fourth play-mode
+   One screen, one click: click to begin, wait for green, click
+   as fast as you can, then click again to begin the next trial.
+   Score the mean of N valid trials. Too-early clicks stay on a
+   retry screen and never enter the mean.
+   Records live in their own localStorage bucket.
+   ============================================================ */
+(function () {
+    'use strict';
+
+    var LS_SET = 'rtSettings';
+    var LS_RUNS = 'reactionRuns';
+    var MAX_RUNS = 300;
+    var DEFAULTS = { count: 5 };
+    var PRESETS = [5, 10, 20, 30];
+    var MIN_COUNT = 1;
+    var MAX_COUNT = 100;
+    var WAIT_MIN = 1200;
+    var WAIT_MAX = 4000;
+    var RESULT_HOLD = 750;
+
+    var I18N = window.ABS_I18N || { EN: false, t: function (zh) { return zh; } };
+    function T(zh, en) { return I18N.t(zh, en); }
+
+    var S = {
+        active: false,
+        paused: false,
+        phase: 'idle',
+        count: DEFAULTS.count,
+        round: 0,
+        times: [],
+        early: 0,
+        last: null,
+        goAt: 0,
+        dueAt: 0,
+        pauseAt: 0,
+        timer: 0,
+        onFinish: null
+    };
+
+    var el = {};
+
+    function $(id) { return document.getElementById(id); }
+    function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+    function isNum(v) { return typeof v === 'number' && isFinite(v); }
+    function normCount(v) {
+        var n = Math.round(Number(v));
+        if (!isNum(n)) { n = DEFAULTS.count; }
+        return clamp(n, MIN_COUNT, MAX_COUNT);
+    }
+    function mean() {
+        if (!S.times.length) { return 0; }
+        var sum = 0;
+        for (var i = 0; i < S.times.length; i++) { sum += S.times[i]; }
+        return sum / S.times.length;
+    }
+    function fastest() {
+        return S.times.length ? Math.min.apply(null, S.times) : null;
+    }
+
+    /* ---------------- storage ---------------- */
+    function readSettings() {
+        var out = { count: DEFAULTS.count };
+        try {
+            var raw = localStorage.getItem(LS_SET);
+            var p = raw ? JSON.parse(raw) : null;
+            if (p && isNum(Number(p.count))) { out.count = normCount(p.count); }
+            if (!localStorage.getItem('rtDefaultMigrated')) {
+                localStorage.setItem('rtDefaultMigrated', 'v071');
+                if (out.count === 10) {
+                    out.count = DEFAULTS.count;
+                    localStorage.setItem(LS_SET, JSON.stringify(out));
+                }
+            }
+        } catch (e) { }
+        return out;
+    }
+    function saveSettings(patch) {
+        var s = readSettings(), k;
+        if (patch && typeof patch === 'object') {
+            for (k in patch) {
+                if (!patch.hasOwnProperty(k)) { continue; }
+                if (k === 'count') { s.count = normCount(patch[k]); }
+            }
+        }
+        try { localStorage.setItem(LS_SET, JSON.stringify(s)); } catch (e) { }
+        return s;
+    }
+    function readRuns() {
+        try {
+            var raw = localStorage.getItem(LS_RUNS);
+            var a = raw ? JSON.parse(raw) : [];
+            return Array.isArray(a) ? a : [];
+        } catch (e) { return []; }
+    }
+    function saveRun(run) {
+        var a = readRuns();
+        a.push(run);
+        if (a.length > MAX_RUNS) { a = a.slice(a.length - MAX_RUNS); }
+        try { localStorage.setItem(LS_RUNS, JSON.stringify(a)); } catch (e) { }
+        return a;
+    }
+    function pb() {
+        var a = readRuns(), i, best = null;
+        for (i = 0; i < a.length; i++) {
+            if (isNum(a[i].avg) && (best === null || a[i].avg < best)) { best = a[i].avg; }
+        }
+        return best;
+    }
+
+    /* ---------------- dom / painting ---------------- */
+    function grab() {
+        if (el.wrap) { return; }
+        el.wrap = $('rt-wrap');
+        el.kicker = $('rt-kicker');
+        el.big = $('rt-big');
+        el.sub = $('rt-sub');
+        el.tip = $('rt-tip');
+        el.fill = $('rt-fill');
+        el.row = $('rt-row');
+        el.last = $('rt-last');
+        el.avg = $('rt-avg');
+        el.best = $('rt-best');
+        el.early = $('rt-early');
+        el.hudRound = $('slot-timer');
+        el.hudAvg = $('slot-balls');
+        el.bar = $('hud-bar-fill');
+    }
+
+    function showStage(on) {
+        grab();
+        if (!el.wrap) { return; }
+        el.wrap.classList.toggle('is-on', !!on);
+        el.wrap.setAttribute('aria-hidden', on ? 'false' : 'true');
+        if (on) { el.wrap.classList.add('phase-' + S.phase); }
+    }
+
+    function setPhase(p) {
+        S.phase = p;
+        if (!el.wrap) { return; }
+        el.wrap.classList.remove('phase-idle', 'phase-wait', 'phase-go',
+            'phase-result', 'phase-early', 'phase-done');
+        el.wrap.classList.add('phase-' + p);
+    }
+
+    function roundLabel() {
+        if (S.phase === 'idle') { return '0 / ' + S.count; }
+        if (S.round >= S.count) { return S.count + ' / ' + S.count; }
+        var shown = S.round + (S.phase === 'result' ? 0 : 1);
+        return shown + ' / ' + S.count;
+    }
+
+    function paint() {
+        grab();
+        var a = mean(), f = fastest(), progress = S.count ? S.round / S.count : 0;
+        if (el.hudRound) { el.hudRound.textContent = roundLabel(); }
+        if (el.hudAvg) {
+            el.hudAvg.textContent = S.times.length ? (Math.round(a) + ' ms') : '—';
+        }
+        if (el.last) { el.last.textContent = S.last === null ? '—' : (Math.round(S.last) + ' ms'); }
+        if (el.avg) { el.avg.textContent = S.times.length ? (Math.round(a) + ' ms') : '—'; }
+        if (el.best) { el.best.textContent = f === null ? '—' : (Math.round(f) + ' ms'); }
+        if (el.early) { el.early.textContent = String(S.early); }
+        if (el.bar) { el.bar.style.width = (progress * 100).toFixed(1) + '%'; }
+        if (el.fill) { el.fill.style.width = (progress * 100).toFixed(1) + '%'; }
+        if (!el.wrap) { return; }
+
+        if (S.phase === 'idle') {
+            el.kicker.textContent = 'REACTION TEST';
+            el.big.textContent = T('点击开始', 'Click to start');
+            el.sub.textContent = T('共 ' + S.count + ' 次 · 取平均', S.count + ' trials · average');
+            el.tip.textContent = T('每次点击后随机等待 1.2–4 秒；变绿后立刻点击，抢跑本次重来',
+                'Each click starts a 1.2–4 s random wait; click when green, an early click restarts this trial');
+        } else if (S.phase === 'wait') {
+            el.kicker.textContent = T('等待绿色', 'WAIT FOR GREEN');
+            el.big.textContent = T('等待绿色…', 'Wait for green…');
+            el.sub.textContent = T('第 ' + (S.round + 1) + ' / ' + S.count + ' 次', 'Trial ' + (S.round + 1) + ' / ' + S.count);
+            el.tip.textContent = T('现在点击会抢跑', 'Clicking now is too soon');
+        } else if (S.phase === 'go') {
+            el.kicker.textContent = 'GO';
+            el.big.textContent = T('点击！', 'Click!');
+            el.sub.textContent = T('第 ' + (S.round + 1) + ' / ' + S.count + ' 次', 'Trial ' + (S.round + 1) + ' / ' + S.count);
+            el.tip.textContent = T('现在点击', 'Click now');
+        } else if (S.phase === 'result') {
+            el.kicker.textContent = T('第 ' + S.round + ' 次完成', 'Trial ' + S.round + ' done');
+            el.big.textContent = Math.round(S.last) + ' ms';
+            el.sub.textContent = S.times.length
+                ? T('均分 ' + Math.round(a) + ' ms · ' + S.round + ' / ' + S.count,
+                    'Avg ' + Math.round(a) + ' ms · ' + S.round + ' / ' + S.count)
+                : '';
+            el.tip.textContent = S.round >= S.count
+                ? T('正在结算…', 'Finishing…')
+                : T('点击开始下一轮', 'Click to start the next trial');
+        } else if (S.phase === 'early') {
+            el.kicker.textContent = 'TOO SOON';
+            el.big.textContent = T('太早了', 'Too soon');
+            el.sub.textContent = T('本次重来，不计入成绩', 'This trial restarts and does not count');
+            el.tip.textContent = T('点击重试', 'Click to retry');
+        } else {
+            el.kicker.textContent = 'REACTION TEST';
+            el.big.textContent = T('完成', 'Done');
+            el.sub.textContent = T('均分 ' + Math.round(a) + ' ms', 'Avg ' + Math.round(a) + ' ms');
+            el.tip.textContent = '';
+        }
+    }
+
+    /* ---------------- timers ---------------- */
+    function clearTimer() {
+        if (S.timer) {
+            clearTimeout(S.timer);
+            S.timer = 0;
+        }
+    }
+    function schedule(ms, fn) {
+        clearTimer();
+        S.dueAt = performance.now() + ms;
+        S.timer = setTimeout(fn, ms);
+    }
+    function resumeSchedule() {
+        var rem = Math.max(0, S.dueAt - performance.now());
+        clearTimer();
+        var fn = S.phase === 'wait' ? go :
+            (S.phase === 'result' && S.round >= S.count) ? finish : null;
+        if (!fn) { return; }
+        S.timer = setTimeout(fn, rem);
+    }
+
+    /* ---------------- state machine ---------------- */
+    function beginTrial() {
+        S.timer = 0;
+        if (!S.active || S.paused) { return; }
+        if (S.round >= S.count) { finish(); return; }
+        setPhase('wait');
+        schedule(WAIT_MIN + Math.random() * (WAIT_MAX - WAIT_MIN), go);
+        paint();
+    }
+
+    function go() {
+        S.timer = 0;
+        if (!S.active || S.paused || S.phase !== 'wait') { return; }
+        S.goAt = performance.now();
+        setPhase('go');
+        paint();
+    }
+
+    function early() {
+        clearTimer();
+        if (!S.active || S.paused) { return; }
+        S.early++;
+        setPhase('early');
+        paint();
+    }
+
+    function hit() {
+        if (!S.active || S.paused || S.phase !== 'go') { return; }
+        var ms = Math.max(1, Math.round(performance.now() - S.goAt));
+        S.times.push(ms);
+        S.last = ms;
+        S.round++;
+        setPhase('result');
+        paint();
+        if (S.round >= S.count) { schedule(RESULT_HOLD, finish); }
+    }
+
+    function finish() {
+        clearTimer();
+        if (!S.times.length) { stop(); return; }
+        var a = mean(), f = fastest(), w = Math.max.apply(null, S.times);
+        var run = {
+            t: Date.now(),
+            count: S.count,
+            tries: S.times.length,
+            avg: +a.toFixed(1),
+            best: f,
+            worst: w,
+            early: S.early,
+            times: S.times.slice()
+        };
+        var prev = pb();
+        saveRun(run);
+        S.active = false;
+        S.paused = false;
+        setPhase('done');
+        paint();
+        showStage(false);
+        if (el.row) { el.row.classList.remove('is-on'); }
+        var cb = S.onFinish;
+        if (cb) { cb({ run: run, prevPb: prev, times: run.times }); }
+    }
+
+    function onTap(e) {
+        if (!S.active || S.paused) { return; }
+        if (e && e.cancelable) { e.preventDefault(); }
+        if (S.phase === 'idle') { beginTrial(); return; }
+        if (S.phase === 'wait') { early(); return; }
+        if (S.phase === 'go') { hit(); return; }
+        if (S.phase === 'result') {
+            if (S.round >= S.count) { finish(); } else { beginTrial(); }
+            return;
+        }
+        if (S.phase === 'early') { beginTrial(); }
+    }
+
+    function bind() {
+        grab();
+        if (!el.wrap) { return; }
+        if (window.PointerEvent) {
+            el.wrap.addEventListener('pointerdown', onTap, { passive: false });
+        } else {
+            el.wrap.addEventListener('mousedown', onTap);
+            el.wrap.addEventListener('touchstart', function (e) {
+                var t = e.touches && e.touches[0];
+                if (t) { onTap(e); }
+            }, { passive: false });
+        }
+    }
+
+    /* ---------------- lifecycle ---------------- */
+    function start(cfg, onFinish) {
+        grab();
+        var s = readSettings();
+        S.count = normCount(s.count);
+        S.active = true;
+        S.paused = false;
+        S.round = 0;
+        S.times = [];
+        S.early = 0;
+        S.last = null;
+        S.goAt = 0;
+        S.dueAt = 0;
+        S.timer = 0;
+        S.onFinish = onFinish || null;
+        setPhase('idle');
+        showStage(true);
+        if (el.row) { el.row.classList.add('is-on'); }
+        paint();
+    }
+
+    function stop() {
+        S.active = false;
+        S.paused = false;
+        clearTimer();
+        S.phase = 'idle';
+        showStage(false);
+        if (el.row) { el.row.classList.remove('is-on'); }
+        if (el.bar) { el.bar.style.width = '0%'; }
+    }
+
+    function pause() {
+        if (!S.active || S.paused || S.phase === 'done') { return false; }
+        S.paused = true;
+        S.pauseAt = performance.now();
+        clearTimer();
+        return true;
+    }
+
+    function resume() {
+        if (!S.active || !S.paused) { return false; }
+        var delta = performance.now() - S.pauseAt;
+        if (S.phase === 'wait' || S.phase === 'early' || S.phase === 'result') {
+            S.dueAt += delta;
+            resumeSchedule();
+        } else if (S.phase === 'go') {
+            S.goAt += delta;
+        }
+        S.paused = false;
+        paint();
+        return true;
+    }
+
+    function restart() {
+        var cb = S.onFinish;
+        stop();
+        start(null, cb);
+    }
+
+    bind();
+
+    window.Reaction = {
+        defaults: DEFAULTS,
+        presets: PRESETS,
+        settings: readSettings,
+        saveSettings: saveSettings,
+        runs: readRuns,
+        pb: pb,
+        start: start,
+        stop: stop,
+        pause: pause,
+        resume: resume,
+        restart: restart,
+        isRunning: function () { return S.active && !S.paused; },
+        isActive: function () { return S.active; },
+        state: function () {
+            return {
+                phase: S.phase,
+                round: S.round,
+                count: S.count,
+                last: S.last,
+                avg: mean(),
+                times: S.times.slice(),
+                early: S.early
+            };
+        }
+    };
+})();
+</script>
+    <script>/* ============================================================
    antiBallsheet · main-menu layer (behaviour)
    Wraps the original engine: it owns screens, HUD, pause, results,
    stats browser and theme sync. Gameplay code is left untouched.
@@ -7473,6 +8847,7 @@ const game = new AntiBallsheetGame(
         try {
             sessionStorage.setItem('abs-lang-return', st.screen || 'home');
             sessionStorage.setItem('abs-lang-tab', st.setTab || 'mode');
+            sessionStorage.setItem('abs-lang-mode', st.setMode || 'speed');
         } catch (e) { }
         location.reload();
     }
@@ -7520,6 +8895,7 @@ const game = new AntiBallsheetGame(
     var screens = $$('.screen', ui);
     var bs = window.BallSheet;
     var sch = window.Schulte;
+    var rt = window.Reaction;
 
     var st = {
         screen: 'home',
@@ -7529,7 +8905,8 @@ const game = new AntiBallsheetGame(
         returnTo: null,
         muted: store.get('abs-muted', '0') === '1',
         game: 'abs',
-        lastGame: 'abs'
+        lastGame: 'abs',
+        setMode: 'speed'
     };
 
     var rafId = null;
@@ -7611,12 +8988,17 @@ const game = new AntiBallsheetGame(
     function drawSpark(values) {
         var svg = $('#spark');
         if (!svg) { return; }
+        var w = 240, h = 62, pad = 6;
+        var box = svg.getBoundingClientRect();
+        if (box && box.width > 0 && box.height > 0) {
+            h = Math.max(24, Math.round(w * box.height / box.width));
+            svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        }
         if (!values.length) {
-            svg.innerHTML = '<path class="spark-base" d="M6 40 L234 40" />' +
-                '<text x="120" y="26" fill="currentColor" font-size="9" text-anchor="middle" opacity=".55" font-family="Cascadia Mono, Consolas, monospace" letter-spacing="1.5">暂无数据</text>';
+            svg.innerHTML = '<path class="spark-base" d="M6 ' + (h - 16) + ' L234 ' + (h - 16) + '" />' +
+                '<text x="120" y="' + (h / 2 - 4) + '" fill="currentColor" font-size="9" text-anchor="middle" opacity=".55" font-family="Cascadia Mono, Consolas, monospace" letter-spacing="1.5">暂无数据</text>';
             return;
         }
-        var w = 240, h = 62, pad = 6;
         var min = Math.min.apply(null, values), max = Math.max.apply(null, values);
         var span = (max - min) || 0.001;
         var n = values.length;
@@ -7684,6 +9066,15 @@ const game = new AntiBallsheetGame(
             stEl.textContent = spb === null ? '—' : fmt(spb.time) + ' 秒 · ' + spb.size + '×' + spb.size;
         }
 
+        var rpb = rt ? rt.pb() : null;
+        var rtEl = $('#side-rt');
+        if (rtEl) { rtEl.textContent = rpb === null ? '—' : fmt(rpb, 1) + T(' 毫秒', ' ms'); }
+        var rtHint = $('#menu-rt-hint');
+        if (rtHint && rt) {
+            var rcount = rt.settings().count;
+            rtHint.textContent = T(rcount + ' 次 · 均分', rcount + ' trials · mean');
+        }
+
         drawSpark(scores.slice(-12).map(function (x) { return x.values.time; }));
     }
 
@@ -7702,8 +9093,48 @@ const game = new AntiBallsheetGame(
         if (name === 'home') { refreshHome(); focusFirst(); }
     }
 
-    /* 设置 is one screen with three tabs: 规则 / 外观 / 音效 */
+    /* 设置页：规则按玩法分开，下面再分 外观 / 音效 */
     var SET_TABS = ['mode', 'look', 'sfx'];
+    var SET_MODES = ['speed', 'bs', 'st', 'rt'];
+
+    function modeFromGame(game) {
+        if (game === 'bs') { return 'bs'; }
+        if (game === 'st') { return 'st'; }
+        if (game === 'rt') { return 'rt'; }
+        return 'speed';
+    }
+
+    function setMode(mode) {
+        if (SET_MODES.indexOf(mode) < 0) { mode = 'speed'; }
+        st.setMode = mode;
+        $$('.mode-tab', ui).forEach(function (b) {
+            b.classList.toggle('is-on', b.getAttribute('data-modeset') === mode);
+        });
+        $$('[data-modecard]', ui).forEach(function (card) {
+            card.classList.toggle('is-off', card.getAttribute('data-modecard') !== mode);
+        });
+
+        var meta = $('#mode-meta');
+        if (mode === 'speed') {
+            updateModeMeta();
+            bsSyncSliders();
+            stSyncSlider();
+            rtSync();
+            return;
+        }
+        if (mode === 'bs') {
+            bsSyncSliders();
+            if (meta) { meta.textContent = T('生存 · 血量 + 秒得分', 'Survival · HP + score/s'); }
+        } else if (mode === 'st') {
+            stSyncSlider();
+            var cfg = sch ? sch.settings() : { size: 5, type: 'Light' };
+            if (meta) { meta.textContent = cfg.size + ' × ' + cfg.size + ' · ' + cfg.type; }
+        } else {
+            rtSync();
+            var rset = rt ? rt.settings() : { count: 5 };
+            if (meta) { meta.textContent = T(rset.count + ' 次 · 均分', rset.count + ' trials · mean'); }
+        }
+    }
 
     function setTab(tab) {
         if (SET_TABS.indexOf(tab) < 0) { tab = 'mode'; }
@@ -7716,9 +9147,7 @@ const game = new AntiBallsheetGame(
         });
         var meta = $('#mode-meta');
         if (tab === 'mode') {
-            updateModeMeta();
-            bsSyncSliders();
-            stSyncSlider();
+            setMode(st.setMode || 'speed');
         } else if (tab === 'look') {
             mountBallColors();
             if (meta) { meta.textContent = '颜色 · 实时'; }
@@ -7771,6 +9200,7 @@ const game = new AntiBallsheetGame(
         if (name === 'play') { startFreshRun(); return; }
         if (name === 'ballsheet') { startBsRun(); return; }
         if (name === 'schulte') { startStRun(); return; }
+        if (name === 'reaction') { startRtRun(); return; }
         st.returnTo = null;
         showScreen(name);
     }
@@ -7851,10 +9281,20 @@ const game = new AntiBallsheetGame(
 
     function hudLabels(mode) {
         var t = $('#hud-lab-time'), r = $('#hud-lab-right');
-        if (t) { t.textContent = '时间 / 秒'; }
-        if (r) { r.textContent = mode === 'bs' ? '得分 / 血量' : (mode === 'st' ? '进度' : '球数'); }
+        if (t) {
+            t.textContent = mode === 'rt' ? T('轮次', 'Round') : T('时间 / 秒', 'TIME / S');
+        }
+        if (r) {
+            r.textContent = mode === 'bs' ? T('得分 / 血量', 'Score / HP') :
+                (mode === 'st' ? T('进度', 'Progress') :
+                    (mode === 'rt' ? T('平均 / 毫秒', 'Avg / ms') : T('球数', 'Balls')));
+        }
         var row = $('#bs-row');
         if (row && mode !== 'bs') { row.classList.remove('is-on'); }
+        var stRow = $('#st-row');
+        if (stRow && mode !== 'st') { stRow.classList.remove('is-on'); }
+        var rtRow = $('#rt-row');
+        if (rtRow && mode !== 'rt') { rtRow.classList.remove('is-on'); }
         var tip = $('#st-tip');
         if (tip) { tip.classList.toggle('is-on', mode === 'st'); }
     }
@@ -7961,7 +9401,7 @@ const game = new AntiBallsheetGame(
         hud.classList.add('is-on');
         hud.classList.remove('is-dim');
         hudLabels('bs');
-        $('#hud-mode').textContent = 'BallSheet · 生存';
+        $('#hud-mode').textContent = 'BALLSHEET · BIGBALL';
         var pb = bs.pb();
         $('#hud-pb').textContent = pb === null ? '最好 —' : '最好 ' + fmt(pb) + ' 秒';
         $('#hud-bar-fill').style.width = '100%';
@@ -8002,10 +9442,38 @@ const game = new AntiBallsheetGame(
         scheduleFit();
     }
 
+    function startRtRun() {
+        if (!rt) { return; }
+        closeOverlays();
+        clearFieldTint();
+        stLive(false);
+        ovLive(false);
+        stSkin(false);
+        st.game = 'rt';
+        st.lastGame = 'rt';
+        st.paused = false;
+        st.playing = true;
+        ui.classList.add('is-hidden');
+        hud.classList.add('is-on');
+        hud.classList.remove('is-dim');
+        hudLabels('rt');
+        var s = rt.settings();
+        $('#hud-mode').textContent = T('反应测试 · ' + s.count + ' 次', 'Reaction Test · ' + s.count + ' trials');
+        var pb = rt.pb();
+        $('#hud-pb').textContent = pb === null ? T('最好平均 —', 'Best avg —') : T('最好平均 ' + fmt(pb, 1) + ' 毫秒', 'Best avg ' + fmt(pb, 1) + ' ms');
+        $('#hud-bar-fill').style.width = '0%';
+        $('#slot-timer').textContent = '0 / ' + s.count;
+        $('#slot-balls').textContent = '—';
+        var gc = doc.querySelector('.game-container');
+        if (gc) { gc.style.display = 'none'; }
+        rt.start(null, onRtFinish);
+    }
+
     function retryRun() {
         flashReset();
         if (st.lastGame === 'bs' && bs) { startBsRun(); return; }
         if (st.lastGame === 'st' && sch) { startStRun(); return; }
+        if (st.lastGame === 'rt' && rt) { startRtRun(); return; }
         startFreshRun();
     }
 
@@ -8016,6 +9484,20 @@ const game = new AntiBallsheetGame(
             st.paused = true;
             st.pauseAt = performance.now();
             $('#pause-time').textContent = fmt(bs.state().t) + ' 秒';
+            hud.classList.add('is-dim');
+            ovPause.classList.add('is-open');
+            ovLive(true);
+            try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
+            return;
+        }
+        if (st.game === 'rt' && rt) {
+            if (!rt.pause()) { return; }
+            st.paused = true;
+            st.pauseAt = performance.now();
+            var rs = rt.state();
+            $('#pause-time').textContent = rs.round >= rs.count
+                ? T('完成', 'Done')
+                : T('第 ' + (rs.round + 1) + ' / ' + rs.count + ' 次', 'Trial ' + (rs.round + 1) + ' / ' + rs.count);
             hud.classList.add('is-dim');
             ovPause.classList.add('is-open');
             ovLive(true);
@@ -8045,6 +9527,14 @@ const game = new AntiBallsheetGame(
         if (!st.paused) { return; }
         if (st.game === 'bs' && bs) {
             bs.resume();
+            st.paused = false;
+            ovPause.classList.remove('is-open');
+            hud.classList.remove('is-dim');
+            ovLive(false);
+            return;
+        }
+        if (st.game === 'rt' && rt) {
+            rt.resume();
             st.paused = false;
             ovPause.classList.remove('is-open');
             hud.classList.remove('is-dim');
@@ -8119,6 +9609,12 @@ const game = new AntiBallsheetGame(
             stLive(true);
             return;
         }
+        if (st.game === 'rt' && rt) {
+            st.playing = true;
+            hud.classList.remove('is-dim');
+            rt.restart();
+            return;
+        }
         game.startGame();
     }
 
@@ -8127,6 +9623,7 @@ const game = new AntiBallsheetGame(
         st.playing = false;
         if (st.game === 'bs' && bs) { bs.stop(); }
         if (st.game === 'st' && sch) { sch.stop(); }
+        if (st.game === 'rt' && rt) { rt.stop(); }
         closeOverlays();
         clearInterval(game.interval);
         game.interval = null;
@@ -8190,13 +9687,23 @@ const game = new AntiBallsheetGame(
         el.firstChild.textContent = name;
         el.lastChild.textContent = detail || '';
     }
+    function setResUnit(unit) {
+        var el = $('#res-unit');
+        if (el) { el.textContent = unit; }
+    }
+    function showResChart(on) {
+        var canvas = $('#res-chart');
+        if (canvas && canvas.parentElement) { canvas.parentElement.style.display = on ? '' : 'none'; }
+    }
 
     function renderResults(total, avg, min, max, prevPB, cat, rt) {
         var isPB = prevPB === null || total < prevPB;
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局完成';
         tag.classList.toggle('gold', isPB);
-        setResMode(T('速通', 'Speedrun'), game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%');
+        setResMode('BALLSHEET', game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%');
+        setResUnit(T('秒', 's'));
+        showResChart(true);
         $('#res-time').textContent = fmt(total);
 
         var delta = $('#res-delta');
@@ -8242,7 +9749,9 @@ const game = new AntiBallsheetGame(
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局结束';
         tag.classList.toggle('gold', isPB);
-        setResMode(T('BallSheet 生存', 'BallSheet · Survival'), '血量 · 每秒得分');
+        setResMode('BALLSHEET · BIGBALL', '血量 · 每秒得分');
+        setResUnit(T('秒', 's'));
+        showResChart(true);
         $('#res-time').textContent = fmt(run.time);
 
         var delta = $('#res-delta');
@@ -8294,6 +9803,7 @@ const game = new AntiBallsheetGame(
         tag.textContent = isPB ? '新的个人最好' : '本局完成';
         tag.classList.toggle('gold', isPB);
         setResMode(T('舒尔特 · ' + sch.typeName(run.type), 'Schulte · ' + sch.typeName(run.type)), run.size + ' × ' + run.size + ' · ' + cellsTotal + ' 格');
+        setResUnit(T('秒', 's'));
         $('#res-time').textContent = fmt(run.time);
 
         var delta = $('#res-delta');
@@ -8332,7 +9842,59 @@ const game = new AntiBallsheetGame(
         try { $('#res-retry').focus({ preventScroll: true }); } catch (e) { }
     }
 
-    function drawResultsChart(values, unit) {
+    /* ---------------- reaction-test results ---------------- */
+    function onRtFinish(data) {
+        st.playing = false;
+        st.paused = false;
+        var run = data.run;
+        var prev = data.prevPb;
+        var isPB = prev === null || run.avg < prev;
+
+        var tag = $('#res-tag');
+        tag.textContent = isPB ? T('新的个人最好', 'New personal best') : T('测试完成', 'Test complete');
+        tag.classList.toggle('gold', isPB);
+        setResMode(T('反应测试', 'Reaction Test'), run.count + T(' 次 · 有效 ', ' trials · valid ') + run.tries + T(' 次', ' trials'));
+        setResUnit(T('毫秒', 'ms'));
+        showResChart(true);
+        $('#res-time').textContent = fmt(run.avg, 1);
+
+        var delta = $('#res-delta');
+        delta.classList.remove('fast', 'slow');
+        if (prev === null) {
+            delta.textContent = T('第一次反应测试记录', 'First reaction-test record');
+        } else if (isPB) {
+            delta.textContent = T('比最好平均快 ' + fmt(prev - run.avg, 1) + ' 毫秒（最好 ' + fmt(prev, 1) + ' 毫秒）',
+                'Faster than best avg by ' + fmt(prev - run.avg, 1) + ' ms (best ' + fmt(prev, 1) + ' ms)');
+            delta.classList.add('fast');
+        } else {
+            delta.textContent = T('比最好平均慢 ' + fmt(run.avg - prev, 1) + ' 毫秒（最好 ' + fmt(prev, 1) + ' 毫秒）',
+                'Slower than best avg by ' + fmt(run.avg - prev, 1) + ' ms (best ' + fmt(prev, 1) + ' ms)');
+            delta.classList.add('slow');
+        }
+
+        var cells = [
+            [T('有效次数', 'Valid trials'), String(run.tries)],
+            [T('抢跑', 'Too soon'), String(run.early)],
+            [T('最快单次', 'Fastest'), run.best + ' ms'],
+            [T('最慢单次', 'Slowest'), run.worst + ' ms'],
+            [T('均分', 'Mean'), fmt(run.avg, 1) + ' ms'],
+            [T('累计局数', 'Total runs'), String(rt.runs().length)]
+        ];
+        $('#res-grid').innerHTML = cells.map(function (c) {
+            return '<div class="res-cell"><div class="l">' + c[0] + '</div><div class="v">' + c[1] + '</div></div>';
+        }).join('');
+
+        ui.classList.add('is-hidden');
+        hideHud();
+        ovResults.classList.add('is-open');
+        ovLive(true);
+
+        requestAnimationFrame(function () { drawResultsChart(run.times, 'ms', 'trial'); });
+        refreshHome();
+        try { $('#res-retry').focus({ preventScroll: true }); } catch (e) { }
+    }
+
+    function drawResultsChart(values, unit, kind) {
         if (!window.Chart) { return; }
         var canvas = $('#res-chart');
         if (!canvas) { return; }
@@ -8373,7 +9935,11 @@ const game = new AntiBallsheetGame(
                         backgroundColor: 'rgba(0,0,0,.85)',
                         displayColors: false,
                         callbacks: {
-                            title: function (items) { return T('第 ' + items[0].label + ' 球', 'Ball ' + items[0].label); },
+                            title: function (items) {
+                                return kind === 'trial'
+                                    ? T('第 ' + items[0].label + ' 次', 'Trial ' + items[0].label)
+                                    : T('第 ' + items[0].label + ' 球', 'Ball ' + items[0].label);
+                            },
                             label: function (item) { return fmt(item.parsed.y, prec) + ' ' + unitText; }
                         }
                     }
@@ -8411,19 +9977,22 @@ const game = new AntiBallsheetGame(
         if (cats.indexOf(cur) < 0) { cats.unshift(cur); }
         var bsRuns = bs ? bs.runs().length : 0;
         var stRuns = sch ? sch.runs().length : 0;
+        var rtRuns = rt ? rt.runs().length : 0;
         sel.innerHTML = cats.map(function (c) {
             var has = scoresOf(c).length;
             var label = EN ? c.replace(/^(\d+),\s*(\d+)$/, '$1 balls · $2% radius') : c;
             return '<option value="' + c + '">' + label + (has ? '' : ' · 无记录') + '</option>';
-        }).join('') + '<option value="__BS__">BallSheet · 生存' + (bsRuns ? '' : ' · 无记录') + '</option>' +
-            '<option value="__ST__">舒尔特方格' + (stRuns ? '' : ' · 无记录') + '</option>';
-        sel.value = (prev === '__BS__' || prev === '__ST__' || cats.indexOf(prev) >= 0) ? prev : cur;
+        }).join('') + '<option value="__BS__">BALLSHEET · BIGBALL' + (bsRuns ? '' : ' · 无记录') + '</option>' +
+            '<option value="__ST__">舒尔特方格' + (stRuns ? '' : ' · 无记录') + '</option>' +
+            '<option value="__RT__">反应测试' + (rtRuns ? '' : ' · 无记录') + '</option>';
+        sel.value = (prev === '__BS__' || prev === '__ST__' || prev === '__RT__' || cats.indexOf(prev) >= 0) ? prev : cur;
     }
 
     function renderStats(cat) {
         if (!cat) { return; }
         if (cat === '__BS__') { renderBsStats(); return; }
         if (cat === '__ST__') { renderStStats(); return; }
+        if (cat === '__RT__') { renderRtStats(); return; }
         var scores = scoresOf(cat);
         var pb = pbOf(cat);
         var last = scores.length ? scores[scores.length - 1].values : null;
@@ -8554,6 +10123,124 @@ const game = new AntiBallsheetGame(
                     y: {
                         grid: { color: 'rgba(128,128,128,.12)' },
                         ticks: { color: dim, maxTicksLimit: 6, font: { size: 9, family: 'Cascadia Mono, Consolas, monospace' }, callback: function (v) { return (+v).toFixed(1); } }
+                    }
+                }
+            }
+        });
+    }
+
+    /* ---------------- reaction-test stats ---------------- */
+    function renderRtStats() {
+        var runs = rt ? rt.runs() : [];
+        var best = null, fastest = null, totalMs = 0, totalTries = 0;
+        runs.forEach(function (r) {
+            if (typeof r.avg === 'number') {
+                if (best === null || r.avg < best) { best = r.avg; }
+                totalMs += r.avg * (r.tries || 0);
+                totalTries += (r.tries || 0);
+            }
+            if (typeof r.best === 'number' && (fastest === null || r.best < fastest)) { fastest = r.best; }
+        });
+
+        var cells = [
+            [T('最好均分', 'Best mean'), best === null ? '—' : fmt(best, 1) + ' ms', best !== null],
+            [T('局数', 'Runs'), String(runs.length)],
+            [T('总平均', 'Overall mean'), totalTries ? fmt(totalMs / totalTries, 1) + ' ms' : '—'],
+            [T('最快单次', 'Fastest trial'), fastest === null ? '—' : String(fastest) + ' ms']
+        ];
+        $('#stats-summary').innerHTML = cells.map(function (c) {
+            return '<div class="cell"><div class="l">' + c[0] + '</div><div class="v' + (c[2] ? ' acc' : '') + '">' + c[1] + '</div></div>';
+        }).join('');
+
+        $('#stats-empty').classList.toggle('is-hidden', runs.length > 0);
+        if (runs.length && window.Chart) {
+            drawRtChart(runs);
+        } else if (statsChart) {
+            statsChart.destroy();
+            statsChart = null;
+        }
+
+        var rows = runs.slice(-12).reverse().map(function (r, i) {
+            var idx = runs.length - i;
+            return '<tr><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + String(r.count) +
+                '</td><td>' + String(r.tries) + '</td><td>' + fmt(r.avg, 1) + '</td><td>' + String(r.best) +
+                '</td><td>' + String(r.worst) + '</td><td>' + String(r.early) + '</td></tr>';
+        }).join('');
+        $('#stats-runs').innerHTML = runs.length ?
+            '<table class="runs-table"><thead><tr><th>#</th><th>' + T('时间', 'Time') + '</th><th>' +
+            T('次数', 'Trials') + '</th><th>' + T('有效', 'Valid') + '</th><th>' + T('均分', 'Mean') +
+            '</th><th>' + T('最快单次', 'Fastest') + '</th><th>' + T('最慢单次', 'Slowest') + '</th><th>' +
+            T('抢跑', 'Too soon') + '</th></tr></thead><tbody>' + rows + '</tbody></table>' : '';
+    }
+
+    function drawRtChart(runs) {
+        var canvas = $('#stats-chart');
+        if (!canvas) { return; }
+        if (statsChart) { statsChart.destroy(); statsChart = null; }
+        var cs = getComputedStyle(doc.documentElement);
+        var accent = parseColor(cs.getPropertyValue('--accent'));
+        var target = parseColor(cs.getPropertyValue('--target'));
+        var dim = cs.getPropertyValue('--dim').trim() || '#8b979e';
+
+        statsChart = new Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: runs.map(function (_, i) { return String(i + 1); }),
+                datasets: [
+                    {
+                        label: T('均分', 'Mean'),
+                        data: runs.map(function (r) { return r.avg; }),
+                        borderColor: 'rgba(' + accent.r + ',' + accent.g + ',' + accent.b + ',1)',
+                        backgroundColor: 'rgba(' + accent.r + ',' + accent.g + ',' + accent.b + ',.10)',
+                        borderWidth: 1.5,
+                        pointRadius: 2,
+                        pointHoverRadius: 4,
+                        tension: .12,
+                        fill: true
+                    },
+                    {
+                        label: T('最快单次', 'Fastest trial'),
+                        data: runs.map(function (r) { return r.best; }),
+                        borderColor: 'rgba(' + target.r + ',' + target.g + ',' + target.b + ',1)',
+                        backgroundColor: 'transparent',
+                        borderWidth: 1,
+                        borderDash: [4, 3],
+                        pointRadius: 2,
+                        pointHoverRadius: 4,
+                        tension: .12
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                devicePixelRatio: Math.min(2, window.devicePixelRatio || 1),
+                animation: { duration: 0 },
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        labels: { color: dim, font: { size: 9, family: 'Cascadia Mono, Consolas, monospace' }, boxWidth: 10, boxHeight: 4 }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,.85)',
+                        displayColors: false,
+                        callbacks: {
+                            title: function (items) {
+                                var r = runs[items[0].dataIndex];
+                                return r ? fmtWhen(r.t) + ' · ' + r.count + T(' 次', ' trials') : '';
+                            },
+                            label: function (item) { return item.dataset.label + ' ' + fmt(item.parsed.y, 1) + ' ms'; }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(128,128,128,.10)' },
+                        ticks: { color: dim, font: { size: 9, family: 'Cascadia Mono, Consolas, monospace' }, maxTicksLimit: 12 }
+                    },
+                    y: {
+                        grid: { color: 'rgba(128,128,128,.12)' },
+                        ticks: { color: dim, maxTicksLimit: 6, font: { size: 9, family: 'Cascadia Mono, Consolas, monospace' }, callback: function (v) { return (+v).toFixed(0); } }
                     }
                 }
             }
@@ -8778,6 +10465,11 @@ const game = new AntiBallsheetGame(
             if (stRuns.length) { downloadJson('schulte_grid.json', stRuns); }
             return;
         }
+        if (cat === '__RT__' && rt) {
+            var rtRuns = rt.runs();
+            if (rtRuns.length) { downloadJson('reaction_test.json', rtRuns); }
+            return;
+        }
         var d = statsFor(cat);
         if (!d) { return; }
         downloadJson('antiBallsheet_' + cat.replace(/[^0-9]+/g, '-') + '.json', d);
@@ -8787,7 +10479,7 @@ const game = new AntiBallsheetGame(
         var cat = $('#stats-cat').value;
         if (!cat) { return; }
         if (cat === '__BS__' && bs) {
-            if (!window.confirm(T('确定清除所有 BallSheet 生存记录？', 'Clear all BallSheet survival records?'))) { return; }
+            if (!window.confirm(T('确定清除所有 BIGBALL 记录？', 'Clear all BIGBALL records?'))) { return; }
             try { localStorage.removeItem('BallSheetRuns'); } catch (e) { }
             renderBsStats();
             fillCats();
@@ -8798,6 +10490,14 @@ const game = new AntiBallsheetGame(
             if (!window.confirm(T('确定清除所有舒尔特方格记录？', 'Clear all Schulte grid records?'))) { return; }
             try { localStorage.removeItem('schulteRuns'); } catch (e) { }
             renderStStats();
+            fillCats();
+            refreshHome();
+            return;
+        }
+        if (cat === '__RT__' && rt) {
+            if (!window.confirm(T('确定清除所有反应测试记录？', 'Clear all reaction-test records?'))) { return; }
+            try { localStorage.removeItem('reactionRuns'); } catch (e) { }
+            renderRtStats();
             fillCats();
             refreshHome();
             return;
@@ -8939,6 +10639,61 @@ const game = new AntiBallsheetGame(
 
     function stSyncSlider() { stPaint(); }
     function bindStSlider() { stPaint(); }
+
+    /* ---------------- reaction-test trial count ---------------- */
+    function rtPaint() {
+        if (!rt) { return; }
+        var cfg = rt.settings();
+        var input = $('#rt-count');
+        var sum = $('#rt-summary');
+        var box = $('#rt-presets');
+        if (input) { input.value = String(cfg.count); }
+        if (box) {
+            Array.prototype.forEach.call(box.children, function (el) {
+                el.classList.toggle('is-on', Number(el.getAttribute('data-rt')) === cfg.count);
+            });
+        }
+        if (sum) {
+            sum.textContent = T(cfg.count + ' 次 · 每局按有效反应取平均',
+                cfg.count + ' trials · mean of valid reactions');
+        }
+        var hint = $('#menu-rt-hint');
+        if (hint) { hint.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
+        if (st.setTab === 'mode' && st.setMode === 'rt') {
+            var meta = $('#mode-meta');
+            if (meta) { meta.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
+        }
+    }
+
+    function rtCommit(value) {
+        if (!rt) { return; }
+        rt.saveSettings({ count: value });
+        rtPaint();
+    }
+
+    function rtSync() { rtPaint(); }
+
+    function bindRt() {
+        if (!rt) { return; }
+        var input = $('#rt-count');
+        if (input) {
+            input.addEventListener('change', function () { rtCommit(this.value); });
+            input.addEventListener('blur', function () { rtCommit(this.value); });
+        }
+        var box = $('#rt-presets');
+        if (box && !box.childNodes.length) {
+            (rt.presets || []).forEach(function (n) {
+                var b = doc.createElement('button');
+                b.type = 'button';
+                b.className = 'st-chip rt-chip';
+                b.setAttribute('data-rt', String(n));
+                b.textContent = n + T(' 次', ' trials');
+                bindTap(b, function () { rtCommit(n); });
+                box.appendChild(b);
+            });
+        }
+        rtPaint();
+    }
 
     function initAudio() {
         if (!st.muted && !actx) {
@@ -9677,6 +11432,13 @@ const game = new AntiBallsheetGame(
             });
         });
 
+        $$('.mode-tab', ui).forEach(function (btn) {
+            bindTap(btn, function () {
+                sfx(500);
+                setMode(btn.getAttribute('data-modeset'));
+            });
+        });
+
         bindTap($('#btn-sound'), function () {
             st.muted = !st.muted;
             store.set('abs-muted', st.muted ? '1' : '0');
@@ -9697,6 +11459,7 @@ const game = new AntiBallsheetGame(
             ovPause.classList.remove('is-open');
             ui.classList.remove('is-hidden');
             st.setTab = 'mode';
+            st.setMode = modeFromGame(st.game);
             showScreen('settings');
         });
         bindTap($('#pause-quit'), function () { sfx(320); quitToMenu(); });
@@ -9710,6 +11473,7 @@ const game = new AntiBallsheetGame(
             ovResults.classList.remove('is-open');
             ui.classList.remove('is-hidden');
             st.setTab = 'mode';
+            st.setMode = modeFromGame(st.game);
             showScreen('settings');
         });
         bindTap($('#res-home'), function () { sfx(380); quitToMenu(); });
@@ -9721,6 +11485,7 @@ const game = new AntiBallsheetGame(
         $('#slot-mode').addEventListener('input', updateModeMeta);
         bindBsSliders();
         bindStSlider();
+        bindRt();
 
         ui.addEventListener('input', function (e) {
             if (e.target && e.target.type === 'color') { applyTheme(); }
@@ -9735,6 +11500,13 @@ const game = new AntiBallsheetGame(
         });
 
         window.addEventListener('resize', fitStage);
+        var homeResizeT = null;
+        window.addEventListener('resize', function () {
+            if (homeResizeT) { clearTimeout(homeResizeT); }
+            homeResizeT = setTimeout(function () {
+                if (st.screen === 'home') { refreshHome(); }
+            }, 140);
+        });
         window.addEventListener('orientationchange', function () { window.setTimeout(fitStage, 80); });
         bindTouchHit();
     }
@@ -9756,7 +11528,7 @@ const game = new AntiBallsheetGame(
 
         /* ---- live run ---- */
         if (st.playing && !st.paused) {
-            if (st.game === 'bs' || st.game === 'st') {
+            if (st.game === 'bs' || st.game === 'st' || st.game === 'rt') {
                 if (k === 'Escape') {
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -9989,6 +11761,7 @@ const game = new AntiBallsheetGame(
         relinkHud();
         bsSyncSliders();
         stSyncSlider();
+        rtSync();
         applyTheme();
         patchEngine();
         bindUI();
@@ -10009,14 +11782,18 @@ const game = new AntiBallsheetGame(
 
         var langReturn = '';
         var langTab = 'mode';
+        var langMode = 'speed';
         try {
             langReturn = sessionStorage.getItem('abs-lang-return') || '';
             langTab = sessionStorage.getItem('abs-lang-tab') || 'mode';
+            langMode = sessionStorage.getItem('abs-lang-mode') || 'speed';
             sessionStorage.removeItem('abs-lang-return');
             sessionStorage.removeItem('abs-lang-tab');
+            sessionStorage.removeItem('abs-lang-mode');
         } catch (e) { }
         if (langReturn && document.querySelector('.screen[data-screen="' + langReturn + '"]')) {
             st.setTab = langTab;
+            st.setMode = langMode;
             showScreen(langReturn);
         }
     }
