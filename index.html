@@ -4032,6 +4032,57 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     color: #d8ff5a;
 }
 
+/* 自定义倒计时：毫秒输入 + 快捷档 */
+.st-cd-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 8px 0 0;
+    font-family: var(--mono);
+}
+#st-cd {
+    width: 108px;
+    padding: 10px 11px;
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .04);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    outline: none;
+    transition: border-color .12s linear, background .12s linear;
+}
+#st-cd:focus {
+    border-color: #d8ff5a;
+    background: rgba(216, 255, 90, .06);
+}
+.st-cd-unit {
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--dim);
+}
+.st-cd-note {
+    margin-left: auto;
+    font-size: 9px;
+    letter-spacing: .08em;
+    color: var(--dim);
+}
+.st-cd-presets .st-chip {
+    flex: 0 0 auto;
+    min-width: 62px;
+}
+
+@media (max-width: 640px) {
+    .st-cd-note {
+        margin-left: 0;
+        width: 100%;
+    }
+    #st-cd { width: 96px; }
+}
+
 .st-types {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4196,6 +4247,11 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     font-style: normal;
     color: var(--cdc, #d8ff5a);
     text-shadow: 0 0 34px currentColor;
+}
+
+/* 小数秒（例如 1.5 s）多一位字符，收小字号避免顶到圆环 */
+.st-cd-num.is-frac {
+    font-size: 72px;
 }
 
 .st-cd-num.is-tick {
@@ -5327,7 +5383,13 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <p class="st-cap">TYPE</p>
                                     <div class="st-types" id="st-types"></div>
                                     <p class="st-cap">COUNTDOWN</p>
-                                    <div class="st-chips" id="st-cds"></div>
+                                    <div class="st-cd-line">
+                                        <input id="st-cd" type="number" min="0" max="60000" step="1" value="3000"
+                                            inputmode="numeric" aria-label="倒计时毫秒">
+                                        <span class="st-cd-unit">ms</span>
+                                        <span class="st-cd-note">0 = 关闭 · 最大 60000</span>
+                                    </div>
+                                    <div class="st-chips st-cd-presets" id="st-cds"></div>
                                     <p class="st-summary" id="st-summary">Light · 5 × 5</p>
                                 </div>
                                 <p class="bs-foot">方格恒为 <b>425 px</b>，所有规则共用同一块场地。从 <b>Light</b> 开始：按顺序点，
@@ -5813,6 +5875,8 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '最好均分': 'Best mean',
         '总平均': 'Overall mean',
         '毫秒': 'ms',
+        '倒计时毫秒': 'Countdown (ms)',
+        '0 = 关闭 · 最大 60000': '0 = off · max 60000',
         '满血边框（绿）': 'Full HP border (green)',
         '濒死边框（红）': 'Near-death border (red)',
         '变色动态': 'Colour dynamics',
@@ -5880,6 +5944,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         [/^([\d]+) 格 · 倒计时 ([\d]+) s$/, '$1 cells · countdown $2 s'],
         [/^([\d]+) 格 · 倒计时 关$/, '$1 cells · countdown off'],
         [/^([\d]+) × ([\d]+) · ([\d]+) 格$/, '$1 × $2 · $3 cells'],
+        [/^(.+) · ([\d]+) × ([\d]+) · ([\d]+) 格 · 倒计时 关$/, '$1 · $2 × $3 · $4 cells · countdown off'],
         [/^(.+) · ([\d]+) × ([\d]+) · ([\d]+) 格 · 倒计时 (.+)$/, '$1 · $2 × $3 · $4 cells · countdown $5'],
         [/^([\d]+) 像素球 · 600 像素场地$/, '$1 px ball · 600 px field'],
         [/^(.+) · 原始$/, '$1 · original'],
@@ -6072,7 +6137,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     <script>// Create a Mersenne Twister engine and auto-seed it
 var eng = Random.MersenneTwister19937.autoSeed();
 var myrandom = new Random.Random(eng);</script>
-    <script>const VERSION = "v0.7.5 (beta)";
+    <script>const VERSION = "v0.7.6 (beta)";
 </script>
     <script>const TITLE = `antiBallsheet game by dph, ${VERSION}`;
 const FIELD_SIZE_PX = 600;
@@ -7699,8 +7764,11 @@ const game = new AntiBallsheetGame(
         { k: 'gorbow', n: 'Gorbow', d: '黑色升序、红色降序，两组交替点', de: 'Black ascending, red descending, alternating' }
     ];
 
-    var DEFAULTS = { size: 5, type: 'light', count: 3 };
-    var COUNTS = [0, 2, 3, 5];
+    var DEFAULTS = { size: 5, type: 'light', cdMs: 3000 };
+    var CD_MIN = 0;
+    var CD_MAX = 60000;
+    var CD_DEFAULT = 3000;
+    var CD_PRESETS = [0, 1000, 3000, 5000];
     var PALETTE = ['#111111', '#0f4f9e', '#0b7a4b', '#8a3ffc', '#a34700', '#b0216b'];
 
     var S = {
@@ -7715,7 +7783,7 @@ const game = new AntiBallsheetGame(
         errors: 0,
         size: 5,
         type: 'light',
-        count: 3,
+        cdMs: 3000,
         lastN: 0,
         numEl: null,
         seq: [],
@@ -7748,10 +7816,10 @@ const game = new AntiBallsheetGame(
         for (var i = 0; i < SIZES.length; i++) { if (SIZES[i] === v) { return v; } }
         return 5;
     }
-    function normCount(n) {
+    function normCdMs(n) {
         var v = Number(n);
-        for (var i = 0; i < COUNTS.length; i++) { if (COUNTS[i] === v) { return v; } }
-        return DEFAULTS.count;
+        if (!isFinite(v)) { return CD_DEFAULT; }
+        return clamp(Math.round(v), CD_MIN, CD_MAX);
     }
 
     function grab() {
@@ -7771,7 +7839,7 @@ const game = new AntiBallsheetGame(
 
     /* ---------------- settings / records ---------------- */
     function readSettings() {
-        var out = { size: DEFAULTS.size, type: DEFAULTS.type, count: DEFAULTS.count };
+        var out = { size: DEFAULTS.size, type: DEFAULTS.type, cdMs: DEFAULTS.cdMs };
         try {
             var raw = localStorage.getItem(LS_SET);
             if (raw) {
@@ -7779,7 +7847,12 @@ const game = new AntiBallsheetGame(
                 if (o) {
                     if (isNum(Number(o.size))) { out.size = normSize(o.size); }
                     if (typeof o.type === 'string') { out.type = normType(o.type); }
-                    if (isNum(Number(o.count))) { out.count = normCount(o.count); }
+                    if (o.cdMs !== undefined && isNum(Number(o.cdMs))) {
+                        out.cdMs = normCdMs(o.cdMs);
+                    } else if (isNum(Number(o.count))) {
+                        /* legacy setting stored whole seconds — migrate once */
+                        out.cdMs = normCdMs(Number(o.count) * 1000);
+                    }
                 }
             }
         } catch (e) { }
@@ -7791,7 +7864,7 @@ const game = new AntiBallsheetGame(
         if (!patch) { return s; }
         if (patch.size !== undefined) { s.size = normSize(patch.size); }
         if (patch.type !== undefined) { s.type = normType(patch.type); }
-        if (patch.count !== undefined) { s.count = normCount(patch.count); }
+        if (patch.cdMs !== undefined) { s.cdMs = normCdMs(patch.cdMs); }
         try { localStorage.setItem(LS_SET, JSON.stringify(s)); } catch (e) { }
         return s;
     }
@@ -8198,10 +8271,18 @@ const game = new AntiBallsheetGame(
             if (memo) { memo.style.display = 'flex'; memo.textContent = '记 3 秒'; }
             return;
         }
-        if (S.count <= 0) { beginPlay(); return; }
+        if (S.cdMs <= 0) { beginPlay(); return; }
         S.phase = 'count';
         S.lastN = 0;
-        S.countEnd = performance.now() + S.count * 1000;
+        S.countEnd = performance.now() + S.cdMs;
+    }
+
+    function countText(remain, total) {
+        var sec = Math.max(0, remain) / 1000;
+        if (total < 1000 || total % 1000 !== 0) {
+            return sec >= 10 ? String(Math.ceil(sec)) : sec.toFixed(1);
+        }
+        return String(Math.max(1, Math.ceil(sec)));
     }
 
     function beginPlay() {
@@ -8221,21 +8302,23 @@ const game = new AntiBallsheetGame(
             var cbox = $('st-count');
             if (cbox) {
                 cbox.style.display = 'flex';
-                var n = Math.max(1, Math.ceil(remain / 1000));
-                if (n !== S.lastN) {
-                    S.lastN = n;
+                var shown = countText(remain, S.cdMs);
+                if (shown !== S.lastN) {
+                    S.lastN = shown;
                     if (S.numEl) {
-                        S.numEl.textContent = String(n);
+                        S.numEl.textContent = shown;
+                        S.numEl.classList.toggle('is-frac', shown.indexOf('.') >= 0);
                         S.numEl.classList.remove('is-tick');
                         void S.numEl.offsetWidth;
                         S.numEl.classList.add('is-tick');
                     }
-                    cbox.setAttribute('data-n', String(n));
+                    cbox.setAttribute('data-n', shown);
                 }
-                /* ring drains inside the current second, resets on each tick */
-                var p = ((remain % 1000) || 1000) / 1000;
+                /* the ring drains once across the whole custom duration */
+                var sec = Math.max(0, remain) / 1000;
+                var p = S.cdMs > 0 ? clamp(remain / S.cdMs, 0, 1) : 0;
                 cbox.style.setProperty('--cd', p.toFixed(3));
-                cbox.style.setProperty('--cdc', n <= 1 ? '#ff5a4a' : (n === 2 ? '#ffd24a' : '#d8ff5a'));
+                cbox.style.setProperty('--cdc', sec <= 1 ? '#ff5a4a' : (sec <= 2 ? '#ffd24a' : '#d8ff5a'));
                 if (S.arc) { S.arc.setAttribute('stroke-dashoffset', (552.9 * (1 - p)).toFixed(1)); }
             }
             if (remain <= 0) { beginPlay(); }
@@ -8299,12 +8382,12 @@ const game = new AntiBallsheetGame(
         if (cfgInline) {
             if (cfgInline.size !== undefined) { cfg.size = normSize(cfgInline.size); }
             if (cfgInline.type !== undefined) { cfg.type = normType(cfgInline.type); }
-            if (cfgInline.count !== undefined) { cfg.count = normCount(cfgInline.count); }
+            if (cfgInline.cdMs !== undefined) { cfg.cdMs = normCdMs(cfgInline.cdMs); }
         }
         S.size = cfg.size;
         S.type = cfg.type;
-        S.count = normCount(cfg.count);
-        saveSettings({ size: S.size, type: S.type, count: S.count });
+        S.cdMs = normCdMs(cfg.cdMs);
+        saveSettings({ size: S.size, type: S.type, cdMs: S.cdMs });
 
         S.active = true;
         S.paused = false;
@@ -8371,7 +8454,9 @@ const game = new AntiBallsheetGame(
         defaults: DEFAULTS,
         sizes: SIZES,
         types: TYPES,
-        counts: COUNTS,
+        countdownPresets: CD_PRESETS,
+        countdownMin: CD_MIN,
+        countdownMax: CD_MAX,
         typeName: function (k) { return typeInfo(k).n; },
         settings: readSettings,
         saveSettings: saveSettings,
@@ -10607,22 +10692,24 @@ const game = new AntiBallsheetGame(
             });
         }
         if (boxC && !boxC.childNodes.length) {
-            (sch.counts || [0, 2, 3, 5]).forEach(function (n) {
+            (sch.countdownPresets || [0, 1000, 3000, 5000]).forEach(function (ms) {
                 var b = doc.createElement('button');
                 b.type = 'button';
                 b.className = 'st-chip';
-                b.setAttribute('data-cd', String(n));
-                b.textContent = n === 0 ? '关闭' : n + ' s';
+                b.setAttribute('data-cd', String(ms));
+                b.textContent = ms === 0 ? T('关闭', 'Off') : (ms / 1000) + ' s';
                 bindTap(b, function () {
-                    sch.saveSettings({ count: n });
+                    sch.saveSettings({ cdMs: ms });
                     stPaint();
                 });
                 boxC.appendChild(b);
             });
         }
+        var cdInput = $('#st-cd');
+        if (cdInput) { cdInput.value = String(cfg.cdMs); }
         if (boxC) {
             Array.prototype.forEach.call(boxC.children, function (el) {
-                el.classList.toggle('is-on', Number(el.getAttribute('data-cd')) === cfg.count);
+                el.classList.toggle('is-on', Number(el.getAttribute('data-cd')) === cfg.cdMs);
             });
         }
         if (boxT) {
@@ -10632,12 +10719,35 @@ const game = new AntiBallsheetGame(
         }
         var sum = $('#st-summary');
         if (sum) {
+            var cdText = cfg.cdMs ? cfg.cdMs + ' ms' : T('关', 'Off');
             sum.textContent = sch.typeName(cfg.type) + ' · ' + cfg.size + ' × ' + cfg.size + ' · ' +
-                (cfg.size * cfg.size) + ' 格 · 倒计时 ' + (cfg.count ? cfg.count + ' s' : '关');
+                (cfg.size * cfg.size) + T(' 格 · 倒计时 ', ' cells · Countdown ') + cdText;
         }
     }
 
-    function stSyncSlider() { stPaint(); }
+    var stCdBound = false;
+    function bindStCountdown() {
+        var input = $('#st-cd');
+        if (!input || stCdBound || !sch) { return; }
+        stCdBound = true;
+        function commit() {
+            var raw = input.value.trim();
+            if (raw === '') { stPaint(); return; }
+            sch.saveSettings({ cdMs: Number(raw) });
+            stPaint();
+        }
+        input.addEventListener('change', commit);
+        input.addEventListener('blur', commit);
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                commit();
+                input.blur();
+            }
+        });
+    }
+
+    function stSyncSlider() { bindStCountdown(); stPaint(); }
     function bindStSlider() { stPaint(); }
 
     /* ---------------- reaction-test trial count ---------------- */
