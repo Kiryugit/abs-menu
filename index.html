@@ -4983,14 +4983,28 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     font-weight: 600;
     line-height: 1;
     color: #d8ff5a;
-    background: radial-gradient(circle at 50% 50%,
-        rgba(8, 8, 8, .88) 0,
-        rgba(8, 8, 8, .82) 92px,
-        rgba(8, 8, 8, .45) 170px,
-        rgba(8, 8, 8, .26) 100%);
-    backdrop-filter: blur(1.5px);
-    -webkit-backdrop-filter: blur(1.5px);
+    background: transparent;
     pointer-events: none;
+}
+
+/* single dial face under the ring — solid, no blur or stacked shadow */
+.st-count::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 36%,
+        #18221c 0,
+        #0c110e 56%,
+        #070a08 100%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cdc, #d8ff5a) 30%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, .08);
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* 倒计时圆环：每一秒从满圈走空，数字越大越快 */
@@ -5004,7 +5018,8 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     transform: rotate(-90deg);
     overflow: visible;
     pointer-events: none;
-    filter: drop-shadow(0 0 14px rgba(216, 255, 90, .22));
+    z-index: 1;
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--cdc, #d8ff5a) 34%, transparent));
 }
 
 .st-ring-track {
@@ -5022,11 +5037,12 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     display: inline-block;
     font-style: normal;
     color: var(--cdc, #d8ff5a);
-    text-shadow: 0 0 34px currentColor;
-    padding: .10em .18em .12em;
-    border-radius: 18px;
-    background: rgba(8, 8, 8, .86);
-    box-shadow: 0 0 0 10px rgba(8, 8, 8, .22), 0 0 64px 24px rgba(8, 8, 8, .26);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .92), 0 0 20px currentColor;
+    padding: .08em .12em .10em;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 /* 小数秒（例如 1.5 s）多一位字符，收小字号避免顶到圆环 */
@@ -6851,8 +6867,142 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 .hud-lr { border-radius: var(--r-2); }
 
 .hud-help {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 21px;
+    font-size: 10px;
+    color: color-mix(in srgb, var(--ink) 66%, transparent);
+    background: color-mix(in srgb, var(--bg) 58%, transparent);
+    border-color: color-mix(in srgb, var(--ink) 18%, transparent);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--bg) 40%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.hud-help:hover,
+.hud-help:focus {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.hud-help::after {
+    right: -2px;
+    bottom: calc(100% + 11px);
+    width: min(286px, calc(100vw - 24px));
+    padding: 11px 13px 12px;
+    font-size: 10.5px;
+    line-height: 1.7;
+    letter-spacing: .015em;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    background:
+        linear-gradient(158deg, color-mix(in srgb, var(--ink) 4%, transparent), transparent 46%),
+        color-mix(in srgb, var(--bg) 94%, #000 6%);
+    border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--r-2);
+    box-shadow: 0 20px 50px -24px rgba(0, 0, 0, .9),
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent);
+    z-index: 8;
+}
+
+/* one aligned dock instead of four floating buttons */
+.hud-controls {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 4;
+    box-sizing: border-box;
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    padding: 7px;
+    pointer-events: none;
+    border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+    border-radius: var(--r-3);
+    background:
+        linear-gradient(158deg, color-mix(in srgb, var(--ink) 5%, transparent), transparent 48%),
+        color-mix(in srgb, var(--bg) 58%, transparent);
+    box-shadow: 0 24px 56px -36px rgba(0, 0, 0, .9),
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
+    backdrop-filter: blur(14px) saturate(.9);
+}
+
+.hud-controls #hud-lr-wrap,
+.hud-controls #hud-spin,
+.hud-controls #hud-pause {
+    position: static;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin: 0;
+}
+
+.hud-controls #hud-lr-wrap {
+    display: none;
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.hud-controls #hud-lr-wrap.is-visible { display: flex; }
+
+.hud-controls #hud-spin { display: none; }
+.hud-controls #hud-spin.is-visible { display: block; }
+.hud-controls #hud-pause { display: block; }
+
+/* no left/right switch: keep the classic bottom row, clear of the left HUD */
+.hud-controls:not(:has(#hud-lr-wrap.is-visible)) {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+.hud-controls:not(:has(#hud-lr-wrap.is-visible)) #hud-spin,
+.hud-controls:not(:has(#hud-lr-wrap.is-visible)) #hud-pause {
+    width: auto;
+}
+
+.hud-controls #hud-spin,
+.hud-controls #hud-pause,
+.hud-controls #hud-lr {
+    white-space: nowrap;
+}
+
+.hud-controls #hud-lr {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+@media (max-width: 480px) {
+    .hud-controls {
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .hud-help::after {
+        width: min(286px, calc(100vw - 20px));
+        font-size: 10px;
+    }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .hud-controls {
+        right: 8px;
+        bottom: 8px;
+        width: 168px;
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .hud-controls #hud-spin,
+    .hud-controls #hud-pause,
+    .hud-controls #hud-lr {
+        font-size: 8.5px;
+        padding: 7px 8px;
+    }
 }
 
 .ball-hud-a {
@@ -7363,14 +7513,15 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         </div>
         <p class="st-tip" id="st-tip"></p>
         <div class="hud-bar"><i id="hud-bar-fill"></i></div>
-        <div class="hud-lr-wrap" id="hud-lr-wrap">
-            <button id="hud-lr" class="hud-spin hud-lr" type="button" aria-pressed="false">左右键颜色 · 关</button>
-            <span class="hud-help" id="hud-lr-help" tabindex="0" role="note"
-                data-tip="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。"
-                title="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。">!</span>
+        <div class="hud-controls" id="hud-controls">
+            <div class="hud-lr-wrap" id="hud-lr-wrap">
+                <button id="hud-lr" class="hud-spin hud-lr" type="button" aria-pressed="false">左右键颜色 · 关</button>
+                <span class="hud-help" id="hud-lr-help" tabindex="0" role="note"
+                    data-tip="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。">!</span>
+            </div>
+            <button id="hud-spin" class="hud-spin" type="button" aria-pressed="false">盘面旋转 · 关</button>
+            <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
         </div>
-        <button id="hud-spin" class="hud-spin" type="button" aria-pressed="false">盘面旋转 · 关</button>
-        <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
     </div>
 
     <div class="st-cur" id="st-cur" aria-hidden="true"></div>
