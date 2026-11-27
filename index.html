@@ -354,10 +354,10 @@ label {
     --line-strong: rgba(255, 255, 255, .22);
     --panel: rgba(255, 255, 255, .035);
     --panel-2: rgba(255, 255, 255, .07);
-    --accent: #00ffff;
+    --accent: #5bf2dc;
     --target: #fa96c8;
-    --accent-soft: rgba(0, 255, 255, .14);
-    --glow-accent: rgba(0, 255, 255, .36);
+    --accent-soft: rgba(91, 242, 220, .14);
+    --glow-accent: rgba(91, 242, 220, .34);
     --glow-target: rgba(250, 150, 200, .30);
     --grid-alpha: .055;
     --font: "Bahnschrift", "Segoe UI Variable Display", "Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -2491,6 +2491,26 @@ kbd {
     color: var(--ink);
 }
 
+/* reaction test paints its own values; never overwrite the engine nodes */
+#slot-timer #rt-hud-round,
+#slot-balls #rt-hud-avg {
+    display: none;
+}
+
+#slot-timer #rt-hud-round {
+    font-size: 30px;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+
+#slot-balls #rt-hud-avg {
+    font-size: 22px;
+    line-height: 1.15;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+}
+
 /* ---------- polish pass ---------- */
 .ui-root {
     scrollbar-width: thin;
@@ -2760,6 +2780,77 @@ kbd {
     border-color: var(--accent);
 }
 
+/* Schulte-only right-button colour switch, kept beside the spin switch */
+.hud-lr-wrap {
+    position: fixed;
+    right: 112px;
+    bottom: 52px;
+    z-index: 3;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    pointer-events: auto;
+}
+.hud-lr-wrap.is-visible { display: flex; }
+.hud-lr {
+    position: static;
+    right: auto;
+    bottom: auto;
+    display: block;
+}
+.hud-help {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 17px;
+    height: 17px;
+    flex: none;
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1;
+    color: var(--dim);
+    background: rgba(0, 0, 0, .35);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: help;
+    outline: none;
+}
+.hud-help:hover,
+.hud-help:focus {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.hud-help::after {
+    content: attr(data-tip);
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 8px);
+    width: 236px;
+    padding: 9px 11px;
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 1.65;
+    letter-spacing: .02em;
+    text-align: left;
+    color: var(--ink);
+    background: #0b1014;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .55);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity .15s, transform .15s, visibility .15s;
+    pointer-events: none;
+    white-space: normal;
+}
+.hud-help:hover::after,
+.hud-help:focus::after {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
 /* ---------- BALLSHEET / BIGBALL bottom-left HUD ---------- */
 .ball-hud-a {
     position: fixed;
@@ -2872,17 +2963,51 @@ kbd {
 }
 
 .bha-bar {
+    position: relative;
     height: 3px;
     background: rgba(255, 255, 255, .08);
-    overflow: hidden;
+    overflow: visible;
 }
 
-.bha-bar i {
+.bha-bar > i {
     display: block;
     width: 0;
     height: 100%;
+    border-radius: 2px;
     background: linear-gradient(90deg, var(--accent), var(--target));
     box-shadow: 0 0 12px var(--glow-accent);
+    transition: width .12s linear;
+}
+
+/* overflow over the configured max HP: a thin second bar just above the
+   main one, length scaled to how far past the cap the current HP is */
+.bha-over {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 4px);
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(255, 128, 184, .13);
+    opacity: 0;
+    transform: scaleY(.65);
+    transform-origin: bottom;
+    transition: opacity .16s ease, transform .16s ease;
+    pointer-events: none;
+}
+
+.bha-over.is-on {
+    opacity: 1;
+    transform: none;
+}
+
+.bha-over i {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #ff9ac8, #ff4f9e);
+    box-shadow: 0 0 8px rgba(255, 79, 158, .7);
     transition: width .12s linear;
 }
 
@@ -2929,6 +3054,10 @@ kbd {
 
 .ball-hud-a.is-simple .bha-grid,
 .ball-hud-a.is-simple .bha-foot {
+    display: none;
+}
+
+.ball-hud-a.is-simple .bha-over {
     display: none;
 }
 
@@ -3487,6 +3616,16 @@ html[lang="zh-CN"] .brand-sub {
         font-size: 9px;
     }
 
+    .hud-lr-wrap {
+        right: 104px;
+        bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .hud-lr {
+        padding: 10px 10px;
+        font-size: 9px;
+    }
+
     .bs-cell span {
         font-size: 7.5px;
         letter-spacing: .12em;
@@ -3680,6 +3819,16 @@ html[lang="zh-CN"] .brand-sub {
     .hud-spin {
         right: 98px;
         bottom: 8px;
+        padding: 7px 9px;
+        font-size: 8.5px;
+    }
+
+    .hud-lr-wrap {
+        right: 98px;
+        bottom: 44px;
+    }
+
+    .hud-lr {
         padding: 7px 9px;
         font-size: 8.5px;
     }
@@ -6003,6 +6152,1116 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 
 </style>
+<style id="ui-refresh">
+/* ============================================================
+   antiBallsheet · interface refresh
+   Presentational only: no game rules, hit tests or storage keys.
+   Goal: tighter hierarchy, clearer surfaces, phone/landscape
+   layout repair, and a cleaner instrument-panel look.
+   ============================================================ */
+
+:root {
+    --r-1: 3px;
+    --r-2: 6px;
+    --r-3: 9px;
+    --hairline: color-mix(in srgb, var(--ink) 13%, transparent);
+    --surface: linear-gradient(158deg,
+            color-mix(in srgb, var(--ink) 5.5%, transparent) 0%,
+            color-mix(in srgb, var(--ink) 1.8%, transparent) 58%,
+            transparent 100%);
+    --surface-strong: linear-gradient(158deg,
+            color-mix(in srgb, var(--ink) 8%, transparent) 0%,
+            color-mix(in srgb, var(--ink) 2.5%, transparent) 64%,
+            transparent 100%);
+    --shadow-card: 0 30px 66px -48px rgba(0, 0, 0, .9),
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
+    --shadow-float: 0 22px 54px -34px rgba(0, 0, 0, .8),
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+/* ---------- atmosphere ---------- */
+.ui-root {
+    background:
+        radial-gradient(1100px 680px at 10% -12%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 64%),
+        radial-gradient(880px 620px at 98% 2%, color-mix(in srgb, var(--target) 8%, transparent), transparent 66%),
+        var(--bg);
+    background-attachment: fixed;
+}
+
+.bg-scan { opacity: .18; }
+.orb { opacity: .46; }
+.orb.o4 { opacity: .28; }
+
+/* ---------- chrome ---------- */
+.shell {
+    max-width: 1220px;
+    padding-top: 20px;
+}
+
+.topbar {
+    padding-bottom: 13px;
+    border-bottom-color: var(--hairline);
+}
+
+.brand { gap: 11px; }
+
+.brand-mark {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    border-radius: 7px;
+    border-color: color-mix(in srgb, var(--accent) 34%, var(--line-strong));
+    background:
+        linear-gradient(145deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 72%),
+        color-mix(in srgb, var(--ink) 3%, transparent);
+    box-shadow: 0 0 24px -10px var(--glow-accent), inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.brand-name {
+    font-weight: 700;
+    letter-spacing: .2em;
+}
+
+.brand-sub {
+    padding: 2px 7px 1px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 9px;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--ink) 60%, transparent);
+    background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+
+.top-actions { gap: 6px; }
+
+.chip {
+    padding: 7px 12px;
+    border-radius: 999px;
+    border-color: var(--line);
+    background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+    letter-spacing: .13em;
+}
+
+.chip:hover,
+.chip.gh:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    color: var(--ink);
+}
+
+.chip b { font-weight: 700; }
+
+/* ---------- hero ---------- */
+.home .logo {
+    letter-spacing: -.012em;
+    filter: drop-shadow(0 18px 38px rgba(0, 0, 0, .28));
+}
+
+.logo-rest {
+    filter: drop-shadow(0 0 30px color-mix(in srgb, var(--accent) 22%, transparent));
+}
+
+.tagline { letter-spacing: .18em; }
+
+.mode-chip {
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+
+.mode-chip.acc {
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+/* ---------- menu ---------- */
+.menu { gap: 7px; }
+
+.mi {
+    border-radius: var(--r-2);
+    border-left-width: 1px;
+    background: var(--surface);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 4%, transparent);
+    overflow: hidden;
+}
+
+.mi::after {
+    left: 16px;
+    right: 16px;
+    opacity: 0;
+}
+
+.mi:hover,
+.mi:focus-visible {
+    transform: translateX(4px);
+    border-color: color-mix(in srgb, var(--accent) 38%, var(--line-strong));
+    border-left-color: var(--accent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 78%),
+        var(--surface-strong);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 10%, transparent),
+        0 18px 40px -32px rgba(0, 0, 0, .9);
+}
+
+.mi-idx {
+    justify-self: start;
+    min-width: 26px;
+    padding: 3px 0 2px;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 8.5px;
+    line-height: 1.2;
+    color: color-mix(in srgb, var(--ink) 44%, transparent);
+    background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+}
+
+.mi:hover .mi-idx,
+.mi:focus-visible .mi-idx {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+
+.mi-icon {
+    border-radius: 6px;
+    border-color: color-mix(in srgb, currentColor 30%, var(--line));
+    background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+.mi-label {
+    font-weight: 700;
+    letter-spacing: .155em;
+}
+
+.mi-hint {
+    font-size: 9.5px;
+    color: color-mix(in srgb, var(--ink) 44%, transparent);
+}
+
+.mi-go {
+    opacity: .62;
+    color: var(--accent);
+}
+
+.mi:hover .mi-go,
+.mi:focus-visible .mi-go {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+/* the split BIGBALL / classic module: one card, two zones */
+.menu-duo {
+    border-radius: var(--r-3);
+    border-color: color-mix(in srgb, var(--ink) 18%, transparent);
+    background:
+        linear-gradient(104deg,
+            color-mix(in srgb, var(--target) 11%, transparent) 0%,
+            color-mix(in srgb, var(--ink) 2%, transparent) 44%,
+            color-mix(in srgb, var(--accent) 9%, transparent) 100%);
+    box-shadow: var(--shadow-card);
+}
+
+.menu-duo .mi {
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.menu-duo .mi:hover,
+.menu-duo .mi:focus-visible {
+    transform: none;
+}
+
+.menu-duo .mi-feature {
+    border-left: 0;
+    background:
+        linear-gradient(90deg,
+            color-mix(in srgb, var(--target) 16%, transparent) 0%,
+            color-mix(in srgb, var(--target) 3%, transparent) 66%,
+            transparent 100%);
+    box-shadow: none;
+}
+
+.menu-duo .mi-feature:hover,
+.menu-duo .mi-feature:focus-visible {
+    background:
+        linear-gradient(90deg,
+            color-mix(in srgb, var(--target) 26%, transparent) 0%,
+            color-mix(in srgb, var(--target) 7%, transparent) 68%,
+            transparent 100%);
+}
+
+.menu-duo .mi-launch {
+    background:
+        linear-gradient(270deg,
+            color-mix(in srgb, var(--accent) 13%, transparent) 0%,
+            transparent 72%);
+}
+
+.menu-duo .mi-launch:hover,
+.menu-duo .mi-launch:focus-visible {
+    background:
+        linear-gradient(270deg,
+            color-mix(in srgb, var(--accent) 22%, transparent) 0%,
+            transparent 76%);
+}
+
+.menu-duo .mi + .mi { border-left-color: var(--hairline); }
+
+.menu-duo .mi-launch::before {
+    width: 1px;
+    background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.menu-duo .mi-feature .mi-idx {
+    color: var(--target);
+    border-color: color-mix(in srgb, var(--target) 36%, transparent);
+}
+
+.menu-duo .mi-launch .mi-idx {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+}
+
+.menu-duo .mi-title .mi-label,
+.menu-duo .mi > .mi-label {
+    font-size: 14px;
+    letter-spacing: .09em;
+}
+
+.menu-duo .mi-title .mi-tag {
+    font-size: 8px;
+    letter-spacing: .12em;
+    border-radius: 999px;
+    padding: 2px 7px 1px;
+}
+
+.home-keys {
+    gap: 7px 22px;
+    padding-top: 12px;
+    margin-top: 14px;
+    border-top-color: var(--hairline);
+}
+
+.home-keys kbd {
+    border-radius: 5px;
+    background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+
+/* ---------- right rail ---------- */
+.card {
+    border-radius: var(--r-2);
+    border-color: var(--hairline);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+}
+
+.card-current {
+    border-top-color: color-mix(in srgb, var(--accent) 32%, var(--hairline));
+}
+
+.card-head {
+    font-size: 9.5px;
+    letter-spacing: .2em;
+    border-bottom-color: var(--hairline);
+}
+
+.card-head > span:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-head > span:first-child::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    flex: 0 0 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 9px var(--glow-accent);
+}
+
+.pill {
+    padding: 3px 8px 2px;
+    font-size: 8.5px;
+    background: color-mix(in srgb, var(--ink) 3%, transparent);
+}
+
+.pb-value {
+    font-size: clamp(36px, 4.2vw, 46px);
+    letter-spacing: -.01em;
+}
+
+.kv {
+    padding: 8px 0 7px;
+    border-bottom-color: color-mix(in srgb, var(--ink) 9%, transparent);
+}
+
+.spark-wrap { border-top-color: var(--hairline); }
+
+#spark {
+    height: 66px;
+    opacity: .9;
+}
+
+.side-best .kv { padding: 7px 0 6px; }
+
+/* ---------- sub screens ---------- */
+.sub-head {
+    padding-bottom: 13px;
+    border-bottom-color: var(--hairline);
+}
+
+.sub-head h2 {
+    letter-spacing: .11em;
+    text-shadow: 0 18px 42px rgba(0, 0, 0, .24);
+}
+
+.sub-note {
+    margin-left: 12px;
+    letter-spacing: .13em;
+}
+
+.back {
+    border-radius: 999px;
+    padding: 8px 13px;
+    background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+}
+
+.panel {
+    border-radius: var(--r-3);
+    border-color: var(--hairline);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+}
+
+.panel::before,
+.panel::after {
+    width: 17px;
+    height: 17px;
+    border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+    opacity: .5;
+}
+
+.set-tabs {
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.set-tab {
+    min-height: 40px;
+    border-radius: 999px;
+    border-color: var(--line);
+    background: color-mix(in srgb, var(--ink) 2.5%, transparent);
+}
+
+.set-tab:hover,
+.set-tab.is-on {
+    border-color: color-mix(in srgb, var(--accent) 62%, var(--line-strong));
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
+        0 10px 28px -24px var(--glow-accent);
+    color: var(--accent);
+}
+
+.mode-switch { gap: 7px; }
+
+.mode-tab {
+    min-height: 36px;
+    border-radius: var(--r-2);
+    background: color-mix(in srgb, var(--ink) 2%, transparent);
+}
+
+.mode-tab:hover,
+.mode-tab.is-on {
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line-strong));
+}
+
+.set-block,
+.bs-rules {
+    border-radius: var(--r-2);
+}
+
+.bs-rules {
+    border-color: var(--hairline);
+    background: color-mix(in srgb, var(--ink) 2%, transparent);
+}
+
+.bs-rules h3 { letter-spacing: .08em; }
+
+.panel .setting {
+    padding: 12px 0 8px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.panel .setting:first-child { border-top: 0; }
+
+.panel label {
+    font-size: 9.5px;
+    letter-spacing: .13em;
+}
+
+.panel label span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.panel .range-slider {
+    height: 3px;
+    border-radius: 999px;
+}
+
+.panel .range-slider::-webkit-slider-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 14px var(--accent-soft);
+}
+
+.preview {
+    border-top-color: var(--hairline);
+}
+
+.preview-field {
+    border-radius: var(--r-2);
+    border-color: color-mix(in srgb, var(--accent) 24%, var(--line));
+    box-shadow: inset 0 0 45px rgba(0, 0, 0, .26), 0 0 0 1px color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+.preview-ball {
+    box-shadow: 0 0 22px color-mix(in srgb, var(--target) 36%, transparent);
+}
+
+.panel input[type="color"] {
+    border-radius: var(--r-1);
+}
+
+.panel input[type="color"]::-webkit-color-swatch {
+    border-radius: 2px;
+}
+
+.panel .default-button,
+.btn,
+.mini {
+    border-radius: var(--r-2);
+}
+
+.btn.primary {
+    border-radius: var(--r-2);
+    box-shadow: 0 12px 34px -18px var(--glow-accent);
+}
+
+/* docs / help / about */
+.doc {
+    gap: 24px 36px;
+}
+
+.doc > div {
+    border-top-color: var(--hairline);
+    padding-top: 15px;
+}
+
+.doc h3 {
+    font-size: 10px;
+    letter-spacing: .2em;
+}
+
+.doc p,
+.doc li {
+    font-size: 13px;
+    line-height: 1.82;
+    color: color-mix(in srgb, var(--ink) 72%, transparent);
+}
+
+.doc .full { margin-top: 2px; }
+.doc .link { font-weight: 600; }
+
+/* assist: one compact setting, one readable note beside it */
+.set-pane[data-pane="assist"].is-on {
+    display: grid;
+    grid-template-columns: minmax(280px, .78fr) minmax(0, 1.22fr);
+    align-items: start;
+    gap: 22px 38px;
+}
+
+.assist-head { margin-bottom: 12px; }
+
+.assist-grid { align-self: start; }
+
+.assist-note {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+    margin: 0;
+    padding: 2px 0 2px 26px;
+    border-left: 1px solid var(--hairline);
+    color: color-mix(in srgb, var(--ink) 60%, transparent);
+    font-size: 11.5px;
+    line-height: 1.7;
+}
+
+
+/* stats */
+.stats-top {
+    padding-bottom: 14px;
+    border-bottom-color: var(--hairline);
+}
+
+.stats-grid {
+    border-radius: var(--r-2);
+    overflow: hidden;
+    border-color: var(--hairline);
+}
+
+.cell {
+    padding: 13px 14px;
+    background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+.cell .l {
+    font-size: 9.5px;
+    letter-spacing: .15em;
+}
+
+.cell .v {
+    font-size: 17px;
+}
+
+.chart-wrap {
+    border-radius: var(--r-2);
+    border-color: var(--hairline);
+    background: color-mix(in srgb, var(--panel) 64%, transparent);
+    overflow: hidden;
+}
+
+.chart-wrap::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: .22;
+    pointer-events: none;
+}
+
+.chart-wrap canvas { position: relative; z-index: 1; }
+
+.empty {
+    z-index: 2;
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: color-mix(in srgb, var(--ink) 48%, transparent);
+}
+
+.runs-table {
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-2);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+.runs-table th { background: color-mix(in srgb, var(--ink) 3%, transparent); }
+.runs-table td { border-bottom-color: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+/* footer */
+.foot {
+    margin-top: clamp(16px, 2.8vh, 28px);
+    padding: 12px 0 16px;
+    border-top-color: var(--hairline);
+}
+
+.foot span:first-child::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 72%, transparent);
+    box-shadow: 0 0 8px var(--glow-accent);
+    vertical-align: 1px;
+}
+
+/* ---------- pause / result overlays ---------- */
+.ov {
+    background:
+        radial-gradient(900px 620px at 50% 40%, color-mix(in srgb, var(--accent) 3%, transparent), transparent 70%),
+        color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(12px) saturate(.9);
+}
+
+.ov-card {
+    border-radius: var(--r-3);
+    border-color: color-mix(in srgb, var(--ink) 24%, transparent);
+    background:
+        linear-gradient(158deg, color-mix(in srgb, var(--ink) 5%, transparent), transparent 52%),
+        color-mix(in srgb, var(--bg) 86%, #000 14%);
+    box-shadow: 0 44px 110px -50px #000, inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.pause-head,
+.res-head {
+    border-bottom-color: var(--hairline);
+}
+
+.pause-list .btn { border-radius: var(--r-2); }
+.pause-list .btn.primary {
+    color: #041012;
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ---------- in-game HUD ---------- */
+.hud-top {
+    padding-top: max(15px, env(safe-area-inset-top, 0px));
+}
+
+.hud-lab {
+    font-size: 8.5px;
+    letter-spacing: .22em;
+}
+
+.hud-time {
+    font-weight: 500;
+    text-shadow: 0 0 26px var(--glow-accent), 0 1px 0 rgba(0, 0, 0, .55);
+}
+
+.hud-mode { letter-spacing: .18em; }
+
+.hud-pause,
+.hud-spin {
+    border-radius: var(--r-2);
+    border-color: color-mix(in srgb, var(--ink) 16%, transparent);
+    background: color-mix(in srgb, var(--bg) 44%, transparent);
+    box-shadow: 0 8px 24px -20px #000, inset 0 1px 0 color-mix(in srgb, var(--ink) 6%, transparent);
+    backdrop-filter: blur(10px);
+}
+
+.hud-pause:hover,
+.hud-spin:hover {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.hud-lr { border-radius: var(--r-2); }
+
+.hud-help {
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--bg) 40%, transparent);
+}
+
+.ball-hud-a {
+    border-radius: var(--r-3);
+    border-color: color-mix(in srgb, var(--ink) 20%, transparent);
+    border-left-width: 2px;
+    background:
+        linear-gradient(158deg,
+            color-mix(in srgb, var(--ink) 4%, transparent) 0%,
+            transparent 42%),
+        color-mix(in srgb, var(--bg) 84%, #000 16%);
+    box-shadow: 0 24px 60px -30px #000, inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.bha-mode { font-size: 8px; }
+.bha-pb { font-size: 7.5px; }
+
+.bha-main { margin: 14px 0 10px; }
+
+.bha-time b {
+    font-size: 33px;
+    font-weight: 500;
+}
+
+.bha-metric-val b { font-size: 24px; }
+
+.bha-grid {
+    border-top-color: var(--hairline);
+}
+
+.bha-foot { border-top-color: var(--hairline); }
+
+.bs-field {
+    border-color: color-mix(in srgb, var(--accent) 58%, transparent);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .55), 0 30px 95px -34px rgba(0, 0, 0, .9);
+}
+
+.st-cell {
+    border-radius: 9px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .35) inset, 0 10px 22px -16px rgba(0, 0, 0, .8);
+}
+
+.st-cell:hover {
+    transform: translateY(-1px);
+}
+
+.st-cell.is-done { box-shadow: none; }
+
+/* ---------- desktop height trim: keep the cockpit on one screen ---------- */
+@media (min-width: 981px) and (max-height: 920px) {
+    .shell { padding-top: 16px; }
+    .stage { padding-top: clamp(12px, 3.2vh, 30px); }
+    .home .logo { font-size: clamp(32px, 4.1vw, 52px); }
+    .home .tagline { margin-top: 8px; }
+    .home .mode-line { margin-top: 12px; }
+    .home .menu { margin-top: 16px; gap: 6px; }
+    .home .menu > .mi {
+        min-height: 48px;
+        max-height: 62px;
+        padding: 9px 16px;
+    }
+    .menu-duo {
+        min-height: 66px;
+        max-height: 74px;
+    }
+    .home .menu > .mi > .mi-label { font-size: 13.5px; }
+    .home-keys { margin-top: 11px; padding-top: 9px; }
+    .foot { margin-top: 12px; padding-top: 10px; padding-bottom: 12px; }
+}
+
+/* ---------- tablet / landscape: reclaim horizontal room ---------- */
+@media (min-width: 700px) and (max-width: 980px) {
+    .doc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .set-speed-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 172px;
+        gap: 22px;
+        align-items: start;
+    }
+    .set-speed .settings-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 24px;
+        row-gap: 2px;
+        align-items: start;
+    }
+    .set-speed .setting { margin: 8px 0; }
+    .set-speed .preview {
+        margin: 0;
+        padding-top: 0;
+        border-top: 0;
+    }
+    .set-speed .preview-field {
+        width: 140px;
+        height: 140px;
+        flex-basis: 140px;
+    }
+    .set-speed .preview-meta { font-size: 8.5px; }
+
+    #slot-look .settings-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 28px;
+        align-items: start;
+    }
+    #slot-look .slot-content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
+    }
+    #slot-look .settings-container > div { margin: 0; }
+    #slot-look .bs-col { margin-top: 0; }
+    #slot-look .bs-col-note { grid-column: 1 / -1; }
+}
+
+@media (max-width: 699px) {
+    .set-pane[data-pane="assist"].is-on {
+        display: block;
+    }
+    .assist-note {
+        margin: 14px 2px 0;
+        padding: 12px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--hairline);
+        font-size: 10.5px;
+        line-height: 1.7;
+    }
+}
+
+
+/* ---------- phone portrait: stack the two headline modes ---------- */
+@media (max-width: 640px) {
+    .shell {
+        padding: 12px max(12px, env(safe-area-inset-left, 0px)) 0 max(12px, env(safe-area-inset-right, 0px));
+    }
+
+    .topbar {
+        gap: 8px;
+        padding-bottom: 10px;
+    }
+
+    .brand { gap: 8px; }
+    .brand-mark { width: 26px; height: 26px; flex-basis: 26px; border-radius: 6px; }
+    .brand-name { font-size: 10.5px; letter-spacing: .15em; }
+
+    .top-actions { gap: 4px; }
+    .top-actions .chip {
+        padding: 6px 8px;
+        font-size: 8.5px;
+        letter-spacing: .08em;
+    }
+
+    .home .logo { letter-spacing: -.018em; }
+    .tagline { font-size: 9.5px; letter-spacing: .15em; }
+
+    .home .menu { margin-top: 16px; gap: 6px; }
+
+    .menu-duo {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 6px;
+        flex: 0 0 auto;
+        min-height: 0;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .menu-duo .mi {
+        min-height: 58px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-2);
+        padding: 10px 12px;
+    }
+
+    .menu-duo .mi-feature {
+        border-left: 2px solid color-mix(in srgb, var(--target) 64%, transparent);
+        background:
+            linear-gradient(90deg,
+                color-mix(in srgb, var(--target) 12%, transparent) 0%,
+                color-mix(in srgb, var(--ink) 2%, transparent) 72%);
+    }
+
+    .menu-duo .mi-launch {
+        border-left: 2px solid color-mix(in srgb, var(--accent) 64%, transparent);
+        background:
+            linear-gradient(90deg,
+                color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+                color-mix(in srgb, var(--ink) 2%, transparent) 72%);
+    }
+
+    .menu-duo .mi + .mi { border-left-width: 1px; }
+    .menu-duo .mi-launch::before { display: none; }
+
+    .home .menu > .mi {
+        min-height: 48px;
+        max-height: none;
+        padding: 9px 12px;
+    }
+
+    .home .menu > .mi > .mi-label { font-size: 13px; }
+    .mi-label { letter-spacing: .11em; }
+    .mi-idx { min-width: 24px; font-size: 8px; }
+    .mi-go { opacity: .85; }
+
+    .home-side { margin-top: 14px; }
+
+    .card { border-radius: var(--r-2); }
+
+    .sub-head { gap: 12px; }
+    .sub-head h2 { font-size: clamp(21px, 6vw, 25px); letter-spacing: .08em; }
+    .sub-note { display: none; }
+    .set-tabs { gap: 6px; margin-top: 12px; }
+    .set-tab { min-height: 36px; font-size: 11px; border-radius: var(--r-1); }
+    .panel { padding: 14px 13px; border-radius: var(--r-2); }
+    .set-block { padding: 14px 13px; }
+
+    .mode-switch { margin-bottom: 14px; }
+    .mode-tab { min-height: 34px; font-size: 10.5px; padding: 6px 8px; }
+
+    .preview {
+        flex-wrap: nowrap;
+        gap: 14px;
+        align-items: center;
+        margin-top: 12px;
+        padding-top: 12px;
+    }
+
+    .preview-field {
+        width: 116px;
+        height: 116px;
+        flex: 0 0 116px;
+    }
+
+    .preview-meta {
+        min-width: 0;
+        gap: 5px;
+        font-size: 8.5px;
+    }
+
+    .preview-meta #preview-size {
+        font-size: 11px;
+        letter-spacing: .01em;
+    }
+
+    .bs-mode {
+        min-height: 46px;
+        font-size: 10px;
+        line-height: 1.42;
+        text-align: left;
+    }
+
+    .bs-col-modes { gap: 6px; }
+
+    .doc { gap: 18px; }
+    .doc > div { padding-top: 12px; }
+    .doc p, .doc li { font-size: 12.5px; line-height: 1.75; }
+
+    .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .chart-wrap { height: 200px; }
+
+    .foot { gap: 8px 14px; margin-top: 14px; }
+}
+
+/* ---------- short landscape: 2-column home, smaller chrome ---------- */
+@media (max-height: 520px) and (orientation: landscape) {
+    .shell { padding: 8px 14px 0; padding-top: max(8px, env(safe-area-inset-top, 0px)); }
+
+    .topbar { padding-bottom: 6px; }
+    .brand-mark { width: 26px; height: 26px; flex-basis: 26px; }
+    .brand-sub { display: none; }
+    .top-actions .chip { padding: 5px 9px; font-size: 8.5px; }
+
+    .stage { padding-top: 8px; }
+
+    .home {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .home-side { display: none; }
+
+    .home .logo { font-size: clamp(28px, 4.6vw, 38px); }
+    .home .tagline { margin-top: 5px; font-size: 8.5px; }
+    .home .mode-line { margin-top: 7px; gap: 5px 8px; }
+    .mode-chip { padding: 4px 9px; font-size: 9.5px; }
+    .mode-line .lab { font-size: 8px; }
+
+    .home .menu {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+        margin-top: 9px;
+    }
+
+    .menu-duo {
+        grid-column: 1 / -1;
+        min-height: 56px;
+        max-height: 60px;
+        border-radius: var(--r-2);
+    }
+
+    .home .menu > .mi {
+        min-height: 36px;
+        max-height: 40px;
+        padding: 6px 10px;
+        gap: 8px;
+    }
+
+    .home .menu > .mi > .mi-label { font-size: 11.5px; letter-spacing: .06em; }
+    .mi-idx { min-width: 21px; padding: 2px 0; font-size: 7.5px; }
+    .mi-icon { width: 20px; height: 20px; border-radius: 5px; }
+    .mi-icon svg { width: 11px; height: 11px; }
+    .mi-hint { display: none; }
+    .mi-en { display: none; }
+
+    .home-keys { display: none; }
+    .home .menu { flex: 0 0 auto; }
+
+    .foot { display: none; }
+
+    .sub-head { padding-bottom: 8px; }
+    .sub-head h2 { font-size: 22px; }
+    .set-tabs { margin-top: 10px; gap: 5px; }
+    .set-tab { min-height: 30px; padding: 5px 9px; font-size: 10px; }
+    .panel { margin-top: 10px; padding: 14px 16px; }
+    .mode-switch { margin-bottom: 12px; }
+    .mode-tab { min-height: 30px; padding: 5px 8px; font-size: 10px; }
+
+    .set-speed-body { grid-template-columns: minmax(0, 1fr) 150px; gap: 16px; }
+    .set-speed .preview-field { width: 118px; height: 118px; flex-basis: 118px; }
+    .set-speed .preview-meta { font-size: 8px; gap: 4px; }
+
+    .doc { gap: 16px 26px; }
+    .doc > div { padding-top: 10px; }
+    .doc h3 { font-size: 9px; margin-bottom: 5px; }
+    .doc p, .doc li { font-size: 12px; line-height: 1.62; margin-bottom: 5px; }
+
+    .stats-top { padding-bottom: 9px; }
+    .stats-grid { margin-top: 12px; }
+    .cell { padding: 10px 12px; }
+    .chart-wrap { height: 168px; margin-top: 12px; }
+
+    .sens-panel { padding: 12px 14px; }
+    .sens-lede, .sens-note { display: none; }
+    .sens-bar { min-height: 36px; margin-bottom: 10px; }
+    .sens-field { gap: 4px; }
+    .sens-field .sel, .sens-field .sens-num { height: 32px; }
+    .sens-out { margin-top: 10px; }
+    .sens-out > div { padding: 8px 10px; }
+    .sens-out b { font-size: 14px; }
+
+    .sub-foot { margin-top: 8px; }
+
+    .foot { margin-top: 8px; padding: 8px 0 10px; }
+
+    /* landscape game HUD: a narrower dock, clear of the field */
+    .ball-hud-a {
+        left: 12px;
+        bottom: 8px;
+        width: 204px;
+        padding: 9px 10px 8px;
+    }
+
+    .bha-main { margin: 10px 0 7px; gap: 8px; }
+    .bha-time b { font-size: 27px; }
+    .bha-metric-val b { font-size: 20px; }
+    .bha-grid { gap: 5px 9px; margin-top: 7px; padding-top: 6px; }
+    .bha-foot { margin-top: 7px; padding-top: 6px; font-size: 7px; }
+    .bha-mode { font-size: 7px; }
+    .bha-pb { font-size: 6.5px; }
+    .bha-lab { font-size: 6.5px; margin-bottom: 3px; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 720px) {
+    .home .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .home .logo { font-size: clamp(26px, 5.2vw, 34px); }
+    .home .menu > .mi { min-height: 34px; max-height: 38px; }
+}
+
+@media (min-width: 700px) and (max-height: 520px) and (orientation: landscape) {
+    .set-speed .settings-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 16px;
+    }
+    .set-speed .setting { margin: 4px 0; }
+    .set-speed .range-labels { font-size: 7px; letter-spacing: 0; justify-content: space-between; }
+    .set-speed .range-labels span:not(:first-child):not(:last-child) { display: none; }
+    .set-speed .preview-field { width: 112px; height: 112px; flex-basis: 112px; }
+
+    .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .cell { padding: 9px 11px; }
+    .cell .v { margin-top: 3px; font-size: 15px; }
+    .chart-wrap { height: 138px; }
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+    .mi,
+    .st-cell,
+    .chip,
+    .set-tab,
+    .mode-tab {
+        transition: none;
+    }
+}
+</style>
 </head>
 
 <body>
@@ -6052,7 +7311,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         <div class="hud-top">
             <div class="hud-side">
                 <span class="hud-lab" id="hud-lab-time">时间 / 秒</span>
-                <div id="slot-timer" class="hud-time">0.00</div>
+                <div id="slot-timer" class="hud-time"><span id="rt-hud-round" class="rt-hud-val"></span></div>
             </div>
             <div class="hud-mid">
                 <div id="hud-mode" class="hud-mode">—</div>
@@ -6060,7 +7319,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             </div>
             <div class="hud-side right">
                 <span class="hud-lab" id="hud-lab-right">球数</span>
-                <div id="slot-balls" class="hud-balls">100 / 100</div>
+                <div id="slot-balls" class="hud-balls"><span id="rt-hud-avg" class="rt-hud-val"></span></div>
             </div>
         </div>
         <div class="bs-row" id="bs-row">
@@ -6082,7 +7341,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                     <div class="bha-metric-val"><b id="bha-metric">100</b><i id="bha-metric-suffix">/100</i></div>
                 </div>
             </div>
-            <div class="bha-bar"><i id="bha-bar-fill"></i></div>
+            <div class="bha-bar"><span class="bha-over" id="bha-over" aria-hidden="true"><i id="bha-over-fill"></i></span><i id="bha-bar-fill"></i></div>
             <div class="bha-grid">
                 <div class="bha-cell"><span class="bha-lab">压力</span><b id="bha-p">—</b></div>
                 <div class="bha-cell"><span class="bha-lab">每秒得分</span><b id="bha-eps">—</b></div>
@@ -6104,6 +7363,12 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         </div>
         <p class="st-tip" id="st-tip"></p>
         <div class="hud-bar"><i id="hud-bar-fill"></i></div>
+        <div class="hud-lr-wrap" id="hud-lr-wrap">
+            <button id="hud-lr" class="hud-spin hud-lr" type="button" aria-pressed="false">左右键颜色 · 关</button>
+            <span class="hud-help" id="hud-lr-help" tabindex="0" role="note"
+                data-tip="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。"
+                title="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。">!</span>
+        </div>
         <button id="hud-spin" class="hud-spin" type="button" aria-pressed="false">盘面旋转 · 关</button>
         <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
     </div>
@@ -6296,7 +7561,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 <div class="bs-head">
                                     <div>
                                         <h3>BALLSHEET</h3>
-                                        <p>固定球数 · 独立记录</p>
+                                        <p>固定球数 · 碰球开始 · 独立记录</p>
                                     </div>
                                     <span class="pill">计时 + 反应</span>
                                 </div>
@@ -6403,16 +7668,14 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             <div class="assist-head">
                                 <div>
                                     <h3>全局辅助 <em>ASSIST</em></h3>
-                                    <p>跨玩法共用 · 下一局生效</p>
+                                    <p>仅结算轨迹 · 下一局生效</p>
                                 </div>
-                                <span class="pill">场地盘面 · 结算轨迹</span>
+                                <span class="pill">轨迹记录</span>
                             </div>
                             <div class="assist-grid">
-                                <label class="st-toggle assist-toggle"><input type="checkbox" id="as-spin"><span>旋转盘面<em>BALLSHEET / 舒尔特</em></span></label>
                                 <label class="st-toggle assist-toggle"><input type="checkbox" id="as-trail"><span>鼠标轨迹<em>BALLSHEET 仅结算</em></span></label>
-                                <label class="st-toggle assist-toggle"><input type="checkbox" id="as-lr"><span>左右键颜色<em>仅舒尔特</em></span></label>
                             </div>
-                            <p class="assist-note">BALLSHEET / BIGBALL 的局内信息收在左下角竖卡，不再占用顶部；经典 BALLSHEET 显示简化卡。旋转盘面会让 BALLSHEET / BIGBALL 的 600×600 场地本体连同黑底、青色边框一起旋转，球和命中区跟着场地走；不额外绘制辐条、同心圈或圆盘。开启后先停在初始角度，BIGBALL 要等第一次命中、计时开始才转。局内右下角也有“盘面旋转”开关，切换后会立即重开当前局。舒尔特继续旋转自己的方格。鼠标轨迹只记录、不在 BALLSHEET / BIGBALL 局内显示，结算时展示本局路径；舒尔特仍使用原有轨迹面板。左右键颜色只对舒尔特生效。</p>
+                            <p class="assist-note">BALLSHEET / BIGBALL 的局内信息收在左下角竖卡，不再占用顶部；经典 BALLSHEET 显示简化卡。旋转盘面、方格旋转和左右键颜色已从全局设置移入各模式局内：经典 BALLSHEET / BIGBALL 右下角是“盘面旋转”，舒尔特右下角是“方格旋转”和“左右键颜色”，悬停旁边的 ! 可查看左右键说明；三个模式各自记忆，切换后会立即重开当前局。BIGBALL 血量超过上限时，左下卡主血条上方会多出一条粉色细血条显示溢出量。鼠标轨迹只记录、不在 BALLSHEET / BIGBALL 局内显示，结算时展示本局路径；舒尔特仍使用原有轨迹面板。</p>
                         </div>
 
                         <div class="panel set-pane" data-pane="look">
@@ -6863,6 +8126,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '最慢一球': 'Slowest ball',
         '接球数': 'Balls',
         '固定球数 · 独立记录': 'Fixed ball count · separate records',
+        '固定球数 · 碰球开始 · 独立记录': 'Fixed ball count · first touch starts · separate records',
         '计时 + 反应': 'Clock + reaction',
         '球径': 'Ball size',
         '记录次数': 'Samples',
@@ -7219,7 +8483,7 @@ const DEFAULT_COLORS = {
     gameContainerBackground: '#000000',
     gameContainerBorder: '#004444',
     ballBackground: '#fa96c8',
-    title: '#00FFFF'
+    title: '#5BF2DC'
 };
 const colorPickers = [
     { styleName: 'html', cssProperty: 'backgroundColor', captionText: 'Main background', initialColor: DEFAULT_COLORS.htmlBackground },
@@ -7762,6 +9026,7 @@ function getSettings() {
         this.startTime = null;
         this.lastHitTime = null;
         this.reactionTimes = [];
+        this.ready = false;
         this.gameContainer.oncontextmenu = function () { return false; }
         this.gameContainer.onmousedown = function () { return false; }
         this.addEventListeners();
@@ -7867,6 +9132,7 @@ function getSettings() {
         return String(this.ballToCatch) + ', ' + String(this.ballSizeP);
     }
     stopGame() {
+        this.ready = false;
         document.getElementById('title').textContent = TITLE;
         document.documentElement.style.overflow = "visible";
         document.body.style.overflow = "visible";
@@ -7877,7 +9143,31 @@ function getSettings() {
     updateDisplay() {
         this.ballsLeftDisplay.textContent = `Balls Left: ${this.ballsLeft}`;
     }
+    startFromReady() {
+        this.ready = false;
+        this.justStartedAt = performance.now();
+        this.startTime = performance.now();
+        this.lastHitTime = this.startTime;
+        this.currentPositionIndex = 0;
+        this.timerDisplay.textContent = '0.00';
+        this.moveBall();
+        this.audio.play();
+        clearInterval(this.interval);
+        this.interval = setInterval(this.updateTimer.bind(this), 10);
+        try { document.dispatchEvent(new CustomEvent('abs-bs-start')); } catch (e) { }
+    }
     handleHit() {
+        if (this.ready) {
+            /* ignore the synthetic mouseover caused by the centre ball
+               appearing under an already-stationary cursor */
+            if (performance.now() - (this.readySince || 0) < 140) { return; }
+            /* like BIGBALL: the centred ball is a start pad; the first touch
+               starts the clock and releases the held board, but does not
+               consume one of the 100 balls */
+            this.startFromReady();
+            return;
+        }
+        if (performance.now() - (this.justStartedAt || 0) < 90) { return; }
         this.ballsLeft--;
         const lastHitTime = this.lastHitTime;
         if (this.ballsLeft > 0) {
@@ -7957,6 +9247,12 @@ function getSettings() {
     }
     addEventListeners() {
         this.hitbox.addEventListener('mouseover', this.handleHit.bind(this));
+        this.hitbox.addEventListener('pointerdown', function (e) {
+            if (!this.ready) { return; }
+            if (performance.now() - (this.readySince || 0) < 140) { return; }
+            if (e && e.cancelable) { e.preventDefault(); }
+            this.startFromReady();
+        }.bind(this));
         document.addEventListener('keydown', this.handleRestart.bind(this));
         this.startButton.addEventListener('click', this.launchGame.bind(this));
     }
@@ -8497,7 +9793,9 @@ const game = new AntiBallsheetGame(
             x = x < cx ? cx + centreClear : cx - centreClear;
             x = clamp(x, lo, hi);
         }
-        if (window.ABS_ASSIST && window.ABS_ASSIST.get().spin) {
+        var bsSpin = window.ABS_SPIN ? window.ABS_SPIN.get('bs') :
+            (window.ABS_ASSIST ? window.ABS_ASSIST.get().spin : false);
+        if (bsSpin) {
             var maxR = FIELD / 2 - r - 3;
             var dx = x - cx, dy = y - cy;
             var dd = Math.sqrt(dx * dx + dy * dy);
@@ -8962,11 +10260,11 @@ const game = new AntiBallsheetGame(
             }
         } catch (e) { }
         var ga = window.ABS_ASSIST ? window.ABS_ASSIST.get() : null;
-        if (ga) {
-            if (typeof ga.lr === 'boolean') { out.lr = ga.lr; }
-            if (typeof ga.spin === 'boolean') { out.spin = ga.spin; }
-            if (typeof ga.trail === 'boolean') { out.trail = ga.trail; }
-        }
+        if (ga && typeof ga.trail === 'boolean') { out.trail = ga.trail; }
+        /* Schulte owns lr and spin now; do not inherit the removed global
+           switches. spin comes from the per-mode store. */
+        var sp = window.ABS_SPIN ? window.ABS_SPIN.get('st') : null;
+        if (typeof sp === 'boolean') { out.spin = sp; }
         return out;
     }
 
@@ -10067,13 +11365,27 @@ const game = new AntiBallsheetGame(
         el.avg = $('rt-avg');
         el.best = $('rt-best');
         el.early = $('rt-early');
-        el.hudRound = $('slot-timer');
-        el.hudAvg = $('slot-balls');
+        el.hudRound = $('rt-hud-round');
+        el.hudAvg = $('rt-hud-avg');
         el.bar = $('hud-bar-fill');
     }
 
+    /* the engine's #timer / #balls-left are shared by every mode and must
+       survive a reaction run — this mode gets its own value nodes instead */
     function showStage(on) {
         grab();
+        var engT = $('timer'), engB = $('balls-left');
+        if (on) {
+            if (engT) { engT.style.display = 'none'; }
+            if (engB) { engB.style.display = 'none'; }
+            if (el.hudRound) { el.hudRound.style.display = 'inline'; }
+            if (el.hudAvg) { el.hudAvg.style.display = 'inline'; }
+        } else {
+            if (engT) { engT.style.display = ''; }
+            if (engB) { engB.style.display = ''; }
+            if (el.hudRound) { el.hudRound.style.display = 'none'; }
+            if (el.hudAvg) { el.hudAvg.style.display = 'none'; }
+        }
         if (!el.wrap) { return; }
         el.wrap.classList.toggle('is-on', !!on);
         el.wrap.setAttribute('aria-hidden', on ? 'false' : 'true');
@@ -10432,11 +11744,17 @@ const game = new AntiBallsheetGame(
     var rt = window.Reaction;
 
     /* ============================================================
-       global assist: one store for BALLSHEET / BIGBALL / Schulte
+       global assist: trail stays global; spin/lr are per-mode now
        ============================================================ */
     var ASSIST_KEY = 'absAssist';
     var ASSIST_DEFAULT = { lr: false, spin: false, trail: false };
     var assistBound = false;
+
+    /* each mode owns its field/grid rotation; the old global spin is only
+       a one-time migration seed, never read during play */
+    var SPIN_KEY = 'absSpinModes';
+    var SPIN_DEFAULT = { abs: false, bs: false, st: false };
+    var LR_MIGRATED_KEY = 'absLrModeMigrated';
 
     function readAssist() {
         var out = { lr: ASSIST_DEFAULT.lr, spin: ASSIST_DEFAULT.spin, trail: ASSIST_DEFAULT.trail };
@@ -10463,6 +11781,74 @@ const game = new AntiBallsheetGame(
         return a;
     }
 
+    function readSpinModes() {
+        var out = { abs: SPIN_DEFAULT.abs, bs: SPIN_DEFAULT.bs, st: SPIN_DEFAULT.st };
+        try {
+            var raw = localStorage.getItem(SPIN_KEY);
+            if (raw) {
+                var p = JSON.parse(raw);
+                if (p && typeof p === 'object') {
+                    ['abs', 'bs', 'st'].forEach(function (k) {
+                        if (typeof p[k] === 'boolean') { out[k] = p[k]; }
+                    });
+                }
+            } else {
+                /* first launch after the split: inherit the old global
+                   value for all three modes once, then never share again */
+                var legacy = false;
+                var aRaw = localStorage.getItem(ASSIST_KEY);
+                if (aRaw) {
+                    var a = JSON.parse(aRaw);
+                    if (a && typeof a.spin === 'boolean') { legacy = a.spin; }
+                } else {
+                    var sRaw = localStorage.getItem('schulteSettings');
+                    if (sRaw) {
+                        var s = JSON.parse(sRaw);
+                        if (s && typeof s.spin === 'boolean') { legacy = s.spin; }
+                    }
+                }
+                out.abs = legacy;
+                out.bs = legacy;
+                out.st = legacy;
+                localStorage.setItem(SPIN_KEY, JSON.stringify(out));
+            }
+        } catch (e) { }
+        return out;
+    }
+
+    function saveSpinMode(mode, on) {
+        var m = readSpinModes();
+        if (mode !== 'abs' && mode !== 'bs' && mode !== 'st') { return m; }
+        if (typeof on !== 'boolean') { return m; }
+        m[mode] = on;
+        try { localStorage.setItem(SPIN_KEY, JSON.stringify(m)); } catch (e) { }
+        return m;
+    }
+
+    function spinFor(mode) {
+        var m = readSpinModes();
+        return !!m[mode];
+    }
+
+    function initModeAssist() {
+        /* seed the per-mode spin store before any mode reads it */
+        readSpinModes();
+        try {
+            if (!localStorage.getItem(LR_MIGRATED_KEY)) {
+                var a = readAssist();
+                var sRaw = localStorage.getItem('schulteSettings');
+                var s = sRaw ? JSON.parse(sRaw) : {};
+                if (!s || typeof s !== 'object') { s = {}; }
+                /* the old global lr was the effective Schulte value, so copy
+                   it into Schulte's own settings exactly once */
+                s.lr = !!a.lr;
+                localStorage.setItem('schulteSettings', JSON.stringify(s));
+                localStorage.setItem(LR_MIGRATED_KEY, '1');
+            }
+        } catch (e) { }
+        window.ABS_SPIN = { get: spinFor, set: saveSpinMode };
+    }
+
     function initAssist() {
         try {
             if (!localStorage.getItem(ASSIST_KEY)) {
@@ -10479,11 +11865,12 @@ const game = new AntiBallsheetGame(
             }
         } catch (e) { }
         window.ABS_ASSIST = { get: readAssist, set: saveAssist };
+        initModeAssist();
     }
 
     function assistPaint() {
         var a = readAssist();
-        var map = [['lr', '#as-lr'], ['spin', '#as-spin'], ['trail', '#as-trail']];
+        var map = [['trail', '#as-trail']];
         map.forEach(function (pair) {
             var el = $(pair[1]);
             if (el) { el.checked = !!a[pair[0]]; }
@@ -10503,7 +11890,7 @@ const game = new AntiBallsheetGame(
         }
         if (st.setTab === 'assist') {
             var meta = $('#mode-meta');
-            if (meta) { meta.textContent = '全局 · 下一局生效'; }
+            if (meta) { meta.textContent = '辅助记录 · 下一局生效'; }
         }
     }
 
@@ -10746,7 +12133,7 @@ const game = new AntiBallsheetGame(
        ============================================================ */
     function applyTheme() {
         var bg = store.get('color-pickerMain background', '#111111');
-        var accent = store.get('color-pickerInfo text color', '#00ffff');
+        var accent = store.get('color-pickerInfo text color', '#5bf2dc');
         var target = store.get('color-pickerTarget color', '#fa96c8');
         var c = hexToRgb(bg), a = hexToRgb(accent), t = hexToRgb(target);
         var light = luminance(c) > 0.55;
@@ -11230,7 +12617,7 @@ const game = new AntiBallsheetGame(
             setMode(st.setMode || 'speed');
         } else if (tab === 'assist') {
             assistPaint();
-            if (meta) { meta.textContent = '全局 · 下一局生效'; }
+            if (meta) { meta.textContent = '辅助记录 · 下一局生效'; }
         } else if (tab === 'look') {
             mountBallColors();
             if (meta) { meta.textContent = '颜色 · 实时'; }
@@ -11337,11 +12724,22 @@ const game = new AntiBallsheetGame(
         var vh = window.innerHeight || doc.documentElement.clientHeight;
         var availW = vw - 14;
         var reserve = vh < 560 ? 34 : 48;
+        var leftBound = 0;
+        var rightBound = 0;
         /* phones: keep the square clear of the bottom-left BALLSHEET card */
         if (on && vw <= 480 && hud.classList.contains('is-ball-hud')) {
             var bha = $('#ball-hud-a');
             var bh = bha ? bha.getBoundingClientRect() : null;
             if (bh && bh.height > 0) { reserve = Math.max(reserve, vh - bh.top + 8); }
+        }
+        /* short landscape: the bottom-left card sits beside the field, not on it */
+        if (on && vh < 700 && vw > vh && hud.classList.contains('is-ball-hud')) {
+            var bl = $('#ball-hud-a');
+            var bw = bl ? bl.getBoundingClientRect().width : 224;
+            leftBound = Math.min(vw * .40, bw + 18);
+            rightBound = Math.min(vw * .34, 218);
+            availW = Math.max(150, vw - leftBound - rightBound - 8);
+            reserve = 12;
         }
         var availH = vh - top - (on ? reserve : 14);
         var s = Math.min(availW / FIELD_PX, availH / FIELD_PX, 1);
@@ -11355,7 +12753,9 @@ const game = new AntiBallsheetGame(
             return;
         }
         var w = FIELD_PX * s;
-        var x = Math.max(6, (vw - w) / 2);
+        var x = leftBound
+            ? leftBound + Math.max(4, (vw - leftBound - rightBound - w) / 2)
+            : Math.max(6, (vw - w) / 2);
         var y = top + Math.max(4, (availH - w) / 2);
         c.style.position = 'fixed';
         c.style.transformOrigin = 'top left';
@@ -11371,10 +12771,24 @@ const game = new AntiBallsheetGame(
     function syncHudSpin() {
         var btn = $('#hud-spin');
         if (!btn) { return; }
-        var can = (st.game === 'abs' || st.game === 'bs');
-        btn.classList.toggle('is-visible', can);
-        var on = window.ABS_ASSIST ? !!window.ABS_ASSIST.get().spin : false;
-        btn.textContent = on ? '盘面旋转 · 开' : '盘面旋转 · 关';
+        var mode = st.game === 'abs' ? 'abs' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : ''));
+        btn.classList.toggle('is-visible', !!mode);
+        var on = mode ? spinFor(mode) : false;
+        var label = mode === 'st' ? '方格旋转' : '盘面旋转';
+        btn.textContent = label + ' · ' + (on ? '开' : '关');
+        btn.classList.toggle('is-on', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+
+    function syncHudLr() {
+        var wrap = $('#hud-lr-wrap');
+        var btn = $('#hud-lr');
+        if (!wrap || !btn) { return; }
+        var can = (st.game === 'st');
+        wrap.classList.toggle('is-visible', can);
+        if (!can) { return; }
+        var on = sch ? !!sch.settings().lr : false;
+        btn.textContent = '左右键颜色 · ' + (on ? '开' : '关');
         btn.classList.toggle('is-on', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     }
@@ -11400,21 +12814,33 @@ const game = new AntiBallsheetGame(
         $('#bha-pb').textContent = pb;
 
         var raw = bhaText('balls-left');
-        var metric = raw, suffix = '';
+        var metric = raw, suffix = '', maxHp = 100, hpNow = null, over = 0;
         if (isBs) {
             $('#bha-metric-label').textContent = '血量';
             metric = raw.replace(/^血量\s*/, '');
-            var maxHp = 100;
             try {
                 var cfg = window.BallSheet && window.BallSheet.settings ? window.BallSheet.settings() : null;
                 if (cfg && typeof cfg.hp === 'number') { maxHp = cfg.hp; }
             } catch (e) { }
+            hpNow = parseFloat(String(metric).replace(/[^\d.-]/g, ''));
+            if (isFinite(hpNow) && hpNow > maxHp) { over = hpNow - maxHp; }
             suffix = '/' + Math.round(maxHp);
         } else {
             $('#bha-metric-label').textContent = '球数';
         }
         $('#bha-metric').textContent = metric || '—';
         $('#bha-metric-suffix').textContent = suffix;
+
+        var overBar = $('#bha-over'), overFill = $('#bha-over-fill');
+        if (overBar) {
+            var hasOver = over > 0.5;
+            overBar.classList.toggle('is-on', hasOver);
+            if (overFill) {
+                overFill.style.width = hasOver
+                    ? Math.max(8, Math.min(100, over / Math.max(1, maxHp) * 100)).toFixed(1) + '%'
+                    : '0%';
+            }
+        }
 
         $('#bha-p').textContent = bhaText('bs-p');
         $('#bha-eps').textContent = bhaText('bs-eps');
@@ -11467,6 +12893,7 @@ const game = new AntiBallsheetGame(
         var isBallHud = st.game === 'abs' || st.game === 'bs';
         hud.classList.toggle('is-ball-hud', isBallHud);
         syncHudSpin();
+        syncHudLr();
         syncBallHudA();
     }
 
@@ -11580,7 +13007,7 @@ const game = new AntiBallsheetGame(
         $('#hud-pb').textContent = pb === null ? '最好 —' : '最好 ' + fmt(pb) + ' 秒';
         $('#hud-bar-fill').style.width = '100%';
         bs.start(null, onBsFinish);
-        setBallSpin(readAssist().spin, true);
+        setBallSpin(spinFor('bs'), true);
         startAssistTrail('bs');
         scheduleFit();
     }
@@ -11615,8 +13042,9 @@ const game = new AntiBallsheetGame(
         var pb = sch.pb(size, type);
         $('#hud-pb').textContent = pb === null ? '最好 —' : '最好 ' + fmt(pb.time) + ' 秒';
         $('#hud-bar-fill').style.width = '0%';
-        $('#timer').textContent = '0.00';
-        $('#balls-left').textContent = '0 / ' + (size * size);
+        var stTimer = $('#timer'), stCount = $('#balls-left');
+        if (stTimer) { stTimer.textContent = '0.00'; }
+        if (stCount) { stCount.textContent = '0 / ' + (size * size); }
         sch.start(null, onStFinish);
         scheduleFit();
     }
@@ -11644,8 +13072,14 @@ const game = new AntiBallsheetGame(
         var pb = rt.pb();
         $('#hud-pb').textContent = pb === null ? T('最好平均 —', 'Best avg —') : T('最好平均 ' + fmt(pb, 1) + ' 毫秒', 'Best avg ' + fmt(pb, 1) + ' ms');
         $('#hud-bar-fill').style.width = '0%';
-        $('#slot-timer').textContent = '0 / ' + s.count;
-        $('#slot-balls').textContent = '—';
+        var rtRound = $('#rt-hud-round'), rtAvg = $('#rt-hud-avg');
+        if (rtRound) { rtRound.textContent = '0 / ' + s.count; }
+        if (rtAvg) { rtAvg.textContent = '—'; }
+        var timerEl = $('#timer'), ballsEl = $('#balls-left');
+        if (timerEl) { timerEl.style.display = 'none'; }
+        if (ballsEl) { ballsEl.style.display = 'none'; }
+        if (rtRound) { rtRound.style.display = 'inline'; }
+        if (rtAvg) { rtAvg.style.display = 'inline'; }
         var gc = doc.querySelector('.game-container');
         if (gc) { gc.style.display = 'none'; }
         rt.start(null, onRtFinish);
@@ -11687,20 +13121,24 @@ const game = new AntiBallsheetGame(
             try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
             return;
         }
-        st.paused = true;
-        st.pauseAt = performance.now();
-        pauseBallSpin(true);
         if (st.game === 'st' && sch) {
-            if (!sch.pause()) { return; }
+            if (!sch.pause()) { st.paused = false; return; }
+            st.paused = true;
+            st.pauseAt = performance.now();
+            pauseBallSpin(true);
             $('#pause-time').textContent = fmt(sch.state().t) + ' 秒';
             hud.classList.add('is-dim');
             ovPause.classList.add('is-open');
             try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
             return;
         }
+        st.paused = true;
+        st.pauseAt = performance.now();
+        pauseBallSpin(true);
         clearInterval(game.interval);
         game.interval = null;
-        $('#pause-time').textContent = fmt((st.pauseAt - game.startTime) / 1000) + ' 秒';
+        var pauseTime = game.ready || !game.startTime ? 0 : (st.pauseAt - game.startTime) / 1000;
+        $('#pause-time').textContent = fmt(pauseTime) + ' 秒';
         hud.classList.add('is-dim');
         ovPause.classList.add('is-open');
         ovLive(true);
@@ -11729,12 +13167,21 @@ const game = new AntiBallsheetGame(
         if (st.game === 'st' && sch) {
             sch.resume();
             st.paused = false;
+            pauseBallSpin(false);
             ovPause.classList.remove('is-open');
             hud.classList.remove('is-dim');
             stLive(true);
             return;
         }
         pauseBallSpin(false);
+        if (game.ready) {
+            game.readySince = performance.now();
+            st.paused = false;
+            ovPause.classList.remove('is-open');
+            hud.classList.remove('is-dim');
+            ovLive(false);
+            return;
+        }
         var delta = performance.now() - st.pauseAt;
         game.startTime += delta;
         game.lastHitTime += delta;
@@ -11782,26 +13229,27 @@ const game = new AntiBallsheetGame(
         flashReset();
         closeOverlays();
         ovLive(false);
+        hud.classList.add('is-on');
+        hud.classList.remove('is-dim');
         if (st.game === 'bs' && bs) {
             st.playing = true;
-            hud.classList.remove('is-dim');
             bs.restart();
-            setBallSpin(readAssist().spin, true);
+            setBallSpin(spinFor('bs'), true);
             return;
         }
         if (st.game === 'st' && sch) {
             st.playing = true;
-            hud.classList.remove('is-dim');
+            pauseBallSpin(false);
             sch.restart();
             stLive(true);
             return;
         }
         if (st.game === 'rt' && rt) {
             st.playing = true;
-            hud.classList.remove('is-dim');
             rt.restart();
             return;
         }
+        st.playing = true;
         game.startGame();
     }
 
@@ -13360,7 +14808,7 @@ const game = new AntiBallsheetGame(
             var p = origGetPosition();
             /* 旋转时球绕中心走，基础点必须落在内切圆内，
                否则转一圈会跑出 600px 场地被裁掉。 */
-            var spinOn = readAssist().spin;
+            var spinOn = spinFor('abs');
             if (spinOn) {
                 var cx = this.fieldSize / 2, cy = this.fieldSize / 2;
                 var maxR = this.fieldSize / 2 - this.ballRadius - 3;
@@ -13383,7 +14831,23 @@ const game = new AntiBallsheetGame(
             st.paused = false;
             st.playing = true;
             origStart();
-            setBallSpin(readAssist().spin);
+            /* classic 100-ball now opens like BIGBALL: a stationary centred
+               ball, clock at 0.00, everything waiting for the first touch */
+            game.ready = true;
+            game.readySince = performance.now();
+            clearInterval(game.interval);
+            game.interval = null;
+            game.startTime = null;
+            game.lastHitTime = null;
+            game.currentPositionIndex = 0;
+            game.ballsLeft = game.ballToCatch;
+            game.updateDisplay();
+            var bx = (game.fieldSize - game.ball.clientWidth) / 2;
+            var by = (game.fieldSize - game.ball.clientHeight) / 2;
+            game.ball.style.transform = 'translate3d(' + bx + 'px, ' + by + 'px, 0)';
+            game.hitbox.style.transform = 'translate3d(' + (bx - game.cursorRadius) + 'px, ' + (by - game.cursorRadius) + 'px, 0)';
+            game.timerDisplay.textContent = '0.00';
+            setBallSpin(spinFor('abs'), true);
             startAssistTrail('abs');
             hud.classList.add('is-on');
             var t = $('#timer');
@@ -13596,13 +15060,17 @@ const game = new AntiBallsheetGame(
         var slotTimer = $('#slot-timer');
         var timer = $('#timer');
         if (slotTimer && timer) {
+            var rtRound = $('#rt-hud-round');
             slotTimer.textContent = '';
+            if (rtRound) { slotTimer.appendChild(rtRound); }
             slotTimer.appendChild(timer);
         }
         var slotBalls = $('#slot-balls');
         var balls = $('#balls-left');
         if (slotBalls && balls) {
+            var rtAvg = $('#rt-hud-avg');
             slotBalls.textContent = '';
+            if (rtAvg) { slotBalls.appendChild(rtAvg); }
             slotBalls.appendChild(balls);
         }
     }
@@ -13770,19 +15238,33 @@ const game = new AntiBallsheetGame(
 
         bindTap($('#hud-spin'), function () {
             if (!st.playing) { return; }
-            var a = readAssist();
-            var next = !a.spin;
-            saveAssist({ spin: next });
-            assistPaint();
-            /* toggling changes the playfield, so start a fresh run:
+            var mode = st.game === 'abs' ? 'abs' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : ''));
+            if (!mode) { return; }
+            var next = !spinFor(mode);
+            saveSpinMode(mode, next);
+            /* toggling changes the playfield/grid, so start a fresh run:
                no half-rotated ball, no stale score, and the new
-               spin state applies from a clean centre spawn */
-            if (st.game === 'bs') {
+               spin state applies from a clean ready state */
+            if (mode === 'bs') {
                 startBsRun();
-            } else if (st.game === 'abs') {
+            } else if (mode === 'abs') {
                 game.startGame();
+            } else {
+                startStRun();
             }
             syncHudSpin();
+            syncHudLr();
+            sfx(next ? 620 : 380);
+        });
+
+        bindTap($('#hud-lr'), function () {
+            if (!st.playing || st.game !== 'st' || !sch) { return; }
+            var next = !sch.settings().lr;
+            sch.saveSettings({ lr: next });
+            /* cells are painted with their button requirement at start */
+            startStRun();
+            syncHudSpin();
+            syncHudLr();
             sfx(next ? 620 : 380);
         });
 
