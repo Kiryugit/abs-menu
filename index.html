@@ -3069,6 +3069,144 @@ kbd {
     }
 }
 
+@media (max-width: 480px) {
+    .st-hud-a {
+        bottom: calc(190px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+/* ---------- Schulte bottom-left HUD (same card grammar as BALLSHEET) ---------- */
+.hud.is-st-hud .st-hud-a {
+    display: block;
+}
+
+.hud.is-st-hud .hud-top,
+.hud.is-st-hud .hud-bar {
+    display: none !important;
+}
+
+.st-hud-a .bha-mode em {
+    color: #d8ff5a;
+}
+
+.st-hud-a {
+    border-left-color: #d8ff5a;
+}
+
+.st-hud-a #hud-pb {
+    margin: 0;
+    font-size: 7px;
+    line-height: 1.2;
+    letter-spacing: .12em;
+    color: var(--dim);
+}
+
+.st-hud-a .bha-time b,
+.st-hud-a #timer {
+    min-width: 0;
+    color: #d8ff5a;
+    text-shadow: 0 0 24px rgba(216, 255, 90, .24);
+}
+
+.st-hud-a .bha-metric-val b,
+.st-hud-a #balls-left {
+    min-width: 0;
+    color: var(--ink);
+}
+
+.st-hud-a .bha-bar > #hud-bar-fill {
+    background: linear-gradient(90deg, #d8ff5a, #5bf2dc);
+    box-shadow: 0 0 12px rgba(216, 255, 90, .26);
+}
+
+.st-hud-a .stha-grid {
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.st-hud-a #st-row {
+    display: grid;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    gap: 7px 12px;
+    border: 0;
+}
+
+.st-hud-a #st-row .bs-cell {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.st-hud-a #st-row .bs-cell span {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0;
+    font-size: 7px;
+    line-height: 1;
+    letter-spacing: .18em;
+    color: var(--dim);
+}
+
+.st-hud-a #st-row .bs-cell b {
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.st-hud-a .stha-foot {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.st-hud-a #st-tip {
+    display: none;
+    margin: 0;
+    padding: 0;
+    max-height: 2.9em;
+    overflow: hidden;
+    font-size: 8px;
+    line-height: 1.45;
+    letter-spacing: .02em;
+    text-align: left;
+    color: color-mix(in srgb, var(--dim) 90%, transparent);
+}
+
+.st-hud-a #st-tip.is-on {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.st-hud-a #st-tip:empty {
+    display: none !important;
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+    .st-hud-a .stha-grid {
+        margin-top: 7px;
+        padding-top: 6px;
+    }
+
+    .st-hud-a .stha-foot {
+        margin-top: 7px;
+        padding-top: 6px;
+    }
+
+    .st-hud-a #st-tip {
+        font-size: 7.5px;
+        line-height: 1.4;
+        -webkit-line-clamp: 2;
+    }
+}
+
 /* mode screen: ballsheet rule card */
 .bs-rules {
     margin-top: 20px;
@@ -5406,6 +5544,38 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     letter-spacing: .1em;
     color: var(--dim);
 }
+
+@media (min-width: 641px) {
+    .rt-count-line {
+        display: grid;
+        grid-template-columns: 78px 104px 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+    }
+
+    #rt-count {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .rt-count-note {
+        margin-left: 0;
+        justify-self: end;
+        text-align: right;
+    }
+}
+
+/* reaction drawer keeps its own amber accent on selected controls */
+#ov-mode-settings[data-mode="rt"] .rt-rules .st-chip.is-on {
+    border-color: var(--ma);
+    background: color-mix(in srgb, var(--ma) 14%, transparent);
+    color: var(--ma);
+}
+
+#ov-mode-settings[data-mode="rt"] #rt-count:focus {
+    border-color: var(--ma);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ma) 34%, transparent);
+}
 .rt-presets .st-chip {
     flex: 0 0 auto;
     min-width: 66px;
@@ -6026,39 +6196,49 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     justify-content: flex-start;
     gap: 6px;
 }
-.sens-mini {
-    min-width: 34px;
-    height: 18px;
-    padding: 0 5px;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,.04);
-    color: var(--accent);
-    font-family: var(--mono);
-    font-size: 8px;
-    letter-spacing: .08em;
-    cursor: pointer;
+.sens-preset-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 0;
 }
-.sens-mini:hover { border-color: var(--accent); }
-.sens-help {
-    margin: 10px 0 0;
-    padding: 10px 11px;
-    border-left: 2px solid #d8ff5a;
-    background: rgba(216,255,90,.055);
+.sens-preset-row > span {
     color: var(--dim);
-    font-size: 10px;
-    line-height: 1.65;
-}
-.sens-help[hidden] { display: none; }
-.sens-help b { color: var(--ink); }
-.sens-help button {
-    margin-left: 6px;
-    padding: 2px 6px;
-    border: 1px solid rgba(216,255,90,.35);
-    background: transparent;
-    color: #d8ff5a;
     font-family: var(--mono);
     font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+.sens-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.sens-presets button {
+    min-width: 52px;
+    height: 26px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,.035);
+    color: color-mix(in srgb, var(--ink) 62%, transparent);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .08em;
     cursor: pointer;
+    transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+.sens-presets button:hover {
+    border-color: color-mix(in srgb, var(--accent) 58%, transparent);
+    color: var(--ink);
+}
+.sens-presets button.is-on,
+.sens-presets button[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--accent) 72%, transparent);
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    color: var(--accent);
 }
 .sens-out { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .sens-out > div:last-child b { color: #d8ff5a; }
@@ -6070,6 +6250,9 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     .sens-field > span { font-size: 8px; letter-spacing: .08em; }
     .sens-field .sel, .sens-field .sens-num { height: 40px; }
     .sens-num { font-size: 14px; padding: 6px 8px; }
+    .sens-preset-row { flex-direction: column; align-items: flex-start; gap: 6px; margin-top: 0; }
+    .sens-presets { width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .sens-presets button { width: 100%; min-width: 0; height: 28px; }
     .sens-bar span { display: none; }
     .sens-bar { margin-bottom: 10px; }
     .sens-out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -6827,6 +7010,13 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 
 .pause-list .btn { border-radius: var(--r-2); }
+
+.pause-sub {
+    margin-left: 7px;
+    font: 500 8px/1 var(--mono);
+    letter-spacing: .02em;
+    color: var(--dim);
+}
 .pause-list .btn.primary {
     color: #041012;
     background: var(--accent);
@@ -7402,6 +7592,1014 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 
 
 
+/* ============================================================
+   0.9.4 · 准备页 / 模式设置抽屉 / 局内齿轮
+   ============================================================ */
+
+/* ---------- 准备页 ---------- */
+.prep-panel {
+    padding: 22px 24px 18px;
+    max-width: 940px;
+    margin: 0 auto;
+}
+
+#prep-screen .pill {
+    border-color: color-mix(in srgb, var(--ma) 34%, transparent);
+    color: color-mix(in srgb, var(--ma) 82%, var(--ink));
+}
+
+.prep-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+#prep-pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.prep-head-tools {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.prep-mode-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid color-mix(in srgb, var(--ma) 36%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ma) 6%, transparent);
+    color: color-mix(in srgb, var(--ma) 84%, var(--ink));
+    font: 600 8.5px/1 var(--mono);
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: border-color .18s ease, background-color .18s ease;
+}
+
+.prep-mode-open b {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.prep-mode-open:hover,
+.prep-mode-open:focus-visible {
+    border-color: color-mix(in srgb, var(--ma) 72%, transparent);
+    background: color-mix(in srgb, var(--ma) 12%, transparent);
+}
+
+.prep-kicker {
+    display: block;
+    font: 600 9px/1 var(--mono);
+    letter-spacing: .16em;
+    color: color-mix(in srgb, var(--ma) 76%, var(--dim));
+    margin-bottom: 8px;
+}
+
+.prep-head h3 {
+    margin: 0;
+    font-size: clamp(23px, 2.7vw, 32px);
+    letter-spacing: -.03em;
+    color: var(--ink);
+}
+
+.prep-head p {
+    margin: 7px 0 0;
+    max-width: 62ch;
+    font-size: 11.5px;
+    line-height: 1.65;
+    color: var(--dim);
+}
+
+.prep-rules {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 17px;
+}
+
+/* 14 rules leave two cards on the last row — let them share the full width */
+@media (min-width: 701px) {
+    #prep-screen .prep-rules > .prep-rule:nth-last-child(2),
+    #prep-screen .prep-rules > .prep-rule:last-child {
+        grid-column: span 2;
+    }
+}
+
+.prep-rule {
+    min-height: 82px;
+    padding: 9px 11px 8px;
+    text-align: left;
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+    border-radius: var(--r-2);
+    background:
+        linear-gradient(150deg, color-mix(in srgb, var(--ink) 4%, transparent), transparent 58%),
+        color-mix(in srgb, var(--bg) 92%, transparent);
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.prep-rule:hover {
+    border-color: color-mix(in srgb, var(--ma) 46%, transparent);
+    transform: translateY(-1px);
+}
+
+.prep-rule.is-on {
+    border-color: color-mix(in srgb, var(--ma) 82%, transparent);
+    background:
+        linear-gradient(150deg, color-mix(in srgb, var(--ma) 13%, transparent), transparent 62%),
+        color-mix(in srgb, var(--bg) 86%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ma) 14%, transparent);
+}
+
+.prep-rule b {
+    display: block;
+    font-size: 12.5px;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+}
+
+.prep-rule em {
+    display: block;
+    margin-top: 4px;
+    font: 500 7.5px/1 var(--mono);
+    letter-spacing: .13em;
+    color: color-mix(in srgb, var(--ma) 68%, var(--dim));
+    font-style: normal;
+}
+
+.prep-rule span {
+    display: block;
+    margin-top: 8px;
+    font-size: 10px;
+    line-height: 1.55;
+    color: var(--dim);
+}
+
+.prep-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-top: 16px;
+}
+
+.prep-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid color-mix(in srgb, var(--ink) 11%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 3.5%, transparent);
+    font: 500 8.5px/1.2 var(--mono);
+    color: var(--dim);
+}
+
+.prep-chip b {
+    font: 600 10px/1.2 var(--mono);
+    color: var(--ink);
+}
+
+.prep-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 23px;
+    padding-top: 17px;
+    border-top: 1px solid var(--hairline);
+}
+
+.prep-best {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.prep-best span {
+    font: 500 8px/1 var(--mono);
+    letter-spacing: .12em;
+    color: var(--dim);
+}
+
+.prep-best b {
+    font: 600 19px/1.1 var(--mono);
+    color: var(--ink);
+}
+
+.prep-start {
+    min-width: 220px;
+    height: 50px;
+    font-size: 13px;
+    letter-spacing: .02em;
+}
+
+.prep-hint {
+    margin: 13px 0 0;
+    font-size: 10px;
+    line-height: 1.6;
+    color: color-mix(in srgb, var(--dim) 84%, transparent);
+}
+
+/* ---------- 局内齿轮 + dock 组合 ---------- */
+.hud-right {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.hud-right .hud-controls {
+    position: static;
+    right: auto;
+    bottom: auto;
+}
+
+/* mode accents: classic mint / BIGBALL pink / Schulte lime / reaction amber */
+#prep-screen,
+#ov-mode-settings,
+.hud-mode-settings {
+    --ma: var(--accent);
+}
+
+#prep-screen[data-mode="bs"],
+#ov-mode-settings[data-mode="bs"],
+.hud-mode-settings[data-mode="bs"] {
+    --ma: #fa96c8;
+}
+
+#prep-screen[data-mode="st"],
+#ov-mode-settings[data-mode="st"],
+.hud-mode-settings[data-mode="st"] {
+    --ma: #d8ff5a;
+}
+
+#prep-screen[data-mode="rt"],
+#ov-mode-settings[data-mode="rt"],
+.hud-mode-settings[data-mode="rt"] {
+    --ma: #ffc15a;
+}
+
+.hud-mode-settings {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 84px;
+    height: 38px;
+    padding: 0 10px;
+    border: 1px solid color-mix(in srgb, var(--ma) 36%, transparent);
+    border-radius: 9px;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--ink) 7%, transparent), transparent 80%),
+        color-mix(in srgb, var(--bg) 86%, transparent);
+    color: var(--ink);
+    font: 600 9px/1 var(--mono);
+    letter-spacing: .04em;
+    cursor: pointer;
+    backdrop-filter: blur(14px) saturate(.9);
+    box-shadow: 0 8px 20px -14px #000;
+    transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.hud-mode-settings:hover,
+.hud-mode-settings:focus-visible {
+    border-color: color-mix(in srgb, var(--ma) 78%, transparent);
+    background-color: color-mix(in srgb, var(--ma) 8%, transparent);
+    transform: translateY(-1px);
+}
+
+.hud-mode-settings span {
+    font-size: 9.5px;
+    letter-spacing: .06em;
+}
+
+#prep-screen .prep-start,
+#ov-mode-settings .oms-foot .btn.primary {
+    color: #061014;
+    background: var(--ma);
+    border-color: color-mix(in srgb, var(--ma) 72%, #fff 28%);
+    box-shadow: 0 12px 34px -18px color-mix(in srgb, var(--ma) 60%, transparent);
+}
+
+#prep-screen .prep-start:hover,
+#prep-screen .prep-start:focus-visible,
+#ov-mode-settings .oms-foot .btn.primary:hover,
+#ov-mode-settings .oms-foot .btn.primary:focus-visible {
+    color: #061014;
+    background: var(--ma);
+    filter: brightness(1.08);
+}
+
+.hud.is-dim .hud-mode-settings {
+    opacity: .35;
+    pointer-events: none;
+}
+
+/* ---------- 模式设置抽屉 ---------- */
+#ov-mode-settings {
+    z-index: 30;
+}
+
+#ov-mode-settings.is-open {
+    display: grid;
+}
+
+.oms-card {
+    width: min(640px, calc(100vw - 24px));
+    max-height: min(82vh, 700px);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid color-mix(in srgb, var(--ma) 26%, var(--ink) 16%);
+    border-radius: var(--r-3);
+    background:
+        linear-gradient(158deg, color-mix(in srgb, var(--ink) 5%, transparent), transparent 52%),
+        color-mix(in srgb, var(--bg) 90%, #000 10%);
+    box-shadow: 0 44px 110px -50px #000, inset 0 1px 0 color-mix(in srgb, var(--ink) 10%, transparent);
+    overflow: hidden;
+}
+
+.oms-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 15px 18px 13px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.oms-head .res-tag {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ma);
+}
+
+.oms-mode {
+    display: block;
+    font-size: 19px;
+    letter-spacing: -.02em;
+    color: var(--ma);
+}
+
+.oms-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--dim);
+    font: 300 20px/1 var(--sans);
+    cursor: pointer;
+}
+
+.oms-close:hover {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--ma) 55%, transparent);
+}
+
+.oms-body {
+    overflow: auto;
+    padding: 17px 18px 20px;
+    scrollbar-width: thin;
+}
+
+.oms-body .set-pane {
+    display: block;
+    border: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+}
+
+.oms-body .set-pane::before,
+.oms-body .set-pane::after {
+    display: none;
+}
+
+.oms-body .set-pane .sub-foot {
+    display: none;
+}
+
+.oms-body .set-block + .set-block {
+    margin-top: 12px;
+}
+
+.oms-body .bs-rules,
+.oms-body .st-rules,
+.oms-body .rt-rules {
+    margin-top: 0;
+}
+
+.oms-body .bs-head {
+    display: none;
+}
+
+.oms-body #st-rules .st-type-cap,
+.oms-body #st-types,
+.oms-body .st-type-note {
+    display: none;
+}
+
+.oms-body .bs-foot {
+    display: none;
+}
+
+.oms-body .set-speed .preview-field {
+    width: 124px;
+    height: 124px;
+    flex-basis: 124px;
+}
+
+.oms-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 11px 18px 14px;
+    border-top: 1px solid var(--hairline);
+    font: 500 8.5px/1.4 var(--mono);
+    color: var(--dim);
+}
+
+.oms-foot .btn {
+    min-width: 112px;
+    height: 34px;
+}
+
+/* ---------- mode drawer: scoreboard language ---------- */
+#ov-mode-settings {
+    background:
+        radial-gradient(760px 520px at 50% 42%, color-mix(in srgb, var(--ma) 4%, transparent), transparent 72%),
+        color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(3px) saturate(.86);
+}
+
+.oms-card {
+    width: min(560px, calc(100vw - 24px));
+    max-height: min(86vh, 660px);
+    border: 1px solid color-mix(in srgb, var(--ma) 30%, var(--ink) 12%);
+    border-left: 2px solid color-mix(in srgb, var(--ma) 72%, transparent);
+    border-radius: 10px;
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--ink) 5%, transparent), transparent 46%),
+        color-mix(in srgb, var(--bg) 96%, #000 4%);
+    box-shadow:
+        0 28px 76px -50px #000,
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.oms-head {
+    padding: 10px 15px 9px;
+    border-bottom-color: color-mix(in srgb, var(--ma) 18%, var(--hairline));
+}
+
+.oms-head .res-tag {
+    margin-bottom: 2px;
+    font-size: 7.5px;
+    letter-spacing: .18em;
+}
+
+.oms-mode {
+    font-size: 16px;
+    line-height: 1.15;
+    letter-spacing: -.01em;
+}
+
+.oms-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    font-size: 17px;
+}
+
+.oms-meta {
+    display: grid;
+    gap: 0;
+    padding: 8px 15px 9px;
+    border-top: 1px solid color-mix(in srgb, var(--ma) 14%, var(--hairline));
+    border-bottom: 1px solid color-mix(in srgb, var(--ma) 14%, var(--hairline));
+}
+
+.oms-meta span {
+    display: block;
+    font: 500 7.5px/1 var(--mono);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--dim);
+}
+
+.oms-meta b {
+    display: block;
+    margin-top: 4px;
+    font: 500 11.5px/1.2 var(--mono);
+    letter-spacing: .03em;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.oms-meta .is-lead b {
+    color: var(--ma);
+}
+
+.oms-meta > div + div {
+    padding-left: 12px;
+    border-left: 1px solid color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.oms-body {
+    padding: 3px 15px 9px;
+}
+
+.oms-body .set-pane {
+    margin: 0;
+    padding: 0;
+}
+
+.oms-body .bs-rules {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.oms-body .bs-set {
+    margin-top: 0;
+    gap: 8px;
+}
+
+.oms-body .st-cap {
+    margin: 11px 0 6px;
+    padding-top: 9px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+    font-size: 8.5px;
+    letter-spacing: .18em;
+}
+
+.oms-body .st-set .st-cap:first-child {
+    margin-top: 2px;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.oms-body .st-chips {
+    gap: 6px;
+    margin: 0 0 2px;
+}
+
+.oms-body .st-chip {
+    min-width: 0;
+    padding: 8px 6px;
+    border-radius: 6px;
+    font-size: 10.5px;
+}
+
+.oms-body .st-cd-line {
+    margin: 2px 0 0;
+    gap: 8px;
+}
+
+.oms-body #st-cd {
+    width: 92px;
+    padding: 8px 9px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.oms-body .st-summary {
+    display: block;
+    margin: 10px 0 0;
+    padding-top: 9px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+    font-size: 8.5px;
+}
+
+.oms-body .bs-set label {
+    grid-template-columns: 104px minmax(0, 1fr) 48px;
+    gap: 10px;
+    padding: 7px 0 5px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+    font-size: 8.5px;
+}
+
+.oms-body .bs-set label:first-child {
+    padding-top: 2px;
+    border-top: 0;
+}
+
+.oms-body .bs-set b {
+    font-size: 11px;
+}
+
+.oms-body .bs-foot {
+    display: block;
+    margin: 10px 0 0;
+    padding-top: 8px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+    font-size: 9.5px;
+    line-height: 1.55;
+}
+
+.oms-body .set-block {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.oms-body .set-speed .preview {
+    margin: 8px 0 0;
+    padding-top: 8px;
+    border-top-color: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.oms-body .set-speed-body {
+    grid-template-columns: minmax(0, 1fr) 142px;
+    gap: 18px;
+}
+
+.oms-body .set-speed .settings-container {
+    display: block;
+}
+
+.oms-body .set-speed .range-labels {
+    margin-top: 4px;
+    font-size: 7.5px;
+    letter-spacing: 0;
+    gap: 0;
+}
+
+.oms-body .set-speed .preview-field {
+    width: 100px;
+    height: 100px;
+    flex-basis: 100px;
+}
+
+.oms-body .set-speed .preview-meta #preview-size {
+    font-size: 10px;
+    line-height: 1.4;
+    word-break: keep-all;
+}
+
+.oms-body .set-speed .setting {
+    width: 100%;
+    margin: 0;
+    padding: 7px 0 5px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+.oms-body .set-speed .setting:first-child {
+    padding-top: 2px;
+    border-top: 0;
+}
+
+#ov-mode-settings .bs-set label {
+    color: color-mix(in srgb, var(--ma) 52%, var(--dim));
+}
+
+#ov-mode-settings .bs-set label span {
+    color: color-mix(in srgb, var(--ma) 55%, var(--dim));
+}
+
+#ov-mode-settings .bs-set label b {
+    color: var(--ink);
+}
+
+#ov-mode-settings .bs-set input[type="range"]::-webkit-slider-thumb {
+    background: var(--ma);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--ma) 45%, transparent);
+}
+
+#ov-mode-settings .bs-set input[type="range"]::-moz-range-thumb {
+    background: var(--ma);
+}
+
+.oms-body .default-button {
+    margin-top: 8px;
+    height: 26px;
+    font-size: 8.5px;
+}
+
+.oms-body .rt-count-line {
+    padding: 3px 0 7px;
+}
+
+.oms-body .rt-presets {
+    margin: 0 0 2px;
+}
+
+.oms-body .rt-summary {
+    margin: 5px 0 0;
+}
+
+.oms-foot {
+    padding: 8px 15px 9px;
+    border-top-color: color-mix(in srgb, var(--ma) 16%, var(--hairline));
+    font-size: 8px;
+}
+
+.oms-foot .btn {
+    min-width: 92px;
+    height: 30px;
+    font-size: 10.5px;
+}
+
+@media (max-height: 520px) and (min-width: 701px) {
+    .oms-meta { display: none; }
+    .oms-head { padding: 8px 15px; }
+    .oms-body { padding: 2px 15px 4px; }
+    .oms-body .bs-foot { margin-top: 8px; }
+    .oms-foot { padding: 6px 15px; }
+    .oms-foot .btn { height: 28px; }
+}
+
+/* ---------- 准备页 / 抽屉响应式 ---------- */
+@media (max-width: 700px) {
+    .prep-panel {
+        padding: 17px 13px 14px;
+    }
+
+    .prep-head {
+        gap: 10px;
+    }
+
+    .prep-head h3 {
+        font-size: 24px;
+    }
+
+    .prep-head-tools {
+        gap: 5px;
+    }
+
+    .prep-mode-open {
+        width: 30px;
+        height: 27px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .prep-mode-open span {
+        display: none;
+    }
+
+    .prep-rules {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .prep-rule {
+        min-height: 0;
+        padding: 7px 9px 6px;
+    }
+
+    .prep-rule b {
+        font-size: 11px;
+    }
+
+    .prep-rule em {
+        margin-top: 3px;
+        font-size: 7px;
+    }
+
+    .prep-rule span {
+        display: none;
+    }
+
+    .prep-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 13px;
+        margin-top: 18px;
+        padding-top: 14px;
+    }
+
+    .prep-start {
+        width: 100%;
+        min-width: 0;
+        height: 46px;
+    }
+
+    .prep-best {
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .oms-card {
+        width: calc(100vw - 16px);
+        max-height: calc(100vh - 24px);
+    }
+
+    .oms-head {
+        padding: 13px 14px 11px;
+    }
+
+    .oms-body {
+        padding: 14px 13px 16px;
+    }
+
+    .oms-body .st-chips {
+        gap: 5px;
+    }
+
+    .oms-body .st-chip {
+        min-width: 0;
+        padding: 9px 3px;
+    }
+
+    .oms-foot {
+        padding: 10px 13px 12px;
+    }
+
+    .oms-body .set-speed .preview-field {
+        width: 108px;
+        height: 108px;
+        flex-basis: 108px;
+    }
+}
+
+@media (max-height: 820px) and (min-width: 701px) {
+    .prep-head p {
+        display: none;
+    }
+
+    .prep-rules {
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .prep-rule {
+        min-height: 70px;
+        padding: 8px 10px 7px;
+    }
+
+    .prep-rule b {
+        font-size: 12.5px;
+    }
+
+    .prep-rule em {
+        margin-top: 3px;
+    }
+
+    .prep-rule span {
+        display: block;
+        margin-top: 5px;
+        font-size: 9.5px;
+        line-height: 1.45;
+    }
+
+    .prep-summary {
+        margin-top: 8px;
+    }
+
+    .prep-actions {
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+
+    .prep-hint {
+        display: none;
+    }
+}
+
+@media (max-height: 520px) and (min-width: 701px) {
+    .prep-panel {
+        padding: 13px 17px 10px;
+    }
+
+    .prep-head h3 {
+        font-size: 22px;
+    }
+
+    .prep-head p {
+        display: none;
+    }
+
+    .prep-rules {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+        padding: 1px 0 3px;
+    }
+
+    .prep-rule {
+        flex: 0 0 80px;
+        min-height: 38px;
+        padding: 6px 7px;
+    }
+
+    .prep-rule b {
+        font-size: 10.5px;
+    }
+
+    .prep-rule span {
+        display: none;
+    }
+
+    .prep-rule em {
+        margin-top: 3px;
+    }
+
+    .prep-actions {
+        margin-top: 9px;
+        padding-top: 8px;
+    }
+
+    .prep-start {
+        height: 36px;
+        min-width: 190px;
+    }
+
+    .prep-hint {
+        display: none;
+    }
+
+    .oms-card {
+        max-height: calc(100vh - 8px);
+    }
+
+    .oms-head {
+        padding: 8px 14px 7px;
+    }
+
+    .oms-body {
+        padding: 8px 13px 10px;
+    }
+
+    .oms-body .bs-set {
+        gap: 7px;
+    }
+
+    .oms-body .st-chips {
+        margin: 5px 0 2px;
+    }
+
+    .oms-body .st-chip {
+        padding: 7px 6px;
+    }
+
+    .oms-body #st-cd {
+        height: 32px;
+    }
+
+    .oms-body #st-summary {
+        display: none;
+    }
+
+    .oms-foot {
+        padding: 7px 13px 9px;
+    }
+
+    .hud-right {
+        right: 8px;
+        bottom: 8px;
+        gap: 5px;
+    }
+
+    .hud-mode-settings {
+        width: 74px;
+        height: 30px;
+        font-size: 8px;
+        gap: 5px;
+    }
+
+    .hud-mode-settings span {
+        font-size: 8.5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hud-right {
+        right: 10px;
+        bottom: max(10px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .hud-mode-settings {
+        width: 78px;
+        height: 34px;
+    }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
     .mi,
     .st-cell,
@@ -7500,6 +8698,25 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             </div>
             <div class="bha-foot"><span>最高秒得分 <b id="bha-maxeps">—</b></span><span id="bha-tag">BIGBALL</span></div>
         </aside>
+        <aside id="st-hud-a" class="ball-hud-a st-hud-a">
+            <div class="bha-head">
+                <div class="bha-mode">SCHULTE <em id="stha-sub">顺序</em></div>
+                <div class="bha-pb" id="stha-pb"></div>
+            </div>
+            <div class="bha-main">
+                <div class="bha-time">
+                    <span class="bha-lab">TIME / 秒</span>
+                    <div id="stha-time-slot"></div>
+                </div>
+                <div class="bha-metric">
+                    <span class="bha-lab">进度</span>
+                    <div class="bha-metric-val" id="stha-count-slot"></div>
+                </div>
+            </div>
+            <div class="bha-bar" id="stha-bar"></div>
+            <div class="stha-grid" id="stha-grid"></div>
+            <div class="stha-foot" id="stha-foot"></div>
+        </aside>
         <div class="bs-row st-row" id="st-row">
             <div class="bs-cell"><span>方格</span><b id="st-gridsize">—</b></div>
             <div class="bs-cell"><span>错误</span><b id="st-err">0</b></div>
@@ -7513,14 +8730,17 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         </div>
         <p class="st-tip" id="st-tip"></p>
         <div class="hud-bar"><i id="hud-bar-fill"></i></div>
-        <div class="hud-controls" id="hud-controls">
-            <div class="hud-lr-wrap" id="hud-lr-wrap">
-                <button id="hud-lr" class="hud-spin hud-lr" type="button" aria-pressed="false">左右键颜色 · 关</button>
-                <span class="hud-help" id="hud-lr-help" tabindex="0" role="note"
-                    data-tip="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。">!</span>
+        <div class="hud-right" id="hud-right">
+            <button id="hud-mode-settings" class="hud-mode-settings" data-mode="speed" type="button" aria-label="本模式设置" title="本模式设置">⚙ <span id="hud-mode-settings-label">经典</span></button>
+            <div class="hud-controls" id="hud-controls">
+                <div class="hud-lr-wrap" id="hud-lr-wrap">
+                    <button id="hud-lr" class="hud-spin hud-lr" type="button" aria-pressed="false">左右键颜色 · 关</button>
+                    <span class="hud-help" id="hud-lr-help" tabindex="0" role="note"
+                        data-tip="左右键颜色：开启后每格随机要求左键或右键。蓝色格 = 左键，橙色格 = 右键；只有对应键点击才有效，按错只记一次错误，不推进顺序。">!</span>
+                </div>
+                <button id="hud-spin" class="hud-spin" type="button" aria-pressed="false">盘面旋转 · 关</button>
+                <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
             </div>
-            <button id="hud-spin" class="hud-spin" type="button" aria-pressed="false">盘面旋转 · 关</button>
-            <button id="hud-pause" class="hud-pause" type="button">ESC · 暂停</button>
         </div>
     </div>
 
@@ -7603,7 +8823,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <span class="mi-idx">03</span>
                                     <span class="mi-icon ic-st" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16"></path></svg></span>
                                     <span class="mi-label">舒尔特<em class="mi-en">Schulte Grid</em></span>
-                                    <span class="mi-hint">14 种规则 · 不规则盘面</span>
+                                    <span class="mi-hint">14 种规则 · 先选后开</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="reaction" type="button">
@@ -7616,7 +8836,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 <button class="mi" data-act="sensitivity" type="button">
                                     <span class="mi-idx">05</span>
                                     <span class="mi-icon ic-sens" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"></circle><path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"></circle></svg></span>
-                                    <span class="mi-label">灵敏度<em class="mi-en">Sensitivity</em></span>
+                                    <span class="mi-label">灵敏度转换<em class="mi-en">Converter</em></span>
                                     <span class="mi-hint">cm/360 · eDPI · 目标 sens</span>
                                     <span class="mi-go">▶</span>
                                 </button>
@@ -7631,7 +8851,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                     <span class="mi-idx">07</span>
                                     <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3.2"></circle></svg></span>
                                     <span class="mi-label">设置<em class="mi-en">Settings</em></span>
-                                    <span class="mi-hint">玩法 · 辅助 · 外观 · 音效</span>
+                                    <span class="mi-hint">辅助 · 外观 · 音效</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="help" type="button">
@@ -7692,22 +8912,15 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                     <div class="sub">
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
-                            <h2>设置<span class="sub-note">玩法 · 辅助 · 外观 · 音效</span></h2>
+                            <h2>设置<span class="sub-note">辅助 · 外观 · 音效</span></h2>
                             <div class="sub-meta" id="mode-meta">—</div>
                         </div>
                         <div class="set-tabs" id="set-tabs" aria-label="设置分类">
-                            <button class="set-tab is-on" data-tab="mode" type="button">玩法</button>
-                            <button class="set-tab" data-tab="assist" type="button">辅助</button>
+                            <button class="set-tab is-on" data-tab="assist" type="button">辅助</button>
                             <button class="set-tab" data-tab="look" type="button">外观</button>
                             <button class="set-tab" data-tab="sfx" type="button">音效</button>
                         </div>
-                        <div class="panel set-pane is-on" data-pane="mode">
-                            <div class="mode-switch" id="set-modes" role="tablist" aria-label="按玩法设置">
-                                <button class="mode-tab is-on" data-modeset="speed" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><circle cx="12" cy="13" r="6"></circle><path d="M12 9.5v3.9l2.4 1.7"></path><path d="M9.5 2.5h5M12 2.5v2.5"></path></svg><span>BALLSHEET</span></button>
-                                <button class="mode-tab" data-modeset="bs" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"></circle><path d="M3 17h3l1.6-3.2 2.6 4.4 2-2.6 1.2 1.4H21"></path></svg><span>BALLSHEET BIGBALL</span></button>
-                                <button class="mode-tab" data-modeset="st" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16"></path></svg><span>舒尔特</span></button>
-                                <button class="mode-tab" data-modeset="rt" type="button"><svg class="mode-ic" viewBox="0 0 24 24"><path d="M13.5 2 5 14h5.4L9.5 22l8.5-12h-5.2z"></path></svg><span>反应测试</span></button>
-                            </div>
+                        <div class="panel set-pane" data-pane="mode" id="mode-settings-panel">
                             <div class="set-block set-speed" data-modecard="speed">
                                 <div class="bs-head">
                                     <div>
@@ -7775,7 +8988,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                                 <div class="bs-set st-set">
                                     <p class="st-cap">尺寸</p>
                                     <div class="st-chips" id="st-sizes"></div>
-                                    <p class="st-cap">类型</p>
+                                    <p class="st-cap st-type-cap">类型</p>
                                     <div class="st-types" id="st-types"></div>
                                     <p class="st-cap">倒计时</p>
                                     <div class="st-cd-line">
@@ -7826,7 +9039,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             <div class="assist-grid">
                                 <label class="st-toggle assist-toggle"><input type="checkbox" id="as-trail"><span>鼠标轨迹<em>BALLSHEET 仅结算</em></span></label>
                             </div>
-                            <p class="assist-note">BALLSHEET / BIGBALL 的局内信息收在左下角竖卡，不再占用顶部；经典 BALLSHEET 显示简化卡。旋转盘面、方格旋转和左右键颜色已从全局设置移入各模式局内：经典 BALLSHEET / BIGBALL 右下角是“盘面旋转”，舒尔特右下角是“方格旋转”和“左右键颜色”，悬停旁边的 ! 可查看左右键说明；三个模式各自记忆，切换后会立即重开当前局。BIGBALL 血量超过上限时，左下卡主血条上方会多出一条粉色细血条显示溢出量。鼠标轨迹只记录、不在 BALLSHEET / BIGBALL 局内显示，结算时展示本局路径；舒尔特仍使用原有轨迹面板。</p>
+                            <p class="assist-note">玩法参数已从全局设置移到各模式：进入任一玩法后，右下角控制区上方有独立的齿轮设置按钮，打开后只显示当前模式的参数。这里只保留辅助、外观和音效。BALLSHEET / BIGBALL 的局内信息收在左下角竖卡，不再占用顶部；经典 BALLSHEET 显示简化卡。旋转盘面、方格旋转和左右键颜色已从全局设置移入各模式局内：经典 BALLSHEET / BIGBALL 右下角是“盘面旋转”，舒尔特右下角是“方格旋转”和“左右键颜色”，悬停旁边的 ! 可查看左右键说明；三个模式各自记忆，切换后会立即重开当前局。BIGBALL 血量超过上限时，左下卡主血条上方会多出一条粉色细血条显示溢出量。鼠标轨迹只记录、不在 BALLSHEET / BIGBALL 局内显示，结算时展示本局路径；舒尔特仍使用原有轨迹面板。</p>
                         </div>
 
                         <div class="panel set-pane" data-pane="look">
@@ -7865,16 +9078,50 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                     </div>
                 </section>
 
+                <!-- ---------- mode preparation ---------- -->
+                <section class="screen" data-screen="prep" id="prep-screen" data-mode="speed">
+                    <div class="sub prep-shell">
+                        <div class="sub-head">
+                            <button class="back" data-back type="button">← 菜单</button>
+                            <h2><span id="prep-title">准备</span><span class="sub-note" id="prep-subnote">先选玩法，再开始</span></h2>
+                            <div class="sub-meta" id="prep-meta">参数存本机</div>
+                        </div>
+                        <div class="panel prep-panel">
+                            <div class="prep-head">
+                                <div>
+                                    <span class="prep-kicker" id="prep-kicker">MODE</span>
+                                    <h3 id="prep-name">—</h3>
+                                    <p id="prep-desc">—</p>
+                                </div>
+                                <div class="prep-head-tools">
+                                    <span class="pill" id="prep-pill">—</span>
+                                    <button class="prep-mode-open" id="prep-mode-open" type="button" aria-label="打开本模式设置" title="本模式设置">
+                                        <b>⚙</b><span>模式设置</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="prep-rules" id="prep-rules"></div>
+                            <div class="prep-summary" id="prep-summary"></div>
+                            <div class="prep-actions">
+                                <div class="prep-best"><span>本模式最好</span><b id="prep-best">—</b></div>
+                                <button class="btn primary prep-start" id="prep-start" type="button">开始游戏 <span class="k">回车</span></button>
+                            </div>
+                            <p class="prep-hint" id="prep-hint">参数可在本页右上角齿轮或局内右下角设置中调整。</p>
+                        </div>
+                        <div class="sub-foot">参数保存在本机 · 下一局生效</div>
+                    </div>
+                </section>
+
                 <!-- ---------- sensitivity ---------- -->
                 <section class="screen" data-screen="sensitivity">
                     <div class="sub">
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
-                            <h2>灵敏度<span class="sub-note">cm/360 · 双向 sens</span></h2>
+                            <h2>灵敏度转换<span class="sub-note">cm/360 · 双向 sens</span></h2>
                             <div class="sub-meta">换算器 / 非官方</div>
                         </div>
                         <div class="panel sens-panel">
-                            <p class="sens-lede">双向换算：输入任意一侧的 sens，另一侧会自动算出来；也可以直接输入目标 sens 反推来源。默认 800 DPI，数值只跟 yaw 常数有关，和游戏内加速、开镜倍率无关。</p>
+                            <p class="sens-lede">双向换算：输入任意一侧的 sens，另一侧会自动算出来；也可以直接输入目标 sens 反推来源。默认 800 DPI，常用 400 / 800 / 1600 / 3200 可一键预选，也可手动输入。</p>
                             <div class="sens-bar">
                                 <div><b id="sens-dir">来源 → 目标</b><span>双向实时换算 · 默认 800 DPI</span></div>
                                 <div class="sens-bar-actions">
@@ -7885,16 +9132,19 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
                             <div class="sens-grid">
                                 <label class="sens-field"><span>来源游戏</span><select class="sel" id="sens-from"></select></label>
                                 <label class="sens-field"><span>目标游戏</span><select class="sel" id="sens-to"></select></label>
-                                <div class="sens-field">
-                                    <span>来源 DPI <button class="sens-mini" id="sens-detect" type="button">检测</button></span>
-                                    <input class="sel sens-num" id="sens-dpi" type="text" inputmode="decimal" autocomplete="off" value="800" data-label="来源 DPI">
-                                </div>
+                                <label class="sens-field"><span>来源 DPI</span><input class="sel sens-num" id="sens-dpi" type="text" inputmode="decimal" autocomplete="off" value="800" data-label="来源 DPI"></label>
                                 <label class="sens-field"><span>目标 DPI</span><input class="sel sens-num" id="sens-tdpi" type="text" inputmode="decimal" autocomplete="off" value="800" data-label="目标 DPI"></label>
+                                <div class="sens-preset-row">
+                                    <span>来源 DPI 预选</span>
+                                    <div class="sens-presets" id="sens-dpi-presets" role="group" aria-label="来源 DPI 预选">
+                                        <button type="button" data-dpi="400" aria-pressed="false">400</button>
+                                        <button type="button" data-dpi="800" aria-pressed="false">800</button>
+                                        <button type="button" data-dpi="1600" aria-pressed="false">1600</button>
+                                        <button type="button" data-dpi="3200" aria-pressed="false">3200</button>
+                                    </div>
+                                </div>
                                 <label class="sens-field"><span>来源 sens</span><input class="sel sens-num" id="sens-value" type="text" inputmode="decimal" autocomplete="off" value="1.000" data-label="来源 sens"></label>
                                 <label class="sens-field"><span>目标 sens</span><input class="sel sens-num" id="sens-tvalue" type="text" inputmode="decimal" autocomplete="off" value="0.3143" data-label="目标 sens"></label>
-                            </div>
-                            <div class="sens-help" id="sens-dpi-help" hidden>
-                                <b>浏览器不能直接读取鼠标硬件 DPI。</b> 网页只能拿到系统处理后的指针像素，<code>devicePixelRatio</code> 只是屏幕缩放，不是鼠标 DPI。请查看鼠标驱动（G HUB / Synapse / SteelSeries GG）或说明书后手动填写；默认按 800 DPI。 <button type="button" id="sens-dpi-default">使用 800</button>
                             </div>
                             <div class="sens-out" id="sens-out">
                                 <div><span>来源 CM/360</span><b id="sens-cm">—</b></div>
@@ -8067,8 +9317,26 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             <div class="pause-list">
                 <button class="btn primary" id="pause-resume" type="button">继续 <span class="k">ESC</span></button>
                 <button class="btn" id="pause-restart" type="button">重开 <span class="k">R</span></button>
-                <button class="btn" id="pause-mode" type="button">设置</button>
+                <button class="btn" id="pause-settings" type="button">设置 <span class="pause-sub">辅助 · 外观 · 音效</span></button>
                 <button class="btn ghost" id="pause-quit" type="button">退出到菜单</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ov" id="ov-mode-settings" data-mode="speed">
+        <div class="oms-card">
+            <div class="oms-head">
+                <div>
+                    <span class="res-tag">本模式设置</span>
+                    <b class="oms-mode" id="oms-mode">—</b>
+                </div>
+                <button class="oms-close" id="oms-close" type="button" aria-label="关闭设置">×</button>
+            </div>
+            <div class="oms-meta" id="oms-meta"></div>
+            <div class="oms-body" id="oms-body"></div>
+            <div class="oms-foot">
+                <span id="oms-note">参数保存到本地 · 下一局生效</span>
+                <button class="btn primary" id="oms-done" type="button">完成</button>
             </div>
         </div>
     </div>
@@ -8089,7 +9357,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
             <div class="res-trail" id="res-trail-wrap" style="display:none"><canvas id="res-trail"></canvas><div class="res-chart-note">鼠标轨迹 · 本局路径</div></div>
             <div class="res-actions">
                 <button class="btn primary" id="res-retry" type="button">再来一局 <span class="k">R</span></button>
-                <button class="btn" id="res-mode" type="button">去设置</button>
+                <button class="btn" id="res-mode" type="button">模式设置</button>
                 <button class="btn" id="res-home" type="button">主菜单</button>
             </div>
         </div>
@@ -8124,6 +9392,10 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '反应测试': 'Reaction Test',
         '数据': 'Stats',
         '设置': 'Settings',
+        '模式设置': 'Mode Settings',
+        '准备': 'Setup',
+        '本模式最好': 'Mode best',
+        '开始游戏': 'Start run',
         '玩法': 'How to Play',
         '关于': 'About',
         '音效': 'Sound',
@@ -8343,6 +9615,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         '恢复默认': 'Reset',
         '启用动态变色（关＝源站线性）': 'Enable dynamics (off = original linear mapping)',
         '灵敏度': 'Sensitivity',
+        '灵敏度转换': 'Sensitivity Converter',
         '平滑': 'Smoothing',
         '掉血 / 回血分开速率': 'Separate drain / gain rates',
         '掉血滞后': 'Drain smoothing',
@@ -11843,7 +13116,7 @@ const game = new AntiBallsheetGame(
         I18N.setLang(EN ? 'zh' : 'en');
         try {
             sessionStorage.setItem('abs-lang-return', st.screen || 'home');
-            sessionStorage.setItem('abs-lang-tab', st.setTab || 'mode');
+            sessionStorage.setItem('abs-lang-tab', st.setTab || 'assist');
             sessionStorage.setItem('abs-lang-mode', st.setMode || 'speed');
         } catch (e) { }
         location.reload();
@@ -11889,6 +13162,10 @@ const game = new AntiBallsheetGame(
     var hud = $('#abs-hud');
     var ovPause = $('#ov-pause');
     var ovResults = $('#ov-results');
+    var ovModeSettings = $('#ov-mode-settings');
+    var omsBody = $('#oms-body');
+    var prepRules = $('#prep-rules');
+    var prepSummary = $('#prep-summary');
     var screens = $$('.screen', ui);
     var bs = window.BallSheet;
     var sch = window.Schulte;
@@ -12271,7 +13548,11 @@ const game = new AntiBallsheetGame(
         muted: store.get('abs-muted', '0') === '1',
         game: 'abs',
         lastGame: 'abs',
-        setMode: 'speed'
+        setMode: 'speed',
+        prepMode: 'speed',
+        omsReturn: null,
+        omsPausedByOpen: false,
+        omsMode: 'speed'
     };
 
     var rafId = null;
@@ -12453,8 +13734,9 @@ const game = new AntiBallsheetGame(
         });
         try { ui.scrollTop = 0; } catch (e) { }
 
-        if (name === 'settings') { setTab(st.setTab || 'mode'); }
+        if (name === 'settings') { setTab(st.setTab || 'assist'); }
         if (name === 'sensitivity') { sensPaint(); }
+        if (name === 'prep') { prepPaint(); }
         if (name === 'stats') { fillCats(); renderStats($('#stats-cat').value); }
         if (name === 'home') { refreshHome(); focusFirst(); }
     }
@@ -12505,12 +13787,12 @@ const game = new AntiBallsheetGame(
         sensPaint('source');
     }
 
-    function sensSet800() {
-        var dpi = $('#sens-dpi'), tdpi = $('#sens-tdpi'), help = $('#sens-dpi-help');
-        if (dpi) { dpi.value = '800'; }
-        if (tdpi) { tdpi.value = '800'; }
-        if (help) { help.hidden = true; }
-        sensPaint();
+    function sensSetPreset(value) {
+        var dpi = $('#sens-dpi');
+        if (!dpi) { return; }
+        dpi.value = String(value);
+        sensAnchor = 'source';
+        sensPaint('source');
     }
 
     function sensPaint(anchor) {
@@ -12532,7 +13814,7 @@ const game = new AntiBallsheetGame(
             }
         }
         var srcEl = $('#sens-value'), tgtEl = $('#sens-tvalue');
-        var swapEl = $('#sens-swap'), detectEl = $('#sens-detect'), defaultEl = $('#sens-dpi-default');
+        var swapEl = $('#sens-swap');
         if (!srcEl || !tgtEl) { return; }
         if (!sensBound) {
             sensBound = true;
@@ -12550,14 +13832,14 @@ const game = new AntiBallsheetGame(
                 });
             });
             if (swapEl) { swapEl.addEventListener('click', sensSwap); }
-            if (detectEl) {
-                detectEl.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var help = $('#sens-dpi-help');
-                    if (help) { help.hidden = !help.hidden; }
+            var presetEl = $('#sens-dpi-presets');
+            if (presetEl) {
+                presetEl.addEventListener('click', function (e) {
+                    var btn = e.target.closest('button[data-dpi]');
+                    if (!btn || !presetEl.contains(btn)) { return; }
+                    sensSetPreset(Number(btn.getAttribute('data-dpi')));
                 });
             }
-            if (defaultEl) { defaultEl.addEventListener('click', sensSet800); }
         }
         var f = sensGame(from.value), t = sensGame(to.value);
         var dir = $('#sens-dir');
@@ -12598,6 +13880,15 @@ const game = new AntiBallsheetGame(
             if (out.hasOwnProperty(id)) {
                 var node = $(id);
                 if (node) { node.textContent = out[id]; }
+            }
+        }
+        var presets = $('#sens-dpi-presets');
+        if (presets) {
+            var presetBtns = presets.querySelectorAll('button[data-dpi]');
+            for (var pi = 0; pi < presetBtns.length; pi++) {
+                var on = Number(presetBtns[pi].getAttribute('data-dpi')) === dpi;
+                presetBtns[pi].classList.toggle('is-on', on);
+                presetBtns[pi].setAttribute('aria-pressed', on ? 'true' : 'false');
             }
         }
         var errEl = $('#sens-error');
@@ -12712,7 +14003,7 @@ const game = new AntiBallsheetGame(
         }
     })();
 
-    var SET_TABS = ['mode', 'assist', 'look', 'sfx'];
+    var SET_TABS = ['assist', 'look', 'sfx'];
     var SET_MODES = ['speed', 'bs', 'st', 'rt'];
 
     function modeFromGame(game) {
@@ -12725,10 +14016,10 @@ const game = new AntiBallsheetGame(
     function setMode(mode) {
         if (SET_MODES.indexOf(mode) < 0) { mode = 'speed'; }
         st.setMode = mode;
-        $$('.mode-tab', ui).forEach(function (b) {
+        $$('.mode-tab', doc).forEach(function (b) {
             b.classList.toggle('is-on', b.getAttribute('data-modeset') === mode);
         });
-        $$('[data-modecard]', ui).forEach(function (card) {
+        $$('[data-modecard]', doc).forEach(function (card) {
             card.classList.toggle('is-off', card.getAttribute('data-modecard') !== mode);
         });
 
@@ -12755,7 +14046,7 @@ const game = new AntiBallsheetGame(
     }
 
     function setTab(tab) {
-        if (SET_TABS.indexOf(tab) < 0) { tab = 'mode'; }
+        if (SET_TABS.indexOf(tab) < 0) { tab = 'assist'; }
         st.setTab = tab;
         $$('.set-tab', ui).forEach(function (b) {
             b.classList.toggle('is-on', b.getAttribute('data-tab') === tab);
@@ -12764,9 +14055,7 @@ const game = new AntiBallsheetGame(
             p.classList.toggle('is-on', p.getAttribute('data-pane') === tab);
         });
         var meta = $('#mode-meta');
-        if (tab === 'mode') {
-            setMode(st.setMode || 'speed');
-        } else if (tab === 'assist') {
+        if (tab === 'assist') {
             assistPaint();
             if (meta) { meta.textContent = '辅助记录 · 下一局生效'; }
         } else if (tab === 'look') {
@@ -12797,9 +14086,323 @@ const game = new AntiBallsheetGame(
             ball.style.height = d + 'px';
             var sizeEl = $('#preview-size');
             if (sizeEl) {
-                sizeEl.textContent = Math.round(s.ballSize / 100 * 600) + ' 像素球 · 600 像素场地';
+                sizeEl.innerHTML = Math.round(s.ballSize / 100 * 600) + ' 像素球<br>600 像素场地';
             }
         }
+    }
+
+    /* ============================================================
+       mode preparation screen + in-run mode settings drawer
+       ============================================================ */
+    var PREP_MODES = ['speed', 'bs', 'st', 'rt'];
+
+    var PREP_ST_TAG = {
+        light: 'SEQ', classic: 'CLASSIC', revlight: 'REV', revclassic: 'REV CLASSIC',
+        memory: 'MEMORY', reaction: 'REACTION', letters: 'LETTERS', colors: 'COLORS',
+        gorbow: 'GORBOW', irregular: 'IRREGULAR', frenzy: 'FRENZY', blind: 'BLIND',
+        flashlight: 'FLASHLIGHT', math: 'MATH'
+    };
+
+    /* keep the prep picker in sync with the engine's full 14-rule set */
+    var PREP_ST_RULES = (sch && sch.types) ? sch.types : [];
+
+    function prepInfo(mode) {
+        if (mode === 'bs') {
+            return {
+                kicker: T('MODE 02 / BIGBALL', 'MODE 02 / BIGBALL'),
+                name: 'BIGBALL',
+                desc: T('重心球会随血量变色。血条归零前接住尽可能多的球，溢出会化成粉色细血条。', 'The core ball shifts colour with HP. Catch as many balls as you can before HP hits zero; overflow becomes a thin pink bar.'),
+                pill: T('生存', 'SURVIVAL'),
+                sub: T('确认当前参数，再开始', 'Check your setup, then start'),
+                hint: T('血量、压力、得分与旋转可在本页右上角齿轮或局内右下角设置里调整。', 'HP, pressure, score and spin live in the gear at the top right of this page or the settings button at the lower right in-run.')
+            };
+        }
+        if (mode === 'st') {
+            return {
+                kicker: T('MODE 03 / SCHULTE', 'MODE 03 / SCHULTE'),
+                name: T('舒尔特方格', 'Schulte Grid'),
+                desc: T('先选这一局要用的规则；进入本局后，再点场内「开始」才计时。尺寸和倒计时可在准备页齿轮里改。', 'Pick the rule for this run; after entering, press the in-grid Start to begin timing. Size and countdown live in the gear on this page.'),
+                pill: T('14 种规则', '14 RULES'),
+                sub: T('先选规则，再开始', 'Pick a rule, then start'),
+                hint: T('尺寸、倒计时、方格旋转与左右键颜色可在本页右上角齿轮或局内右下角设置里调整。', 'Size, countdown, grid spin and L/R colours live in the gear at the top right of this page or the settings button at the lower right in-run.')
+            };
+        }
+        if (mode === 'rt') {
+            return {
+                kicker: T('MODE 04 / REACTION', 'MODE 04 / REACTION'),
+                name: T('反应测试', 'Reaction Test'),
+                desc: T('绿灯亮起后尽快点击。多次有效点击取平均，太早点击只重来，不计入成绩。', 'Click as soon as the light turns green. Valid trials are averaged; too-early clicks retry and never count.'),
+                pill: T('平均计时', 'MEAN TIME'),
+                sub: T('确认次数，再开始', 'Check trials, then start'),
+                hint: T('次数与预设在局内右下角的反应测试设置里调整。', 'Trial count and presets live in the reaction settings button at the lower right in-run.')
+            };
+        }
+        return {
+            kicker: T('MODE 01 / BALLSHEET', 'MODE 01 / BALLSHEET'),
+            name: 'BALLSHEET',
+            desc: T('球数、球径和光标大小沿用当前存档；碰到第一个球才开始计时。', 'Ball count, size and cursor size come from the saved setup; the clock starts on your first touch.'),
+            pill: T('经典', 'CLASSIC'),
+            sub: T('确认参数，再开始', 'Check your setup, then start'),
+            hint: T('球数、球径与光标大小在局内右下角的 BALLSHEET 设置里调整。', 'Ball count, ball size and cursor size live in the BALLSHEET settings button at the lower right in-run.')
+        };
+    }
+
+    function prepChip(label, value) {
+        var el = doc.createElement('span');
+        el.className = 'prep-chip';
+        var l = doc.createElement('b');
+        l.textContent = String(value);
+        el.appendChild(doc.createTextNode(label + ' '));
+        el.appendChild(l);
+        return el;
+    }
+
+    function prepBest(mode) {
+        try {
+            if (mode === 'speed') {
+                var pb = pbOf(modeCat(currentMode()));
+                return pb === null ? '—' : fmt(pb) + ' s';
+            }
+            if (mode === 'bs') {
+                var bpb = bs ? bs.pb() : null;
+                return bpb === null ? '—' : fmt(bpb) + ' s';
+            }
+            if (mode === 'st') {
+                var cfg = sch ? sch.settings() : { size: 5, type: 'light' };
+                var spb = sch ? sch.pb(cfg.size, cfg.type) : null;
+                return spb === null ? '—' : fmt(spb.time) + ' s';
+            }
+            var rpb = rt ? rt.pb() : null;
+            return rpb === null ? '—' : fmt(rpb, 1) + ' ms';
+        } catch (e) { return '—'; }
+    }
+
+    function prepPaint() {
+        var mode = PREP_MODES.indexOf(st.prepMode) < 0 ? 'speed' : st.prepMode;
+        var info = prepInfo(mode);
+        var prep = $('#prep-screen');
+        if (prep) { prep.setAttribute('data-mode', mode); }
+        $('#prep-kicker').textContent = info.kicker;
+        $('#prep-name').textContent = info.name;
+        $('#prep-desc').textContent = info.desc;
+        $('#prep-pill').textContent = info.pill;
+        $('#prep-subnote').textContent = info.sub;
+        $('#prep-hint').textContent = info.hint;
+        $('#prep-best').textContent = prepBest(mode);
+
+        if (prepRules) { prepRules.innerHTML = ''; }
+        if (prepSummary) { prepSummary.innerHTML = ''; }
+
+        if (mode === 'st' && sch) {
+            var cfg = sch.settings();
+            if (prepRules) {
+                prepRules.style.display = '';
+                PREP_ST_RULES.forEach(function (rule) {
+                    var b = doc.createElement('button');
+                    b.type = 'button';
+                    b.className = 'prep-rule' + (cfg.type === rule.k ? ' is-on' : '');
+                    b.setAttribute('data-prep-rule', rule.k);
+                    b.setAttribute('aria-pressed', cfg.type === rule.k ? 'true' : 'false');
+                    b.innerHTML = '<b>' + (EN ? rule.n : (rule.cn || rule.n)) + '</b><em>'
+                        + (PREP_ST_TAG[rule.k] || rule.k.toUpperCase()) + '</em><span>'
+                        + (EN ? rule.de : rule.d) + '</span>';
+                    bindTap(b, function () {
+                        var patch = { type: rule.k };
+                        if (rule.k === 'irregular' && cfg.size !== 7) { patch.size = 7; }
+                        sch.saveSettings(patch);
+                        prepPaint();
+                    });
+                    prepRules.appendChild(b);
+                });
+            }
+            if (prepSummary) {
+                prepSummary.appendChild(prepChip(T('尺寸', 'SIZE'), cfg.size + '×' + cfg.size));
+                prepSummary.appendChild(prepChip(T('倒计时', 'COUNTDOWN'), fmt(cfg.cdMs / 1000, 1) + ' s'));
+                prepSummary.appendChild(prepChip(T('规则', 'RULE'), sch.typeName(cfg.type)));
+            }
+        } else {
+            if (prepRules) { prepRules.style.display = 'none'; }
+            if (prepSummary) {
+                if (mode === 'bs' && bs) {
+                    var bset = bs.settings();
+                    prepSummary.appendChild(prepChip('HP', bset.hp));
+                    prepSummary.appendChild(prepChip(T('压力', 'PRESSURE'), bset.pressure));
+                    prepSummary.appendChild(prepChip(T('得分', 'SCORE'), bset.gain));
+                } else if (mode === 'rt' && rt) {
+                    var rset = rt.settings();
+                    prepSummary.appendChild(prepChip(T('次数', 'TRIALS'), rset.count));
+                    prepSummary.appendChild(prepChip(T('计分', 'SCORING'), T('平均', 'MEAN')));
+                } else {
+                    var sm = currentMode();
+                    prepSummary.appendChild(prepChip(T('球数', 'BALLS'), sm.ballsToCatch));
+                    prepSummary.appendChild(prepChip(T('球径', 'SIZE'), String(sm.ballSize) + '%'));
+                    prepSummary.appendChild(prepChip(T('光标', 'CURSOR'), String(sm.cursorSize)));
+                }
+            }
+        }
+
+        setTimeout(function () {
+            var start = $('#prep-start');
+            if (start) { try { start.focus({ preventScroll: true }); } catch (e) { start.focus(); } }
+        }, 40);
+    }
+
+    function openPrep(mode) {
+        st.prepMode = PREP_MODES.indexOf(mode) < 0 ? 'speed' : mode;
+        st.returnTo = null;
+        showScreen('prep');
+    }
+
+    function startPrep() {
+        var mode = st.prepMode;
+        if (mode === 'bs') { startBsRun(); return; }
+        if (mode === 'rt') { startRtRun(); return; }
+        if (mode === 'st') {
+            startStRun();
+            /* the rule was chosen on the prep page, but the run itself still
+               waits for the player to press the in-grid Start pill */
+            return;
+        }
+        startFreshRun();
+    }
+
+    function omsName(mode) {
+        if (mode === 'bs') { return 'BIGBALL'; }
+        if (mode === 'st') { return T('舒尔特', 'Schulte'); }
+        if (mode === 'rt') { return T('反应测试', 'Reaction'); }
+        return 'BALLSHEET';
+    }
+
+    function omsMetaItems(mode) {
+        var items = [];
+        if (mode === 'st' && sch) {
+            var sc = sch.settings();
+            items = [
+                [T('规则', 'RULE'), sch.typeName(sc.type)],
+                [T('盘面', 'GRID'), sc.size + ' × ' + sc.size + ' · ' + (sc.size * sc.size) + T(' 格', ' cells')],
+                [T('倒计时', 'COUNTDOWN'), sc.cdMs ? fmt(sc.cdMs / 1000, 1) + ' s' : T('关', 'Off')]
+            ];
+        } else if (mode === 'bs' && bs) {
+            var bset = bs.settings();
+            items = [
+                ['HP', String(bset.hp)],
+                [T('压力', 'PRESSURE'), String(bset.pressure)],
+                [T('得分', 'GAIN'), String(bset.gain)],
+                [T('快球', 'FAST BALL'), (bset.cheese === undefined ? 100 : bset.cheese) + ' ms']
+            ];
+        } else if (mode === 'rt' && rt) {
+            var rset = rt.settings();
+            items = [
+                [T('次数', 'TRIALS'), String(rset.count)],
+                [T('计分', 'SCORING'), T('平均', 'MEAN')],
+                [T('等待', 'WAIT'), '1.2–4.0 s'],
+                [T('抢跑', 'FALSE START'), T('重试', 'RETRY')]
+            ];
+        } else {
+            var sm = currentMode();
+            items = [
+                [T('接球', 'BALLS'), String(sm.ballsToCatch)],
+                [T('球径', 'SIZE'), String(sm.ballSize) + '%'],
+                [T('光标', 'CURSOR'), String(sm.cursorSize)]
+            ];
+        }
+        return items;
+    }
+
+    function paintOmsMeta() {
+        var host = $('#oms-meta');
+        if (!host) { return; }
+        var items = omsMetaItems(st.omsMode || 'speed');
+        host.innerHTML = '';
+        host.style.gridTemplateColumns = 'repeat(' + Math.max(1, items.length) + ', minmax(0, 1fr))';
+        items.forEach(function (it, i) {
+            var cell = doc.createElement('div');
+            if (i === 0) { cell.className = 'is-lead'; }
+            var lab = doc.createElement('span');
+            lab.textContent = it[0];
+            var val = doc.createElement('b');
+            val.textContent = it[1];
+            cell.appendChild(lab);
+            cell.appendChild(val);
+            host.appendChild(cell);
+        });
+    }
+
+    function openModeSettings(mode, from) {
+        if (!ovModeSettings) { return; }
+        var m = SET_MODES.indexOf(mode) < 0 ? 'speed' : mode;
+        st.omsMode = m;
+        st.omsReturn = from || 'game';
+        st.omsPausedByOpen = false;
+
+        if (st.omsReturn === 'game') {
+            if (st.playing && !st.paused) {
+                pauseGame();
+                if (!st.paused) { return; }
+                st.omsPausedByOpen = true;
+            }
+            if (ovPause) { ovPause.classList.remove('is-open'); }
+        } else if (st.omsReturn === 'pause') {
+            if (ovPause) { ovPause.classList.remove('is-open'); }
+            if (hud) { hud.classList.add('is-dim'); }
+        } else if (st.omsReturn === 'results') {
+            if (ovResults) { ovResults.classList.remove('is-open'); }
+        } else {
+            if (ovPause) { ovPause.classList.remove('is-open'); }
+            if (hud) { hud.classList.remove('is-dim'); }
+        }
+
+        ovModeSettings.setAttribute('data-mode', m);
+        setMode(m);
+        var title = $('#oms-mode');
+        if (title) { title.textContent = omsName(m); }
+        paintOmsMeta();
+        var note = $('#oms-note');
+        if (note) {
+            note.textContent = st.omsReturn === 'prep'
+                ? T('保存后本局生效', 'Applies to this run')
+                : T('参数保存到本地 · 下一局生效', 'Saved locally · applies next run');
+        }
+        ovModeSettings.classList.add('is-open');
+        setTimeout(function () {
+            var close = $('#oms-close');
+            if (close) { try { close.focus({ preventScroll: true }); } catch (e) { close.focus(); } }
+        }, 30);
+    }
+
+    function closeModeSettings() {
+        if (!ovModeSettings || !ovModeSettings.classList.contains('is-open')) { return; }
+        ovModeSettings.classList.remove('is-open');
+        var back = st.omsReturn;
+        st.omsReturn = null;
+
+        if (back === 'pause') {
+            if (ovPause) { ovPause.classList.add('is-open'); }
+            if (hud) { hud.classList.add('is-dim'); }
+            try { $('#pause-resume').focus({ preventScroll: true }); } catch (e) { }
+        } else if (back === 'results') {
+            if (ovResults) { ovResults.classList.add('is-open'); }
+        } else if (back === 'prep') {
+            prepPaint();
+            setTimeout(function () {
+                var gear = $('#prep-mode-open');
+                if (gear) { try { gear.focus({ preventScroll: true }); } catch (e) { gear.focus(); } }
+            }, 30);
+        } else if (st.omsPausedByOpen) {
+            st.omsPausedByOpen = false;
+            resumeGame();
+        } else if (hud) {
+            hud.classList.remove('is-dim');
+        }
+    }
+
+    function openSettingsFromPause() {
+        if (!ovPause) { return; }
+        st.returnTo = 'pause';
+        ovPause.classList.remove('is-open');
+        if (hud) { hud.classList.remove('is-on', 'is-dim'); }
+        if (ui) { ui.classList.remove('is-hidden'); }
+        showScreen('settings');
     }
 
     function focusFirst() {
@@ -12818,10 +14421,10 @@ const game = new AntiBallsheetGame(
     }
 
     function act(name) {
-        if (name === 'play') { startFreshRun(); return; }
-        if (name === 'ballsheet') { startBsRun(); return; }
-        if (name === 'schulte') { startStRun(); return; }
-        if (name === 'reaction') { startRtRun(); return; }
+        if (name === 'play') { openPrep('speed'); return; }
+        if (name === 'ballsheet') { openPrep('bs'); return; }
+        if (name === 'schulte') { openPrep('st'); return; }
+        if (name === 'reaction') { openPrep('rt'); return; }
         st.returnTo = null;
         showScreen(name);
     }
@@ -12863,8 +14466,9 @@ const game = new AntiBallsheetGame(
         var c = doc.querySelector('.game-container');
         if (!c) { return; }
         var on = hud && hud.classList.contains('is-on');
+        var isStHud = !!(on && hud.classList.contains('is-st-hud'));
         var top = 0;
-        if (on) {
+        if (on && !isStHud) {
             var head = $('.hud-top', hud);
             if (head) { top = Math.max(top, head.getBoundingClientRect().bottom); }
             $$('.bs-row.is-on', hud).forEach(function (row) {
@@ -12877,25 +14481,32 @@ const game = new AntiBallsheetGame(
         var reserve = vh < 560 ? 34 : 48;
         var leftBound = 0;
         var rightBound = 0;
-        /* phones: keep the square clear of the bottom-left BALLSHEET card */
-        if (on && vw <= 480 && hud.classList.contains('is-ball-hud')) {
-            var bha = $('#ball-hud-a');
-            var bh = bha ? bha.getBoundingClientRect() : null;
+        var bottomCard = isStHud ? $('#st-hud-a') : $('.hud.is-ball-hud #ball-hud-a');
+        /* phones: keep the square clear of the bottom-left card */
+        if (on && vw <= 480 && (isStHud || hud.classList.contains('is-ball-hud'))) {
+            var bh = bottomCard ? bottomCard.getBoundingClientRect() : null;
             if (bh && bh.height > 0) { reserve = Math.max(reserve, vh - bh.top + 8); }
         }
         /* short landscape: the bottom-left card sits beside the field, not on it */
-        if (on && vh < 700 && vw > vh && hud.classList.contains('is-ball-hud')) {
-            var bl = $('#ball-hud-a');
-            var bw = bl ? bl.getBoundingClientRect().width : 224;
+        if (on && vh < 700 && vw > vh && (isStHud || hud.classList.contains('is-ball-hud'))) {
+            var bw = bottomCard ? bottomCard.getBoundingClientRect().width : 224;
             leftBound = Math.min(vw * .40, bw + 18);
             rightBound = Math.min(vw * .34, 218);
             availW = Math.max(150, vw - leftBound - rightBound - 8);
             reserve = 12;
         }
+        /* narrow desktop: the card would clip the left edge of a 600 px stage */
+        if (on && isStHud && vw >= 720 && vw <= 1210) {
+            var cw = bottomCard ? bottomCard.getBoundingClientRect().width : 252;
+            leftBound = Math.max(leftBound, Math.min(vw * .40, cw + 22));
+            rightBound = Math.max(rightBound, Math.min(vw * .34, 218));
+            availW = Math.max(150, vw - leftBound - rightBound - 8);
+        }
         var availH = vh - top - (on ? reserve : 14);
         var s = Math.min(availW / FIELD_PX, availH / FIELD_PX, 1);
         if (!isFinite(s) || s <= 0) { s = 1; }
-        if (s > 0.995) {
+        if (s > 0.995) { s = 1; }
+        if (s === 1 && !leftBound && !rightBound) {
             c.style.transform = '';
             c.style.transformOrigin = '';
             c.style.position = '';
@@ -12919,7 +14530,24 @@ const game = new AntiBallsheetGame(
         requestAnimationFrame(function () { requestAnimationFrame(fitStage); });
     }
 
+    function modeShort(mode) {
+        if (mode === 'bs') { return 'BIGBALL'; }
+        if (mode === 'st') { return T('舒尔特', 'Schulte'); }
+        if (mode === 'rt') { return T('反应', 'Reaction'); }
+        return T('经典', 'Classic');
+    }
+
     function syncHudSpin() {
+        var gear = $('#hud-mode-settings');
+        if (gear) {
+            var gm = st.game === 'abs' ? 'speed' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : 'rt'));
+            var gname = omsName(gm);
+            var glabel = $('#hud-mode-settings-label');
+            gear.title = gname + ' 设置';
+            gear.setAttribute('aria-label', gname + ' 设置');
+            gear.setAttribute('data-mode', gm);
+            if (glabel) { glabel.textContent = modeShort(gm); }
+        }
         var btn = $('#hud-spin');
         if (!btn) { return; }
         var mode = st.game === 'abs' ? 'abs' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : ''));
@@ -13003,6 +14631,54 @@ const game = new AntiBallsheetGame(
         $('#bha-bar-fill').style.width = fill && fill.style.width ? fill.style.width : '0%';
     }
 
+    /* Schulte uses the same bottom-left card grammar as BALLSHEET. The
+       live timer / progress / bar / grid row / rule tip are MOVED into
+       the card so every engine write keeps painting the same node. */
+    function syncStHudA(isSt) {
+        if (!hud) { return; }
+        var card = $('#st-hud-a');
+        hud.classList.toggle('is-st-hud', !!isSt);
+        if (!card) { return; }
+        var pb = $('#hud-pb');
+        var timer = $('#timer');
+        var count = $('#balls-left');
+        var bar = $('#hud-bar-fill');
+        var row = $('#st-row');
+        var tip = $('#st-tip');
+        if (isSt) {
+            var pbSlot = $('#stha-pb');
+            if (pb && pbSlot && pb.parentNode !== pbSlot) { pbSlot.appendChild(pb); }
+            var timeSlot = $('#stha-time-slot');
+            if (timer && timeSlot && timer.parentNode !== timeSlot) { timeSlot.appendChild(timer); }
+            var countSlot = $('#stha-count-slot');
+            if (count && countSlot && count.parentNode !== countSlot) { countSlot.appendChild(count); }
+            var barSlot = $('#stha-bar');
+            if (bar && barSlot && bar.parentNode !== barSlot) { barSlot.appendChild(bar); }
+            var gridSlot = $('#stha-grid');
+            if (row && gridSlot && row.parentNode !== gridSlot) { gridSlot.appendChild(row); }
+            var footSlot = $('#stha-foot');
+            if (tip && footSlot && tip.parentNode !== footSlot) { footSlot.appendChild(tip); }
+            return;
+        }
+        var mid = $('.hud-mid', hud);
+        if (pb && mid && pb.parentNode !== mid) { mid.appendChild(pb); }
+        var timeHome = $('#slot-timer');
+        if (timer && timeHome && timer.parentNode !== timeHome) { timeHome.appendChild(timer); }
+        var countHome = $('#slot-balls');
+        if (count && countHome && count.parentNode !== countHome) { countHome.appendChild(count); }
+        var barHome = $('.hud-bar', hud);
+        if (bar && barHome && bar.parentNode !== barHome) { barHome.appendChild(bar); }
+        var rtRow = $('#rt-row');
+        if (row && row.parentNode !== hud) {
+            if (rtRow && rtRow.parentNode === hud) { hud.insertBefore(row, rtRow); }
+            else { hud.appendChild(row); }
+        }
+        if (tip && tip.parentNode !== hud) {
+            if (barHome && barHome.parentNode === hud) { hud.insertBefore(tip, barHome); }
+            else { hud.appendChild(tip); }
+        }
+    }
+
     function watchBallHudA() {
         if (window.__bhaObserver) { return; }
         var ids = ['timer', 'balls-left', 'hud-pb', 'hud-bar-fill', 'bs-p', 'bs-eps', 'bs-balls', 'bs-rt', 'bs-maxeps'];
@@ -13043,6 +14719,7 @@ const game = new AntiBallsheetGame(
         if (tip) { tip.classList.toggle('is-on', mode === 'st'); }
         var isBallHud = st.game === 'abs' || st.game === 'bs';
         hud.classList.toggle('is-ball-hud', isBallHud);
+        syncStHudA(mode === 'st');
         syncHudSpin();
         syncHudLr();
         syncBallHudA();
@@ -13184,6 +14861,8 @@ const game = new AntiBallsheetGame(
         hudLabels('st');
         var size = sch.settings().size;
         var type = sch.settings().type;
+        var stSub = $('#stha-sub');
+        if (stSub) { stSub.textContent = sch.typeName(type); }
         $('#hud-mode').textContent = '舒尔特 · ' + sch.typeName(type) + ' ' + size + ' × ' + size;
         var tip = $('#st-tip');
         if (tip) {
@@ -13194,8 +14873,11 @@ const game = new AntiBallsheetGame(
         $('#hud-pb').textContent = pb === null ? '最好 —' : '最好 ' + fmt(pb.time) + ' 秒';
         $('#hud-bar-fill').style.width = '0%';
         var stTimer = $('#timer'), stCount = $('#balls-left');
-        if (stTimer) { stTimer.textContent = '0.00'; }
-        if (stCount) { stCount.textContent = '0 / ' + (size * size); }
+        if (stTimer) { stTimer.textContent = '0.00'; stTimer.style.display = ''; }
+        if (stCount) { stCount.textContent = '0 / ' + (size * size); stCount.style.display = ''; }
+        var rtRound = $('#rt-hud-round'), rtAvg = $('#rt-hud-avg');
+        if (rtRound) { rtRound.style.display = 'none'; }
+        if (rtAvg) { rtAvg.style.display = 'none'; }
         sch.start(null, onStFinish);
         scheduleFit();
     }
@@ -14504,7 +16186,7 @@ const game = new AntiBallsheetGame(
             sum.textContent = sch.typeName(cfg.type) + ' · ' + cfg.size + ' × ' + cfg.size + ' · ' +
                 (cfg.size * cfg.size) + T(' 格 · 倒计时 ', ' cells · Countdown ') + cdText;
         }
-        if (st.setTab === 'mode' && st.setMode === 'st') {
+        if (st.setMode === 'st') {
             var meta = $('#mode-meta');
             if (meta) { meta.textContent = cfg.size + ' × ' + cfg.size + ' · ' + sch.typeName(cfg.type); }
         }
@@ -14554,7 +16236,7 @@ const game = new AntiBallsheetGame(
         }
         var hint = $('#menu-rt-hint');
         if (hint) { hint.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
-        if (st.setTab === 'mode' && st.setMode === 'rt') {
+        if (st.setMode === 'rt') {
             var meta = $('#mode-meta');
             if (meta) { meta.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
         }
@@ -15052,6 +16734,13 @@ const game = new AntiBallsheetGame(
         if (oldStart) { oldStart.remove(); }
         zhifyPanels();
         mountBallColors();
+
+        /* the mode card lives only inside the in-run settings drawer now */
+        var modePane = $('#mode-settings-panel');
+        if (modePane && omsBody && modePane.parentNode !== omsBody) {
+            modePane.classList.add('oms-mode-panel');
+            omsBody.appendChild(modePane);
+        }
     }
 
     /* ============================================================
@@ -15419,34 +17108,39 @@ const game = new AntiBallsheetGame(
             sfx(next ? 620 : 380);
         });
 
+        bindTap($('#prep-start'), function () { sfx(720); startPrep(); });
+
         bindTap($('#hud-pause'), function () { sfx(380); pauseGame(); });
+        bindTap($('#hud-mode-settings'), function () {
+            if (!st.playing) { return; }
+            sfx(560);
+            openModeSettings(modeFromGame(st.game), 'game');
+        });
+        bindTap($('#oms-close'), function () { sfx(380); closeModeSettings(); });
+        bindTap($('#oms-done'), function () { sfx(620); closeModeSettings(); });
+        bindTap($('#prep-mode-open'), function () {
+            sfx(560);
+            openModeSettings(st.prepMode || 'speed', 'prep');
+        });
+        if (omsBody) {
+            omsBody.addEventListener('input', function () { setTimeout(paintOmsMeta, 0); });
+            omsBody.addEventListener('change', function () { setTimeout(paintOmsMeta, 0); });
+        }
+        if (ovModeSettings) {
+            ovModeSettings.addEventListener('pointerdown', function (e) {
+                if (e.target === ovModeSettings) { closeModeSettings(); }
+            });
+        }
 
         bindTap($('#pause-resume'), function () { sfx(620); resumeGame(); });
         bindTap($('#pause-restart'), function () { sfx(720); restartRun(); });
-        bindTap($('#pause-mode'), function () {
-            sfx(560);
-            st.returnTo = 'pause';
-            stLive(false);
-            ovLive(false);
-            ovPause.classList.remove('is-open');
-            ui.classList.remove('is-hidden');
-            st.setTab = 'mode';
-            st.setMode = modeFromGame(st.game);
-            showScreen('settings');
-        });
+        bindTap($('#pause-settings'), function () { sfx(560); openSettingsFromPause(); });
         bindTap($('#pause-quit'), function () { sfx(320); quitToMenu(); });
 
         bindTap($('#res-retry'), function () { sfx(720); retryRun(); });
         bindTap($('#res-mode'), function () {
             sfx(560);
-            st.returnTo = 'results';
-            stLive(false);
-            ovLive(false);
-            ovResults.classList.remove('is-open');
-            ui.classList.remove('is-hidden');
-            st.setTab = 'mode';
-            st.setMode = modeFromGame(st.game);
-            showScreen('settings');
+            openModeSettings(modeFromGame(st.game), 'results');
         });
         bindTap($('#res-home'), function () { sfx(380); quitToMenu(); });
 
@@ -15527,6 +17221,18 @@ const game = new AntiBallsheetGame(
                 e.stopImmediatePropagation();
                 restartRun();
             }
+            return;
+        }
+
+        /* ---- mode settings drawer ---- */
+        if (ovModeSettings && ovModeSettings.classList.contains('is-open')) {
+            if (k === 'Escape') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                closeModeSettings();
+                return;
+            }
+            e.stopImmediatePropagation();
             return;
         }
 
@@ -15819,14 +17525,14 @@ const game = new AntiBallsheetGame(
         var langMode = 'speed';
         try {
             langReturn = sessionStorage.getItem('abs-lang-return') || '';
-            langTab = sessionStorage.getItem('abs-lang-tab') || 'mode';
+            langTab = sessionStorage.getItem('abs-lang-tab') || 'assist';
             langMode = sessionStorage.getItem('abs-lang-mode') || 'speed';
             sessionStorage.removeItem('abs-lang-return');
             sessionStorage.removeItem('abs-lang-tab');
             sessionStorage.removeItem('abs-lang-mode');
         } catch (e) { }
         if (langReturn && document.querySelector('.screen[data-screen="' + langReturn + '"]')) {
-            st.setTab = langTab;
+            st.setTab = (langTab === 'mode') ? 'assist' : langTab;
             st.setMode = langMode;
             showScreen(langReturn);
         }
@@ -15839,3 +17545,4 @@ const game = new AntiBallsheetGame(
 </body>
 
 </html>
+
