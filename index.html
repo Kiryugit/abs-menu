@@ -69,25 +69,6 @@ body:has(.ui-root.is-hidden):not(.game-bg-grid) { background: #000; }
 
 .game-bg .bg-vignette { inset: 0; }
 
-body.game-bg-grid .bs-field {
-    background-color: #081512;
-    background-image:
-        linear-gradient(to right, rgba(91, 242, 220, .2) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(91, 242, 220, .2) 1px, transparent 1px);
-    background-size: 42px 42px;
-    box-shadow: inset 0 0 110px 18px rgba(0, 0, 0, .58);
-}
-
-body.game-bg-grid .game-container.is-st {
-    background-color: #081512;
-    background-image:
-        linear-gradient(to right, rgba(91, 242, 220, .2) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(91, 242, 220, .2) 1px, transparent 1px),
-        linear-gradient(#081512, #081512);
-    background-size: 42px 42px, 42px 42px, auto;
-    box-shadow: inset 0 0 110px 18px rgba(0, 0, 0, .58);
-}
-
 /* 真正旋转的是这块 600×600 的场地本体：黑底、青色边框、
    内部命中圈和球全部跟着转。外层容器只负责定位和接收坐标。 */
 .bs-field {
@@ -889,10 +870,10 @@ html:has(#abs-ui.is-hidden) .mcur {
     gap: 8px;
 }
 
-/* top row: BallSheet split into two half-width entries */
+/* primary entry: one full-width BALLSHEET card; the two variants are chosen on the next screen */
 .menu-duo {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 8px;
 }
 
@@ -908,6 +889,28 @@ html:has(#abs-ui.is-hidden) .mcur {
 .menu-duo .mi:hover,
 .menu-duo .mi:focus-visible {
     transform: translateY(-2px);
+}
+
+.menu-duo .mi-combined .mi-title {
+    grid-row: 1 / 3;
+    justify-content: center;
+}
+
+.menu-duo .mi-feature.mi-combined > .mi-hint {
+    display: none;
+}
+
+.menu-duo .mi-combined::before {
+    content: "2 种玩法";
+    position: absolute;
+    right: 46px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .12em;
+    pointer-events: none;
 }
 
 .menu-duo .mi-idx {
@@ -4649,7 +4652,7 @@ body.st-skin {
 }
 
 /* the grid itself sits on pure black, no frame, no grid lines */
-body.st-skin:not(.game-bg-grid) .game-container.is-st {
+body.st-skin .game-container.is-st {
     box-shadow: none;
 }
 
@@ -5107,7 +5110,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 .assist-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     gap: 10px;
     margin-top: 12px;
 }
@@ -7614,8 +7617,9 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     isolation: isolate;
 }
 
-/* the scrim gets a soft cut-out over the bottom-left scoreboard, so the
-   live data stays sharp while the field behind it still blurs normally */
+/* the scrim covers the whole field; the live scoreboard is lifted above it
+   instead of punching a transparent window, which used to leave a black block
+   in the bottom-left corner */
 .ov::before {
     content: "";
     position: fixed;
@@ -7626,16 +7630,6 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
         radial-gradient(900px 620px at 50% 40%, color-mix(in srgb, var(--accent) 3%, transparent), transparent 70%),
         color-mix(in srgb, var(--bg) 78%, transparent);
     backdrop-filter: blur(var(--ui-blur, 3px)) saturate(.9);
-    -webkit-mask-image: linear-gradient(#000, #000), linear-gradient(#000, #000);
-    -webkit-mask-size: 100% 100%, 360px 340px;
-    -webkit-mask-position: 0 0, 0 100%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-composite: xor;
-    mask-image: linear-gradient(#000, #000), linear-gradient(#000, #000);
-    mask-size: 100% 100%, 360px 340px;
-    mask-position: 0 0, 0 100%;
-    mask-repeat: no-repeat;
-    mask-composite: exclude;
 }
 
 .ov-card,
@@ -7660,6 +7654,11 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 
 /* keep the live scoreboard above the scrim, so pause/settings never blur it */
+body:has(#ov-pause.is-open) .hud,
+body:has(#ov-mode-settings.is-open) .hud {
+    z-index: 61;
+}
+
 body:has(#ov-pause.is-open) .hud .hud-right,
 body:has(#ov-mode-settings.is-open) .hud .hud-right {
     visibility: hidden;
@@ -8265,6 +8264,170 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
 /* ============================================================
    0.9.4 · 准备页 / 模式设置抽屉 / 局内齿轮
    ============================================================ */
+
+/* ---------- BALLSHEET 玩法选择 ---------- */
+.pick-panel {
+    padding: 22px 24px 18px;
+    max-width: 940px;
+    margin: 0 auto;
+}
+
+.pick-head {
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--line);
+}
+
+.pick-kicker {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .18em;
+}
+
+.pick-head h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .06em;
+}
+
+.pick-head p {
+    margin: 7px 0 0;
+    color: var(--dim);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.pick-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.pick-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 218px;
+    padding: 18px 18px 16px;
+    overflow: hidden;
+    text-align: left;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--panel) 62%, transparent);
+    cursor: pointer;
+    transition: transform .16s, border-color .16s, background .16s;
+}
+
+.pick-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--pick-accent, var(--accent));
+    opacity: .75;
+}
+
+.pick-big { --pick-accent: var(--target); }
+.pick-speed { --pick-accent: var(--accent); }
+
+.pick-card:hover,
+.pick-card:focus-visible {
+    outline: none;
+    transform: translateY(-2px);
+    border-color: var(--pick-accent, var(--accent));
+    background: color-mix(in srgb, var(--panel) 78%, transparent);
+}
+
+.pick-card .pick-kicker {
+    margin: 0 0 8px;
+    color: color-mix(in srgb, var(--pick-accent, var(--accent)) 78%, var(--dim));
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+}
+
+.pick-name {
+    font-size: clamp(22px, 2.2vw, 28px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: .02em;
+}
+
+.pick-desc {
+    max-width: 94%;
+    margin-top: 12px;
+    color: var(--dim);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.pick-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+}
+
+.pick-meta span {
+    padding: 4px 7px;
+    color: var(--dim);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .04em;
+}
+
+.pick-go {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 18px;
+    color: var(--pick-accent, var(--accent));
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+}
+
+.pick-go b { font-size: 15px; }
+
+.pick-note {
+    margin: 15px 0 0;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .04em;
+}
+
+@media (max-width: 700px) {
+    .pick-panel { padding: 18px 16px 15px; }
+    .pick-grid { grid-template-columns: 1fr; gap: 9px; }
+    .pick-card { min-height: 0; padding: 15px 15px 14px; }
+    .pick-name { font-size: 22px; }
+    .pick-go { padding-top: 12px; }
+}
+
+@media (max-height: 560px) and (min-width: 701px) {
+    .pick-panel { padding: 13px 18px 12px; }
+    .pick-head { padding-bottom: 9px; }
+    .pick-head h3 { font-size: 17px; }
+    .pick-head p { display: none; }
+    .pick-grid { margin-top: 9px; }
+    .pick-card { min-height: 0; padding: 11px 14px 10px; }
+    .pick-desc { display: none; }
+    .pick-meta { margin-top: 8px; }
+    .pick-go { padding-top: 8px; }
+    .pick-note { margin-top: 8px; }
+}
 
 /* ---------- 准备页 ---------- */
 .prep-panel {
@@ -9486,40 +9649,33 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
 
                             <nav class="menu" id="menu" aria-label="主菜单">
                                 <div class="menu-duo">
-                                    <button class="mi mi-feature" data-act="ballsheet" type="button">
+                                    <button class="mi mi-feature mi-combined" data-act="ballsheet" type="button">
                                         <span class="mi-idx">01</span>
                                         <span class="mi-icon ic-bs" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"></circle><path d="M3 17h3l1.6-3.2 2.6 4.4 2-2.6 1.2 1.4H21"></path></svg></span>
                                         <span class="mi-title">
-                                            <span class="mi-label">BallSheet<em class="mi-en">Survival</em></span>
-                                            <span class="mi-tag">BIGBALL</span>
+                                            <span class="mi-label">BALLSHEET<em class="mi-en">ARCADE</em></span>
+                                            <span class="mi-tag">BIGBALL · 100 球</span>
                                         </span>
-                                        <span class="mi-hint">生存 · 血量 + 每秒得分</span>
-                                        <span class="mi-go">▶</span>
-                                    </button>
-                                    <button class="mi mi-launch" data-act="play" type="button">
-                                        <span class="mi-idx">02</span>
-                                        <span class="mi-icon ic-speed" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="6"></circle><path d="M12 9.5v3.9l2.4 1.7"></path><path d="M9.5 2.5h5M12 2.5v2.5"></path></svg></span>
-                                        <span class="mi-label">BALLSHEET</span>
-                                        <span class="mi-hint" id="menu-play-hint">100 球 · 球径 10%</span>
+                                        <span class="mi-hint">选择玩法 · 进入准备页</span>
                                         <span class="mi-go">▶</span>
                                     </button>
                                 </div>
                                 <button class="mi" data-act="schulte" type="button">
-                                    <span class="mi-idx">03</span>
+                                    <span class="mi-idx">02</span>
                                     <span class="mi-icon ic-st" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"></rect><path d="M9.33 4v16M14.67 4v16M4 9.33h16M4 14.67h16"></path></svg></span>
                                     <span class="mi-label">舒尔特<em class="mi-en">Schulte Grid</em></span>
                                     <span class="mi-hint">14 种规则 · 先选后开</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="reaction" type="button">
-                                    <span class="mi-idx">04</span>
+                                    <span class="mi-idx">03</span>
                                     <span class="mi-icon ic-rt" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2 5 14h5.4L9.5 22l8.5-12h-5.2z"></path></svg></span>
                                     <span class="mi-label">反应测试<em class="mi-en">Reaction Test</em></span>
                                     <span class="mi-hint" id="menu-rt-hint">10 次 · 均分</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="sensitivity" type="button">
-                                    <span class="mi-idx">05</span>
+                                    <span class="mi-idx">04</span>
                                     <span class="mi-icon ic-sens" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"></circle><path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"></circle></svg></span>
                                     <span class="mi-label">灵敏度转换<em class="mi-en">Converter</em></span>
                                     <span class="mi-hint">cm/360 · eDPI · 目标 sens</span>
@@ -9527,28 +9683,28 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 </button>
                                 <div class="menu-utils">
                                 <button class="mi" data-act="stats" type="button">
-                                    <span class="mi-idx">06</span>
+                                    <span class="mi-idx">05</span>
                                     <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6.5 20v-6M11 20v-10M15.5 20v-4M20 20v-8"></path></svg></span>
                                     <span class="mi-label">数据<em class="mi-en">Stats</em></span>
                                     <span class="mi-hint">历史 · 节奏</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="settings" type="button">
-                                    <span class="mi-idx">07</span>
+                                    <span class="mi-idx">06</span>
                                     <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3.2"></circle></svg></span>
                                     <span class="mi-label">设置<em class="mi-en">Settings</em></span>
                                     <span class="mi-hint">对局 · 外观 · 音效</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="help" type="button">
-                                    <span class="mi-idx">08</span>
+                                    <span class="mi-idx">07</span>
                                     <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.5-1 5.2-1 8 .8v13c-2.8-1.8-5.5-1.8-8-.8z"></path><path d="M20 5.5c-2.5-1-5.2-1-8 .8v13c2.8-1.8 5.5-1.8 8-.8z"></path><path d="M12 6.3v13"></path></svg></span>
                                     <span class="mi-label">玩法<em class="mi-en">How to Play</em></span>
                                     <span class="mi-hint">按键</span>
                                     <span class="mi-go">▶</span>
                                 </button>
                                 <button class="mi" data-act="about" type="button">
-                                    <span class="mi-idx">09</span>
+                                    <span class="mi-idx">08</span>
                                     <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"></circle><path d="M12 10.8v5.4"></path><circle cx="12" cy="7.6" r=".9" fill="currentColor" stroke="none"></circle></svg></span>
                                     <span class="mi-label">关于<em class="mi-en">About</em></span>
                                     <span class="mi-hint">版本 · 致谢</span>
@@ -9596,6 +9752,41 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 </div>
                             </section>
                         </aside>
+                    </div>
+                </section>
+
+                <!-- ---------- BALLSHEET variant picker ---------- -->
+                <section class="screen" data-screen="bs-pick" id="bs-pick-screen">
+                    <div class="sub pick-shell">
+                        <div class="sub-head">
+                            <button class="back" data-back type="button">← 菜单</button>
+                            <h2>BALLSHEET<span class="sub-note">选择玩法</span></h2>
+                            <div class="sub-meta">两种玩法 · 成绩独立</div>
+                        </div>
+                        <div class="panel pick-panel">
+                            <div class="pick-head">
+                                <span class="prep-kicker">BALLSHEET / MODE</span>
+                                <h3>选一个玩法</h3>
+                                <p>先进入对应准备页确认参数，再开始这一局。两种玩法的 PB 与历史分开记录。</p>
+                            </div>
+                            <div class="pick-grid">
+                                <button class="pick-card pick-big" data-pick="bs" type="button">
+                                    <span class="pick-kicker">生存 · SURVIVAL</span>
+                                    <span class="pick-name">BIGBALL</span>
+                                    <span class="pick-desc">重心球会随血量变色。球扫归零前尽量多接，漏球会掉血；活得更久、得分更高。</span>
+                                    <span class="pick-meta"><span>HP 100</span><span>压力 60</span><span>得分 35</span></span>
+                                    <span class="pick-go">进入 BIGBALL 准备页 <b>→</b></span>
+                                </button>
+                                <button class="pick-card pick-speed" data-pick="speed" type="button">
+                                    <span class="pick-kicker">速通 · SPRINT</span>
+                                    <span class="pick-name">BALLSHEET 100</span>
+                                    <span class="pick-desc">100 个球 · 球径 10%。碰球开始计时，清完所有球，用时越短越好。</span>
+                                    <span class="pick-meta"><span>100 球</span><span>球径 10%</span><span>计时</span></span>
+                                    <span class="pick-go">进入 100 球准备页 <b>→</b></span>
+                                </button>
+                            </div>
+                            <p class="pick-note">选好后进入准备页；在准备页还能改球数、球径或 BIGBALL 参数。</p>
+                        </div>
                     </div>
                 </section>
 
@@ -9742,23 +9933,8 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                     </div>
                                     <p>开启后，结算面板会画出这一局鼠标在场地里走过的完整路线，方便回看拉枪、停顿和绕路。局内不显示，不挡视线，也不会改变成绩。</p>
                                 </div>
-                                <div class="assist-card">
-                                    <div class="assist-card-top">
-                                        <span class="assist-ico" aria-hidden="true">
-                                            <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="1"></rect><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"></path></svg>
-                                        </span>
-                                        <span class="assist-title">场地背景</span>
-                                        <span class="assist-tag">局内</span>
-                                    </div>
-                                    <div class="bg-choice" id="bg-choice" role="group" aria-label="场地背景">
-                                        <button class="bg-opt is-on" data-bg="black" type="button">纯黑</button>
-                                        <button class="bg-opt" data-bg="grid" type="button">动态网格</button>
-                                    </div>
-                                    <div class="bg-sample" aria-hidden="true"><i></i><i></i><i></i></div>
-                                    <p>纯黑最干净；动态网格沿用主菜单的呼吸网格，场内会自动压暗一档，场外保持和主界面一致。</p>
-                                </div>
                             </div>
-                            <p class="assist-note">两项都立即保存，下一局生效。BALLSHEET / 舒尔特通用；鼠标轨迹只记录、不挡局内视线。</p>
+                            <p class="assist-note">鼠标轨迹立即保存，下一局生效。场地内固定纯黑；场外沿用主界面动态网格，不再提供背景开关。</p>
                         </div>
 
                         <div class="panel set-pane" data-pane="look">
@@ -14002,12 +14178,12 @@ const game = new AntiBallsheetGame(
     function applyUiPrefs() {
         var u = readUiPrefs();
         document.documentElement.style.setProperty('--ui-blur', u.blur + 'px');
-        if (document.body) { document.body.classList.toggle('game-bg-grid', u.bg === 'grid'); }
-        /* Schulte repaints its stage through inline colours; when the live
-           run is already on screen, swap those back to the shared grid. */
+        /* the field is always solid black now; only the space around it keeps
+           the main-menu breathing grid, so this class stays on permanently */
+        if (document.body) { document.body.classList.add('game-bg-grid'); }
         if (document.body && document.body.classList.contains('st-live')) {
             var stField = document.getElementById('bs-field');
-            var stBase = u.bg === 'grid' ? '' : '#0a0a0a';
+            var stBase = '#000';
             if (stField) { stField.style.backgroundColor = stBase; }
             document.documentElement.style.backgroundColor = stBase;
             document.body.style.backgroundColor = stBase;
@@ -15305,8 +15481,8 @@ const game = new AntiBallsheetGame(
     }
 
     function act(name) {
+        if (name === 'ballsheet') { showScreen('bs-pick'); return; }
         if (name === 'play') { openPrep('speed'); return; }
-        if (name === 'ballsheet') { openPrep('bs'); return; }
         if (name === 'schulte') { openPrep('st'); return; }
         if (name === 'reaction') { openPrep('rt'); return; }
         st.returnTo = null;
@@ -15660,16 +15836,15 @@ const game = new AntiBallsheetGame(
         var c = doc.querySelector('.game-container');
         var f = doc.querySelector('#bs-field');
         var de = doc.documentElement;
-        var gridBg = readUiPrefs().bg === 'grid';
         if (on) {
             if (c) { c.classList.add('is-st'); }
             if (f) {
                 f.classList.add('is-st');
-                f.style.backgroundColor = gridBg ? '' : '#0a0a0a';
+                f.style.backgroundColor = '#000';
                 f.style.borderColor = 'transparent';
             }
-            if (de) { de.style.backgroundColor = gridBg ? '' : '#0a0a0a'; }
-            doc.body.style.backgroundColor = gridBg ? '' : '#0a0a0a';
+            if (de) { de.style.backgroundColor = '#000'; }
+            doc.body.style.backgroundColor = '#000';
         } else {
             if (c) { c.classList.remove('is-st'); }
             if (f) {
@@ -17936,6 +18111,15 @@ const game = new AntiBallsheetGame(
             bindTap(btn, function () {
                 sfx(btn.getAttribute('data-act') === 'play' ? 720 : 560);
                 act(btn.getAttribute('data-act'));
+            });
+        });
+
+        $$('.pick-card', ui).forEach(function (btn) {
+            bindTap(btn, function () {
+                var mode = btn.getAttribute('data-pick');
+                if (mode !== 'bs' && mode !== 'speed') { return; }
+                sfx(720);
+                openPrep(mode);
             });
         });
 
