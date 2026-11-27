@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://kiryugit.github.io/abs-menu/"><img alt="在线试玩" src="https://img.shields.io/badge/PLAY-%E5%9C%A8%E7%BA%BF%E8%AF%95%E7%8E%A9-22d3ee?style=flat-square"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-v0.7.5%20beta-f472b6?style=flat-square">
+  <img alt="version" src="https://img.shields.io/badge/version-v0.7.6%20beta-f472b6?style=flat-square">
   <img alt="single file" src="https://img.shields.io/badge/build-single%20HTML-8b5cf6?style=flat-square">
   <img alt="language" src="https://img.shields.io/badge/lang-%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD-38bdf8?style=flat-square">
 </p>
@@ -33,7 +33,7 @@
 | --- | --- | --- |
 | **BALLSHEET** | 固定球数，光标触球即得分，越快吃完越好；支持球数与球径调节 | 总时长、平均 / 最快 / 最慢反应、逐球曲线 |
 | **BALLSHEET · BIGBALL** | 血量随压力持续下降，吃球回血；球色严格跟随原作 `EPS − pressure` 公式 | 存活时长、吃球数、每秒得分、最高秒得分 |
-| **舒尔特方格** | 3×3 – 10×10，9 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
+| **舒尔特方格** | 3×3 – 10×10，9 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等；倒计时支持 0–60000 ms 自定义 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
 | **反应测试** | 点击后才随机等待 1.2–4 秒，屏幕变绿立即点击；支持 1–100 次，默认 5 次 | 平均、最快 / 最慢单次、有效次数、抢跑次数 |
 
 ## 界面
@@ -115,6 +115,6 @@ pwsh -NoProfile -File .\build.ps1
 
 ## 版本
 
-当前 `v0.7.5 (beta)`：7:5 满高双栏驾驶舱、顶部双 BALLSHEET 合并、趋势图自适应、短屏回退。
+当前 `v0.7.6 (beta)`：舒尔特倒计时改为 0–60000 ms 自定义输入，支持小数秒显示与旧秒数设置迁移；沿用 7:5 满高双栏驾驶舱。
 
 完整版本记录见 [`gh-pages/README.md`](gh-pages/README.md#版本)。
