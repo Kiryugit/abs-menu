@@ -6190,6 +6190,29 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     .menu-utils { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+.home-side .menu-utils {
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: auto;
+}
+
+.home-side .menu-utils .mi {
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 6px;
+    min-height: 44px;
+    padding: 7px 8px;
+}
+
+.home-side .menu-utils .mi-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.home-side .menu-utils .mi-icon svg { width: 11px; height: 11px; }
+
+.home-side .menu-utils .mi-label { font-size: 10px; }
+
 /* recent runs: uses the spare height under the utility row on tall desktops */
 .home-recent {
     display: flex;
@@ -6466,10 +6489,25 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 
 .home-side .card-current {
-    flex: 0 0 auto;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
+    --side-accent: var(--accent);
+    border-color: color-mix(in srgb, var(--side-accent) 18%, var(--line));
+}
+
+.home-side .card-current[data-mode="speed"] { --side-accent: #5bf2dc; }
+.home-side .card-current[data-mode="bigball"] { --side-accent: #fa96c8; }
+.home-side .card-current[data-mode="schulte"] { --side-accent: #d8ff5a; }
+.home-side .card-current[data-mode="reaction"] { --side-accent: #ffc15a; }
+
+.side-title em {
+    margin-left: 8px;
+    color: var(--side-accent);
+    font-size: 8px;
+    font-style: normal;
+    letter-spacing: .08em;
 }
 
 .side-stats {
@@ -6557,6 +6595,91 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     text-overflow: ellipsis;
 }
 
+/* other modes: three compact rows under the focused latest run */
+.side-queue {
+    flex: 0 0 auto;
+    padding-top: 14px;
+    padding-bottom: 10px;
+}
+
+.side-queue-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3px;
+}
+
+.side-qrow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px solid var(--line);
+    --sq: var(--accent);
+}
+
+.side-qrow:first-child { border-top: 0; padding-top: 2px; }
+.side-qrow:last-child { padding-bottom: 2px; }
+.side-qrow[data-mode="speed"] { --sq: #5bf2dc; }
+.side-qrow[data-mode="bigball"] { --sq: #fa96c8; }
+.side-qrow[data-mode="schulte"] { --sq: #d8ff5a; }
+.side-qrow[data-mode="reaction"] { --sq: #ffc15a; }
+
+.sq-name {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: .06em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sq-name i {
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sq);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--sq) 65%, transparent);
+}
+
+.sq-last {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+.sq-last em {
+    margin-left: 2px;
+    color: var(--dim);
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.sq-pb {
+    min-width: 78px;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .04em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.sq-pb b {
+    color: var(--sq);
+    font-weight: 500;
+}
+
 .spark-empty-line {
     fill: none;
     stroke: var(--accent);
@@ -6620,7 +6743,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 }
 
 .home-side .card-current .spark-wrap {
-    flex: 0 0 210px;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     min-height: 150px;
@@ -7744,6 +7867,252 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 
 
 /* stats */
+.stats-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.stats-tab-group { display: flex; gap: 6px; }
+
+.stats-tab {
+    padding: 7px 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--panel) 74%, transparent);
+    color: color-mix(in srgb, var(--ink) 54%, transparent);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: color .16s, border-color .16s, background .16s;
+}
+
+.stats-tab:hover { color: var(--ink); border-color: color-mix(in srgb, var(--accent) 34%, var(--hairline)); }
+
+.stats-tab.is-on {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--accent) 54%, var(--hairline));
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.stats-tab:focus-visible,
+.stats-filter:focus-visible,
+.stats-run:focus-visible,
+.stats-more:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 74%, transparent);
+    outline-offset: 2px;
+}
+
+.stats-feed-count {
+    color: color-mix(in srgb, var(--ink) 42%, transparent);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    white-space: nowrap;
+}
+
+.stats-feed-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 12px 0 10px;
+}
+
+.stats-filter {
+    padding: 5px 9px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 4%, transparent);
+    color: color-mix(in srgb, var(--ink) 48%, transparent);
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: color .16s, background .16s, border-color .16s;
+}
+
+.stats-filter:hover { color: var(--ink); }
+
+.stats-filter.is-on {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+
+.stats-feed {
+    border-top: 1px solid var(--hairline);
+}
+
+.stats-feed-empty {
+    display: none;
+    padding: 30px 0 26px;
+    border-top: 1px solid var(--hairline);
+    color: color-mix(in srgb, var(--ink) 42%, transparent);
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-align: center;
+}
+
+.stats-feed-empty.is-on { display: block; }
+
+.stats-run {
+    --sr: var(--accent);
+    display: grid;
+    grid-template-columns: 7px minmax(0, 1fr) auto minmax(112px, auto);
+    align-items: center;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--hairline);
+    cursor: pointer;
+    transition: background .16s;
+}
+
+.stats-run:hover { background: color-mix(in srgb, var(--sr) 5%, transparent); }
+.stats-run[data-mode="speed"] { --sr: #5bf2dc; }
+.stats-run[data-mode="bigball"] { --sr: #fa96c8; }
+.stats-run[data-mode="schulte"] { --sr: #d8ff5a; }
+.stats-run[data-mode="reaction"] { --sr: #ffc15a; }
+
+.sr-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--sr);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--sr) 58%, transparent);
+}
+
+.sr-main { min-width: 0; }
+
+.sr-main b {
+    display: block;
+    overflow: hidden;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sr-main span {
+    display: block;
+    overflow: hidden;
+    margin-top: 3px;
+    color: color-mix(in srgb, var(--ink) 42%, transparent);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: .05em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sr-score {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .02em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.sr-score em {
+    margin-left: 2px;
+    color: color-mix(in srgb, var(--ink) 44%, transparent);
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.sr-side {
+    color: color-mix(in srgb, var(--ink) 40%, transparent);
+    font-family: var(--mono);
+    font-size: 8px;
+    line-height: 1.6;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.sr-side b { color: var(--sr); font-weight: 500; }
+.sr-side i { display: block; color: color-mix(in srgb, var(--ink) 30%, transparent); font-style: normal; }
+
+.stats-feed-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 12px;
+}
+
+.stats-more { min-width: 104px; }
+.stats-more[hidden] { display: none; }
+
+.stats-feed-note {
+    color: color-mix(in srgb, var(--ink) 34%, transparent);
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: .06em;
+}
+
+.stats-recent-view.stats-view-hidden,
+.stats-mode-view.stats-view-hidden {
+    position: absolute;
+    left: -10000px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    visibility: hidden;
+    clip-path: inset(50%);
+    pointer-events: none;
+}
+
+/* mode detail keeps every saved run reachable inside a bounded scroll area */
+.stats-mode-view .runs {
+    max-height: min(46vh, 440px);
+    overflow: auto;
+}
+
+.stats-mode-view .runs-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: color-mix(in srgb, var(--bg) 88%, var(--panel));
+    backdrop-filter: blur(8px);
+}
+
+@media (max-width: 700px) {
+    .stats-tab { padding: 6px 9px; font-size: 9px; }
+    .stats-feed-count { font-size: 8px; }
+    .stats-feed-filter { gap: 5px; padding: 10px 0 8px; }
+    .stats-filter { padding: 5px 8px; font-size: 8px; }
+
+    .stats-run {
+        grid-template-columns: 6px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 11px 2px;
+    }
+
+    .sr-side {
+        grid-column: 2 / 4;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 10px;
+        text-align: left;
+        white-space: normal;
+    }
+
+    .sr-side i { display: inline; }
+
+    .stats-feed-foot { align-items: flex-end; }
+    .stats-mode-view .runs { max-height: 380px; }
+}
+
 .stats-top {
     padding-bottom: 14px;
     border-bottom-color: var(--hairline);
@@ -7807,6 +8176,14 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 
 .runs-table th { background: color-mix(in srgb, var(--ink) 3%, transparent); }
 .runs-table td { border-bottom-color: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+.runs-table tbody tr.is-focus td {
+    background: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+.runs-table tbody tr.is-focus td:first-child {
+    box-shadow: inset 2px 0 0 var(--accent);
+}
 
 /* footer */
 .foot {
@@ -8367,9 +8744,24 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     .stage { padding-top: 8px; }
 
     .home {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) 220px;
+        align-items: stretch;
+        gap: 12px;
     }
-    .home-side { display: none; }
+    .home-side { display: flex; height: 100%; }
+    .home-side > .card { display: none; }
+    .home-side .menu-utils {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-top: auto;
+        gap: 5px;
+    }
+    .home-side .menu-utils .mi {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 42px;
+        padding: 6px;
+        justify-items: center;
+    }
+    .home-side .menu-utils .mi-label { display: none; }
 
     .home .logo { font-size: clamp(28px, 4.6vw, 38px); }
     .home .tagline { margin-top: 5px; font-size: 8.5px; }
@@ -8467,6 +8859,19 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     .home .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .home .logo { font-size: clamp(26px, 5.2vw, 34px); }
     .home .menu > .mi { min-height: 34px; max-height: 38px; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 600px) {
+    .home { grid-template-columns: minmax(0, 1fr) 190px; }
+    .home .menu > .mi {
+        grid-template-columns: minmax(0, 1fr) 18px;
+        gap: 6px;
+        padding: 6px 10px;
+    }
+    .home .menu .mi-idx,
+    .home .menu .mi-icon { display: none; }
+    .home .menu .mi-label { font-size: 10.5px; letter-spacing: .04em; }
+    .home-side .menu-utils .mi { min-height: 42px; }
 }
 
 @media (min-width: 700px) and (max-height: 520px) and (orientation: landscape) {
@@ -9961,36 +10366,6 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                     <span class="mi-hint">cm/360 · eDPI · 目标 sens</span>
                                     <span class="mi-go">▶</span>
                                 </button>
-                                <div class="menu-utils">
-                                <button class="mi" data-act="stats" type="button">
-                                    <span class="mi-idx">05</span>
-                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6.5 20v-6M11 20v-10M15.5 20v-4M20 20v-8"></path></svg></span>
-                                    <span class="mi-label">数据<em class="mi-en">Stats</em></span>
-                                    <span class="mi-hint">历史 · 节奏</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                <button class="mi" data-act="settings" type="button">
-                                    <span class="mi-idx">06</span>
-                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3.2"></circle></svg></span>
-                                    <span class="mi-label">设置<em class="mi-en">Settings</em></span>
-                                    <span class="mi-hint">对局 · 外观 · 音效</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                <button class="mi" data-act="help" type="button">
-                                    <span class="mi-idx">07</span>
-                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.5-1 5.2-1 8 .8v13c-2.8-1.8-5.5-1.8-8-.8z"></path><path d="M20 5.5c-2.5-1-5.2-1-8 .8v13c2.8-1.8 5.5-1.8 8-.8z"></path><path d="M12 6.3v13"></path></svg></span>
-                                    <span class="mi-label">玩法<em class="mi-en">How to Play</em></span>
-                                    <span class="mi-hint">按键</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                <button class="mi" data-act="about" type="button">
-                                    <span class="mi-idx">08</span>
-                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"></circle><path d="M12 10.8v5.4"></path><circle cx="12" cy="7.6" r=".9" fill="currentColor" stroke="none"></circle></svg></span>
-                                    <span class="mi-label">关于<em class="mi-en">About</em></span>
-                                    <span class="mi-hint">版本 · 致谢</span>
-                                    <span class="mi-go">▶</span>
-                                </button>
-                                </div>
                                 <div class="home-recent" id="home-recent">
                                     <div class="home-recent-head">
                                         <span>最近记录</span>
@@ -10008,36 +10383,51 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                         </div>
 
                         <aside class="home-side">
-                            <section class="card card-current">
+                            <section class="card card-current" id="home-current">
                                 <div class="card-head">
-                                    <span>本局</span>
+                                    <span class="side-title">最近一局<em id="side-mode">BALLSHEET 100</em></span>
                                     <span class="pill" id="side-state">空闲</span>
                                 </div>
                                 <div class="side-stats">
-                                    <div class="side-stat"><span>上一局</span><b id="side-last">—</b></div>
-                                    <div class="side-stat"><span>局数</span><b id="side-runs">0</b></div>
-                                    <div class="side-stat"><span>最佳均反</span><b id="side-avg">—</b></div>
+                                    <div class="side-stat"><span id="side-lab-1">上一局</span><b id="side-last">—</b></div>
+                                    <div class="side-stat"><span id="side-lab-2">局数</span><b id="side-runs">0</b></div>
+                                    <div class="side-stat"><span id="side-lab-3">最佳均反</span><b id="side-avg">—</b></div>
                                 </div>
                                 <div class="side-pb-strip">
-                                    <span>个人最好</span><b id="side-pb">—</b><em class="unit">秒</em>
+                                    <span id="side-pb-label">个人最好</span><b id="side-pb">—</b><em class="unit" id="side-pb-unit">秒</em>
                                     <span class="pb-delta" id="side-delta">还没有记录</span>
                                 </div>
                                 <div class="spark-wrap">
-                                    <div class="spark-head"><span>最近 12 局 · 用时</span><span id="spark-side">等待第一局</span></div>
+                                    <div class="spark-head"><span id="spark-title">最近 12 局 · 用时</span><span id="spark-side">等待第一局</span></div>
                                     <svg id="spark" viewBox="0 0 240 62" preserveAspectRatio="none"
                                         aria-label="最近走势"></svg>
                                     <div class="spark-x"><span>−12</span><span>现在</span></div>
                                 </div>
                             </section>
 
-                            <section class="card side-best">
-                                <div class="card-head"><span>其它最好</span><span class="side-best-note">LOCAL</span></div>
-                                <div class="side-best-grid">
-                                    <div class="side-best-cell"><span>BIGBALL</span><b id="side-bs">—</b></div>
-                                    <div class="side-best-cell"><span>舒尔特</span><b id="side-st">—</b></div>
-                                    <div class="side-best-cell"><span>反应</span><b id="side-rt">—</b></div>
-                                </div>
+                            <section class="card side-queue" id="side-queue">
+                                <div class="card-head"><span>其它模式</span><span class="side-best-note">最近 · PB</span></div>
+                                <div class="side-queue-list" id="side-queue-list"></div>
                             </section>
+
+                            <div class="menu-utils home-utils">
+                                <button class="mi" data-act="stats" type="button" aria-label="数据" title="数据">
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"></path><path d="M6.5 20v-6M11 20v-10M15.5 20v-4M20 20v-8"></path></svg></span>
+                                    <span class="mi-label">数据<em class="mi-en">Stats</em></span>
+                                </button>
+                                <button class="mi" data-act="settings" type="button" aria-label="设置" title="设置">
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3.2"></circle></svg></span>
+                                    <span class="mi-label">设置<em class="mi-en">Settings</em></span>
+                                </button>
+                                <button class="mi" data-act="help" type="button" aria-label="玩法" title="玩法">
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.5-1 5.2-1 8 .8v13c-2.8-1.8-5.5-1.8-8-.8z"></path><path d="M20 5.5c-2.5-1-5.2-1-8 .8v13c2.8-1.8 5.5-1.8 8-.8z"></path><path d="M12 6.3v13"></path></svg></span>
+                                    <span class="mi-label">玩法<em class="mi-en">How to Play</em></span>
+                                </button>
+                                <button class="mi" data-act="about" type="button" aria-label="关于" title="关于">
+                                    <span class="mi-icon ic-util" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2"></circle><path d="M12 10.8v5.4"></path><circle cx="12" cy="7.6" r=".9" fill="currentColor" stroke="none"></circle></svg></span>
+                                    <span class="mi-label">关于<em class="mi-en">About</em></span>
+                                </button>
+                            </div>
                         </aside>
                     </div>
                 </section>
@@ -10412,21 +10802,47 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
                             <h2>数据<span class="sub-note">历史与节奏</span></h2>
-                            <div class="sub-meta">本地存储</div>
+                            <div class="sub-meta">全部记录 · 最近优先</div>
                         </div>
-                        <div class="panel">
-                            <div class="stats-top">
-                                <span class="lab">分类</span>
-                                <select class="sel" id="stats-cat" aria-label="成绩分类"></select>
-                                <button class="mini" id="btn-export" type="button">导出 JSON</button>
-                                <button class="mini danger" id="btn-clear" type="button">清除</button>
+                        <div class="panel stats-panel">
+                            <div class="stats-tabs">
+                                <div class="stats-tab-group" role="tablist" aria-label="数据视图">
+                                    <button class="stats-tab is-on" type="button" data-stats-view="recent" role="tab" aria-selected="true">最近流</button>
+                                    <button class="stats-tab" type="button" data-stats-view="mode" role="tab" aria-selected="false">模式详情</button>
+                                </div>
+                                <span class="stats-feed-count" id="stats-feed-count">0 局</span>
                             </div>
-                            <div class="stats-grid" id="stats-summary"></div>
-                            <div class="chart-wrap">
-                                <canvas id="stats-chart"></canvas>
-                                <div class="empty" id="stats-empty">本分类还没有记录</div>
+
+                            <div class="stats-recent-view" id="stats-recent-view">
+                                <div class="stats-feed-filter" id="stats-filters" role="group" aria-label="模式筛选">
+                                    <button class="stats-filter is-on" type="button" data-filter="all">全部</button>
+                                    <button class="stats-filter" type="button" data-filter="speed">BALLSHEET</button>
+                                    <button class="stats-filter" type="button" data-filter="bigball">BIGBALL</button>
+                                    <button class="stats-filter" type="button" data-filter="schulte">舒尔特</button>
+                                    <button class="stats-filter" type="button" data-filter="reaction">反应</button>
+                                </div>
+                                <div class="stats-feed" id="stats-feed"></div>
+                                <div class="stats-feed-empty" id="stats-feed-empty">还没有任何游玩记录。</div>
+                                <div class="stats-feed-foot">
+                                    <button class="mini stats-more" id="stats-more" type="button">加载更早</button>
+                                    <span class="stats-feed-note" id="stats-feed-note">显示 0 / 共 0 局</span>
+                                </div>
                             </div>
-                            <div class="runs" id="stats-runs"></div>
+
+                            <div class="stats-mode-view stats-view-hidden" id="stats-mode-view">
+                                <div class="stats-top">
+                                    <span class="lab">分类</span>
+                                    <select class="sel" id="stats-cat" aria-label="成绩分类"></select>
+                                    <button class="mini" id="btn-export" type="button">导出 JSON</button>
+                                    <button class="mini danger" id="btn-clear" type="button">清除</button>
+                                </div>
+                                <div class="stats-grid" id="stats-summary"></div>
+                                <div class="chart-wrap">
+                                    <canvas id="stats-chart"></canvas>
+                                    <div class="empty" id="stats-empty">本分类还没有记录</div>
+                                </div>
+                                <div class="runs" id="stats-runs"></div>
+                            </div>
                         </div>
                         <div class="sub-foot">四套存档：BALLSHEET 用 <b>GameStats_&lt;球数&gt;, &lt;球径&gt;</b>（原版键名），
                             BIGBALL 用 <b>BallSheetRuns</b>，舒尔特用 <b>schulteRuns</b>，反应测试用 <b>reactionRuns</b>。各玩法互不影响。</div>
@@ -10744,6 +11160,14 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         /* stats */
         '历史与节奏': 'History & pace',
         '本地存储': 'Local storage',
+        '本地存储 · 最近优先': 'LOCAL · RECENT FIRST',
+        '全部记录 · 最近优先': 'ALL RUNS · NEWEST FIRST',
+        '最近流': 'Recent runs',
+        '模式详情': 'Mode detail',
+        '全部': 'All',
+        '加载更早': 'Load earlier',
+        '其它模式': 'Other modes',
+        '最近 · PB': 'LAST · PB',
         '分类': 'Category',
         '导出 JSON': 'Export JSON',
         '清除': 'Clear',
@@ -15011,6 +15435,82 @@ const game = new AntiBallsheetGame(
         } catch (e) { }
         return out.sort();
     }
+
+    function runStamp(r) {
+        if (!r) { return 0; }
+        var v = r.timestamp !== undefined ? r.timestamp : r.t;
+        return typeof v === 'number' && isFinite(v) ? v : 0;
+    }
+
+    function lastRunStamp(runs) {
+        var best = 0;
+        for (var i = 0; i < runs.length; i++) {
+            var ts = runStamp(runs[i]);
+            if (ts > best) { best = ts; }
+        }
+        return best;
+    }
+
+    /* the newest run across the four modes; drives the right-rail card and stats order */
+    function latestRunInfo() {
+        var best = null;
+        function take(info) { if (!best || info.ts > best.ts) { best = info; } }
+
+        allCats().forEach(function (cat) {
+            var scores = scoresOf(cat);
+            if (!scores.length) { return; }
+            var last = scores[scores.length - 1];
+            var balls = cat.split(',')[0].trim();
+            take({
+                key: 'speed', ts: runStamp(last), cat: cat,
+                title: 'BALLSHEET ' + balls,
+                count: scores.length, last: last.values, pb: pbOf(cat),
+                series: scores.map(function (x) { return x.values.time; })
+            });
+        });
+
+        var br = bs ? bs.runs() : [];
+        if (br.length) {
+            var bl = br[br.length - 1];
+            take({
+                key: 'bigball', ts: runStamp(bl), title: 'BIGBALL',
+                count: br.length, last: bl, pb: bs.pb(),
+                bestEaten: Math.max.apply(null, br.map(function (r) { return r.eaten || 0; })),
+                series: br.map(function (r) { return r.time; })
+            });
+        }
+
+        var sr = sch ? sch.runs() : [];
+        if (sr.length) {
+            var sl = sr[sr.length - 1];
+            var same = sr.filter(function (r) { return r.size === sl.size && r.type === sl.type; });
+            var spb = sch.pb(sl.size, sl.type);
+            take({
+                key: 'schulte', ts: runStamp(sl), title: T('舒尔特 ', 'SCHULTE ') + sl.size + '×' + sl.size,
+                count: same.length, last: sl, pb: spb ? spb.time : null,
+                avgTime: same.length ? same.reduce(function (a, r) { return a + r.time; }, 0) / same.length : null,
+                series: same.map(function (r) { return r.time; })
+            });
+        }
+
+        var rr = rt ? rt.runs() : [];
+        if (rr.length) {
+            var rl = rr[rr.length - 1];
+            take({
+                key: 'reaction', ts: runStamp(rl), title: T('反应测试', 'REACTION'),
+                count: rr.length, last: rl, pb: rt.pb(),
+                best: rl.best,
+                series: rr.map(function (r) { return r.avg; })
+            });
+        }
+
+        if (best) { return best; }
+        var s = currentMode(), cat = modeCat(s), scores = scoresOf(cat);
+        return {
+            key: 'speed', ts: 0, cat: cat, title: 'BALLSHEET ' + cat.split(',')[0].trim(),
+            count: scores.length, last: null, pb: pbOf(cat), series: []
+        };
+    }
     function fmt(n, d) { return (typeof n === 'number' && isFinite(n)) ? n.toFixed(d === undefined ? 2 : d) : '—'; }
     function fmtWhen(ts) {
         var d = new Date(ts);
@@ -15244,53 +15744,10 @@ const game = new AntiBallsheetGame(
        home
        ============================================================ */
     function refreshHome() {
-        var s = currentMode();
-        var cat = modeCat(s);
-        var scores = scoresOf(cat);
-        var pb = pbOf(cat);
-
         refreshHeroCycle();
+        var info = paintRecentCard();
+        paintQueue(info);
 
-        $('#side-pb').textContent = pb === null ? '—' : fmt(pb);
-
-        var sparkWrap = $('.home-side .spark-wrap');
-        if (sparkWrap) { sparkWrap.classList.toggle('is-empty', scores.length === 0); }
-
-        var last = scores.length ? scores[scores.length - 1].values : null;
-        $('#side-last').textContent = last ? fmt(last.time) + ' 秒' : '—';
-        $('#side-runs').textContent = String(scores.length);
-
-        var bestAvg = scores.length ? Math.min.apply(null, scores.map(function (x) { return x.values.averageTime; })) : null;
-        $('#side-avg').textContent = bestAvg === null ? '—' : fmt(bestAvg, 3) + ' 秒';
-
-        var deltaEl = $('#side-delta');
-        if (!scores.length) {
-            deltaEl.textContent = '还没有记录 —— 去立个标杆';
-        } else if (scores.length === 1) {
-            deltaEl.textContent = '第一局已记录 · 再来一次';
-        } else {
-            var diff = last.time - pb;
-            deltaEl.textContent = diff <= 0 ? '上一局就是最好成绩' :
-                '比最好慢 ' + fmt(diff) + ' 秒';
-        }
-
-        var pill = $('#side-state');
-        pill.textContent = scores.length ? '已记录' : '空闲';
-        pill.classList.toggle('live', scores.length > 0);
-
-        var bpb = bs ? bs.pb() : null;
-        var bsEl = $('#side-bs');
-        if (bsEl) { bsEl.textContent = bpb === null ? '—' : fmt(bpb) + ' 秒'; }
-
-        var spb = sch ? sch.pb(null) : null;
-        var stEl = $('#side-st');
-        if (stEl) {
-            stEl.textContent = spb === null ? '—' : fmt(spb.time) + ' 秒 · ' + spb.size + '×' + spb.size;
-        }
-
-        var rpb = rt ? rt.pb() : null;
-        var rtEl = $('#side-rt');
-        if (rtEl) { rtEl.textContent = rpb === null ? '—' : fmt(rpb, 1) + T(' 毫秒', ' ms'); }
         var rtHint = $('#menu-rt-hint');
         if (rtHint && rt) {
             var rcount = rt.settings().count;
@@ -15298,7 +15755,141 @@ const game = new AntiBallsheetGame(
         }
 
         paintRecent();
-        drawSpark(scores.slice(-12).map(function (x) { return x.values.time; }));
+    }
+
+    /* the other three modes stay visible as compact rows under the focused card */
+    function paintQueue(latest) {
+        var host = $('#side-queue-list');
+        if (!host) { return; }
+        var s = currentMode(), cat = modeCat(s);
+        var items = [];
+
+        var scores = scoresOf(cat);
+        var last = scores.length ? scores[scores.length - 1] : null;
+        var pb = pbOf(cat);
+        items.push({
+            key: 'speed', name: 'BALLSHEET',
+            last: last ? fmt(last.values.time) : '—', unit: T('秒', 's'),
+            pb: pb === null ? '—' : fmt(pb) + T('秒', 's')
+        });
+
+        var br = bs ? bs.runs() : [];
+        var bl = br.length ? br[br.length - 1] : null;
+        var bpb = bs ? bs.pb() : null;
+        items.push({
+            key: 'bigball', name: 'BIGBALL',
+            last: bl ? fmt(bl.time) : '—', unit: T('秒', 's'),
+            pb: bpb === null ? '—' : fmt(bpb) + T('秒', 's')
+        });
+
+        var sr = sch ? sch.runs() : [];
+        var sl = sr.length ? sr[sr.length - 1] : null;
+        var spb = sch ? sch.pb(null) : null;
+        items.push({
+            key: 'schulte', name: T('舒尔特', 'SCHULTE'),
+            last: sl ? fmt(sl.time) : '—', unit: T('秒', 's'),
+            pb: spb === null ? '—' : fmt(spb.time) + T('秒', 's')
+        });
+
+        var rr = rt ? rt.runs() : [];
+        var rl = rr.length ? rr[rr.length - 1] : null;
+        var rpb = rt ? rt.pb() : null;
+        items.push({
+            key: 'reaction', name: T('反应测试', 'REACTION'),
+            last: rl ? fmt(rl.avg, 1) : '—', unit: T('毫秒', 'ms'),
+            pb: rpb === null ? '—' : fmt(rpb, 1) + T('毫秒', 'ms')
+        });
+
+        var focus = latest ? latest.key : 'speed';
+        host.innerHTML = items.filter(function (m) { return m.key !== focus; }).map(function (m) {
+            return '<div class="side-qrow" data-mode="' + m.key + '">' +
+                '<span class="sq-name"><i></i>' + m.name + '</span>' +
+                '<span class="sq-last">' + m.last + (m.last === '—' ? '' : '<em>' + m.unit + '</em>') + '</span>' +
+                '<span class="sq-pb"><b>PB</b> ' + m.pb + '</span>' +
+                '</div>';
+        }).join('');
+    }
+
+    function paintRecentCard() {
+        var info = latestRunInfo();
+        var card = $('#home-current');
+        if (card) { card.setAttribute('data-mode', info.key); }
+
+        var modeEl = $('#side-mode');
+        if (modeEl) { modeEl.textContent = info.title; }
+
+        var labels = ['上一局', '局数', '最佳均反'];
+        var stat1 = '—', stat2 = String(info.count || 0), stat3 = '—';
+        var pbLabel = '个人最好', unit = '秒', pbText = info.pb === null ? '—' : fmt(info.pb);
+        var chartTitle = '最近 12 局 · 用时';
+        var delta = '还没有记录 —— 去立个标杆';
+        var has = !!info.last;
+
+        if (info.key === 'speed' && info.last) {
+            stat1 = fmt(info.last.time) + ' 秒';
+            var minAvg = null;
+            var scores = scoresOf(info.cat);
+            scores.forEach(function (x) {
+                if (minAvg === null || x.values.averageTime < minAvg) { minAvg = x.values.averageTime; }
+            });
+            stat3 = minAvg === null ? '—' : fmt(minAvg, 3) + ' 秒';
+            if (info.count === 1) {
+                delta = '第一局已记录 · 再来一次';
+            } else {
+                var diff = info.last.time - info.pb;
+                delta = diff <= 0 ? '上一局就是最好成绩' : '比最好慢 ' + fmt(diff) + ' 秒';
+            }
+        } else if (info.key === 'bigball' && info.last) {
+            labels = ['上局存活', '局数', '最高吃球'];
+            unit = '秒';
+            pbLabel = '最长存活';
+            chartTitle = '最近 12 局 · 存活';
+            stat1 = fmt(info.last.time) + ' 秒';
+            stat3 = String(info.bestEaten || 0);
+            var bdiff = info.pb - info.last.time;
+            delta = bdiff <= 0 ? '上一局就是最长存活' : '比最长少 ' + fmt(bdiff) + ' 秒';
+        } else if (info.key === 'schulte' && info.last) {
+            labels = ['上局用时', '局数', '平均用时'];
+            pbLabel = '最快用时';
+            stat1 = fmt(info.last.time) + ' 秒';
+            stat3 = info.avgTime === null ? '—' : fmt(info.avgTime) + ' 秒';
+            var sdiff = info.last.time - info.pb;
+            delta = sdiff <= 0 ? '上一局就是最快' : '比最快慢 ' + fmt(sdiff) + ' 秒';
+        } else if (info.key === 'reaction' && info.last) {
+            labels = ['上局均反', '局数', '最快单次'];
+            unit = '毫秒';
+            pbLabel = '最佳均反';
+            chartTitle = '最近 12 局 · 均反';
+            pbText = info.pb === null ? '—' : fmt(info.pb, 1);
+            stat1 = fmt(info.last.avg, 1) + ' 毫秒';
+            stat3 = info.best === undefined ? '—' : fmt(info.best, 1) + ' 毫秒';
+            var rdiff = info.last.avg - info.pb;
+            delta = rdiff <= 0 ? '上一局就是最好' : '比最好慢 ' + fmt(rdiff, 1) + ' 毫秒';
+        }
+
+        $('#side-lab-1').textContent = labels[0];
+        $('#side-lab-2').textContent = labels[1];
+        $('#side-lab-3').textContent = labels[2];
+        $('#side-last').textContent = stat1;
+        $('#side-runs').textContent = stat2;
+        $('#side-avg').textContent = stat3;
+        $('#side-pb-label').textContent = pbLabel;
+        $('#side-pb').textContent = pbText;
+        $('#side-pb-unit').textContent = unit;
+        $('#spark-title').textContent = chartTitle;
+        $('#side-delta').textContent = delta;
+
+        var pill = $('#side-state');
+        if (pill) {
+            pill.textContent = has ? '已记录' : '空闲';
+            pill.classList.toggle('live', has);
+        }
+        var sparkWrap = $('.home-side .spark-wrap');
+        if (sparkWrap) { sparkWrap.classList.toggle('is-empty', !info.series.length); }
+        var sparkSide = $('#spark-side');
+        if (sparkSide) { sparkSide.textContent = info.series.length ? info.count + ' 局' : '等待第一局'; }
+        drawSpark(info.series.slice(-12));
+        return info;
     }
 
     /* ============================================================
@@ -15314,7 +15905,12 @@ const game = new AntiBallsheetGame(
         if (name === 'settings') { setTab(st.setTab || 'assist'); }
         if (name === 'sensitivity') { sensPaint(); }
         if (name === 'prep') { prepPaint(); }
-        if (name === 'stats') { fillCats(); renderStats($('#stats-cat').value); }
+        if (name === 'stats') {
+            fillCats(true);
+            renderStats($('#stats-cat').value);
+            setStatsFilter('all');
+            setStatsView('recent');
+        }
         if (name === 'home') { refreshHome(); focusFirst(); }
     }
 
@@ -16033,15 +16629,17 @@ const game = new AntiBallsheetGame(
         showScreen('settings');
     }
 
+    function homeFocusItems() { return $$('#menu .mi, .home-side .home-utils .mi'); }
+
     function focusFirst() {
-        var first = $('#menu .mi');
+        var first = homeFocusItems()[0];
         if (first) {
             setTimeout(function () { try { first.focus({ preventScroll: true }); } catch (e) { first.focus(); } }, 30);
         }
     }
 
     function moveFocus(dir) {
-        var items = $$('#menu .mi');
+        var items = homeFocusItems();
         if (!items.length) { return; }
         var current = items.indexOf(doc.activeElement);
         var next = current < 0 ? (dir > 0 ? 0 : items.length - 1) : (current + dir + items.length) % items.length;
@@ -17142,24 +17740,236 @@ const game = new AntiBallsheetGame(
     /* ============================================================
        stats screen
        ============================================================ */
-    function fillCats() {
+    var STATS_FEED_PAGE = 12;
+    var statsFeedLimit = STATS_FEED_PAGE;
+    var statsFilter = 'all';
+    var statsFeedShown = [];
+    var statsFocusTs = 0;
+
+    function feedDiff(diff, decimals) {
+        if (typeof diff !== 'number' || !isFinite(diff)) { return ''; }
+        if (Math.abs(diff) <= 0.0005) { return T('持平 PB', '= PB'); }
+        return T('差 ', 'Δ ') + fmt(Math.abs(diff), decimals);
+    }
+
+    /* every saved run from all four modes, newest first; never truncated here */
+    function collectRunFeed() {
+        var out = [];
+
+        allCats().forEach(function (cat) {
+            var m = cat.match(/^(\d+),\s*(\d+)$/);
+            var balls = m ? m[1] : cat;
+            var size = m ? m[2] : '';
+            var scores = scoresOf(cat);
+            var pb = pbOf(cat);
+            scores.forEach(function (s) {
+                if (!s || !s.values || typeof s.values.time !== 'number' || !isFinite(s.values.time)) { return; }
+                out.push({
+                    key: 'speed', cat: cat, ts: runStamp(s),
+                    label: 'BALLSHEET ' + balls,
+                    detail: T(balls + ' 球 · 球径 ' + size + '%', balls + ' balls · ' + size + '% radius') +
+                        (pb === null ? '' : ' · ' + feedDiff(s.values.time - pb, 2)),
+                    score: fmt(s.values.time), unit: T('秒', 's'), decimals: 2,
+                    pbText: 'PB ' + (pb === null ? '—' : fmt(pb) + T('秒', 's'))
+                });
+            });
+        });
+
+        var br = bs ? bs.runs() : [];
+        var bpb = bs ? bs.pb() : null;
+        br.forEach(function (r) {
+            if (!r || typeof r.time !== 'number' || !isFinite(r.time)) { return; }
+            out.push({
+                key: 'bigball', cat: '__BS__', ts: runStamp(r),
+                label: 'BIGBALL',
+                detail: T('存活 · 吃 ' + (r.eaten || 0) + ' 球', 'survival · ' + (r.eaten || 0) + ' eaten') +
+                    (bpb === null ? '' : ' · ' + feedDiff(bpb - r.time, 2)),
+                score: fmt(r.time), unit: T('秒', 's'), decimals: 2,
+                pbText: 'PB ' + (bpb === null ? '—' : fmt(bpb) + T('秒', 's'))
+            });
+        });
+
+        var sr = sch ? sch.runs() : [];
+        sr.forEach(function (r) {
+            if (!r || typeof r.time !== 'number' || !isFinite(r.time)) { return; }
+            var p = sch.pb(r.size, r.type);
+            out.push({
+                key: 'schulte', cat: '__ST__', ts: runStamp(r),
+                label: T('舒尔特 ', 'SCHULTE ') + r.size + '×' + r.size,
+                detail: r.size + '×' + r.size + ' · ' + sch.typeName(r.type) +
+                    (p ? ' · ' + feedDiff(r.time - p.time, 2) : ''),
+                score: fmt(r.time), unit: T('秒', 's'), decimals: 2,
+                pbText: 'PB ' + (p ? fmt(p.time) + T('秒', 's') : '—')
+            });
+        });
+
+        var rr = rt ? rt.runs() : [];
+        var rpb = rt ? rt.pb() : null;
+        rr.forEach(function (r) {
+            if (!r || typeof r.avg !== 'number' || !isFinite(r.avg)) { return; }
+            out.push({
+                key: 'reaction', cat: '__RT__', ts: runStamp(r),
+                label: T('反应测试', 'REACTION'),
+                detail: T((r.count || 0) + ' 次 · 均分', (r.count || 0) + ' trials · mean') +
+                    (rpb === null ? '' : ' · ' + feedDiff(r.avg - rpb, 1)),
+                score: fmt(r.avg, 1), unit: T('毫秒', 'ms'), decimals: 1,
+                pbText: 'PB ' + (rpb === null ? '—' : fmt(rpb, 1) + T('毫秒', 'ms'))
+            });
+        });
+
+        out.sort(function (a, b) {
+            if (b.ts !== a.ts) { return b.ts - a.ts; }
+            return String(a.label).localeCompare(String(b.label));
+        });
+        return out;
+    }
+
+    function renderStatsFeed(reset) {
+        if (reset) { statsFeedLimit = STATS_FEED_PAGE; }
+        var all = collectRunFeed();
+        var filtered = statsFilter === 'all' ? all : all.filter(function (e) { return e.key === statsFilter; });
+        statsFeedShown = filtered.slice(0, statsFeedLimit);
+
+        var host = $('#stats-feed');
+        if (host) {
+            host.innerHTML = statsFeedShown.map(function (e, i) {
+                var aria = T('查看 ' + e.label + ' ' + e.score + e.unit + ' 详情',
+                    'Open ' + e.label + ' ' + e.score + e.unit + ' detail');
+                return '<div class="stats-run" data-mode="' + e.key + '" data-i="' + i + '" role="button" tabindex="0" aria-label="' + aria + '">' +
+                    '<span class="sr-dot"></span>' +
+                    '<div class="sr-main"><b>' + e.label + '</b><span>' + e.detail + '</span></div>' +
+                    '<div class="sr-score">' + e.score + '<em>' + e.unit + '</em></div>' +
+                    '<div class="sr-side"><b>' + e.pbText + '</b><i>' + (e.ts ? fmtWhen(e.ts) : '—') + '</i></div>' +
+                    '</div>';
+            }).join('');
+        }
+
+        var count = $('#stats-feed-count');
+        if (count) { count.textContent = all.length + T(' 局', ' runs'); }
+
+        var note = $('#stats-feed-note');
+        if (note) {
+            note.textContent = T('显示 ' + statsFeedShown.length + ' / 共 ' + filtered.length + ' 局',
+                'Showing ' + statsFeedShown.length + ' / ' + filtered.length);
+        }
+
+        var empty = $('#stats-feed-empty');
+        if (empty) {
+            empty.classList.toggle('is-on', !statsFeedShown.length);
+            empty.textContent = all.length ? T('这个筛选下还没有记录。', 'No runs match this filter.')
+                : T('还没有任何游玩记录。', 'No runs yet.');
+        }
+
+        var more = $('#stats-more');
+        if (more) { more.hidden = statsFeedShown.length >= filtered.length; }
+    }
+
+    function setStatsFilter(filter) {
+        statsFilter = filter || 'all';
+        Array.prototype.forEach.call(doc.querySelectorAll('.stats-filter'), function (b) {
+            b.classList.toggle('is-on', b.getAttribute('data-filter') === statsFilter);
+        });
+        renderStatsFeed(true);
+    }
+
+    function setStatsView(view) {
+        statsFocusTs = 0;
+        var recent = $('#stats-recent-view');
+        var mode = $('#stats-mode-view');
+        if (recent) { recent.classList.toggle('stats-view-hidden', view !== 'recent'); }
+        if (mode) { mode.classList.toggle('stats-view-hidden', view !== 'mode'); }
+
+        Array.prototype.forEach.call(doc.querySelectorAll('.stats-tab'), function (b) {
+            var on = b.getAttribute('data-stats-view') === view;
+            b.classList.toggle('is-on', on);
+            b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+
+        if (view === 'recent') {
+            renderStatsFeed(false);
+            return;
+        }
+        var sel = $('#stats-cat');
+        if (sel && !sel.options.length) { fillCats(true); }
+        if (sel && sel.value) { renderStats(sel.value); }
+    }
+
+    function markFocusRun() {
+        if (!statsFocusTs) { return; }
+        var runs = $('#stats-runs');
+        if (!runs) { return; }
+        var row = runs.querySelector('tr[data-ts="' + statsFocusTs + '"]');
+        if (!row) { return; }
+        row.classList.add('is-focus');
+        try {
+            runs.scrollTop = Math.max(0, row.offsetTop - runs.clientHeight / 2 + row.offsetHeight / 2);
+        } catch (e) { }
+    }
+
+    function openRunDetail(entry) {
+        if (!entry) { return; }
+        setStatsView('mode');
+        var sel = $('#stats-cat');
+        if (!sel) { return; }
+        var exists = Array.prototype.some.call(sel.options, function (o) { return o.value === entry.cat; });
+        if (exists) { sel.value = entry.cat; }
+        statsFocusTs = entry.ts || 0;
+        renderStats(sel.value);
+        markFocusRun();
+    }
+
+    function statsCatEntries() {
+        var current = modeCat(currentMode());
+        var cats = allCats();
+        if (cats.indexOf(current) < 0) { cats.push(current); }
+        var out = [];
+        cats.forEach(function (cat) {
+            var scores = scoresOf(cat);
+            var m = cat.match(/^(\d+),\s*(\d+)$/);
+            var label = m ? (EN ? m[1] + ' balls · ' + m[2] + '% radius' : m[1] + ' 球 · ' + m[2] + '%') : cat;
+            out.push({
+                key: cat, label: label, ts: lastRunStamp(scores),
+                has: scores.length > 0, current: cat === current
+            });
+        });
+        var br = bs ? bs.runs() : [];
+        var sr = sch ? sch.runs() : [];
+        var rr = rt ? rt.runs() : [];
+        out.push({ key: '__BS__', label: 'BALLSHEET · BIGBALL', ts: lastRunStamp(br), has: br.length > 0 });
+        out.push({ key: '__ST__', label: T('舒尔特方格', 'SCHULTE'), ts: lastRunStamp(sr), has: sr.length > 0 });
+        out.push({ key: '__RT__', label: T('反应测试', 'REACTION'), ts: lastRunStamp(rr), has: rr.length > 0 });
+        out.forEach(function (e, i) { e.order = i; });
+        out.sort(function (a, b) {
+            if (b.ts !== a.ts) { return b.ts - a.ts; }
+            if (!!b.has !== !!a.has) { return b.has ? -1 : 1; }
+            if (!!a.current !== !!b.current) { return a.current ? -1 : 1; }
+            return a.order - b.order;
+        });
+        return out;
+    }
+
+    function fillCats(forceRecent) {
         var sel = $('#stats-cat');
         if (!sel) { return; }
         var prev = sel.value;
-        var cats = allCats();
-        var cur = modeCat(currentMode());
-        if (cats.indexOf(cur) < 0) { cats.unshift(cur); }
-        var bsRuns = bs ? bs.runs().length : 0;
-        var stRuns = sch ? sch.runs().length : 0;
-        var rtRuns = rt ? rt.runs().length : 0;
-        sel.innerHTML = cats.map(function (c) {
-            var has = scoresOf(c).length;
-            var label = EN ? c.replace(/^(\d+),\s*(\d+)$/, '$1 balls · $2% radius') : c;
-            return '<option value="' + c + '">' + label + (has ? '' : ' · 无记录') + '</option>';
-        }).join('') + '<option value="__BS__">BALLSHEET · BIGBALL' + (bsRuns ? '' : ' · 无记录') + '</option>' +
-            '<option value="__ST__">舒尔特方格' + (stRuns ? '' : ' · 无记录') + '</option>' +
-            '<option value="__RT__">反应测试' + (rtRuns ? '' : ' · 无记录') + '</option>';
-        sel.value = (prev === '__BS__' || prev === '__ST__' || prev === '__RT__' || cats.indexOf(prev) >= 0) ? prev : cur;
+        var entries = statsCatEntries();
+        var recent = null, fallback = null;
+        entries.forEach(function (e) {
+            if (!recent && e.ts > 0) { recent = e.key; }
+            if (!fallback && e.current) { fallback = e.key; }
+        });
+        if (!fallback) { fallback = entries[0] ? entries[0].key : ''; }
+        var target;
+        if (forceRecent) {
+            target = recent || fallback;
+        } else {
+            target = entries.some(function (e) { return e.key === prev; }) ? prev : (recent || fallback);
+        }
+        sel.innerHTML = entries.map(function (e) {
+            return '<option value="' + e.key + '">' + e.label + (e.has ? '' : ' · 无记录') + '</option>';
+        }).join('');
+        sel.value = target;
+        if (sel.value !== target && entries.length) { sel.value = entries[0].key; }
     }
 
     function renderStats(cat) {
@@ -17189,10 +17999,10 @@ const game = new AntiBallsheetGame(
             statsChart = null;
         }
 
-        var rows = scores.slice(-12).reverse().map(function (s, i) {
+        var rows = scores.slice().reverse().map(function (s, i) {
             var idx = scores.length - i;
             var v = s.values;
-            return '<tr><td>' + idx + '</td><td>' + fmtWhen(s.timestamp) + '</td><td>' + fmt(v.time) + '</td><td>' +
+            return '<tr data-ts="' + runStamp(s) + '"><td>' + idx + '</td><td>' + fmtWhen(s.timestamp) + '</td><td>' + fmt(v.time) + '</td><td>' +
                 fmt(v.averageTime, 3) + '</td><td>' + fmt(v.minAvgTime, 3) + '</td><td>' + fmt(v.maxAvgTime, 3) + '</td></tr>';
         }).join('');
         $('#stats-runs').innerHTML = scores.length ?
@@ -17230,10 +18040,10 @@ const game = new AntiBallsheetGame(
             statsChart = null;
         }
 
-        var rows = runs.slice(-12).reverse().map(function (r, i) {
+        var rows = runs.slice().reverse().map(function (r, i) {
             var idx = runs.length - i;
             var cells2 = r.size * r.size;
-            return '<tr><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + r.size + ' × ' + r.size +
+            return '<tr data-ts="' + runStamp(r) + '"><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + r.size + ' × ' + r.size +
                 '</td><td>' + sch.typeName(r.type) + '</td><td>' + fmt(r.time) + '</td><td>' + String(r.errors) +
                 '</td><td>' + fmt(r.time / cells2, 3) + '</td></tr>';
         }).join('');
@@ -17334,9 +18144,9 @@ const game = new AntiBallsheetGame(
             statsChart = null;
         }
 
-        var rows = runs.slice(-12).reverse().map(function (r, i) {
+        var rows = runs.slice().reverse().map(function (r, i) {
             var idx = runs.length - i;
-            return '<tr><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + String(r.count) +
+            return '<tr data-ts="' + runStamp(r) + '"><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + String(r.count) +
                 '</td><td>' + String(r.tries) + '</td><td>' + fmt(r.avg, 1) + '</td><td>' + String(r.best) +
                 '</td><td>' + String(r.worst) + '</td><td>' + String(r.early) + '</td></tr>';
         }).join('');
@@ -17449,9 +18259,9 @@ const game = new AntiBallsheetGame(
             statsChart = null;
         }
 
-        var rows = runs.slice(-12).reverse().map(function (r, i) {
+        var rows = runs.slice().reverse().map(function (r, i) {
             var idx = runs.length - i;
-            return '<tr><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + fmt(r.time) + '</td><td>' +
+            return '<tr data-ts="' + runStamp(r) + '"><td>' + idx + '</td><td>' + fmtWhen(r.t) + '</td><td>' + fmt(r.time) + '</td><td>' +
                 String(r.eaten) + '</td><td>' + String(r.balls) + '</td><td>' + (r.balls ? Math.round(r.avgRt) : '—') + '</td><td>' +
                 String(r.maxEps) + '</td></tr>';
         }).join('');
@@ -18886,7 +19696,39 @@ const game = new AntiBallsheetGame(
         });
         bindTap($('#res-home'), function () { sfx(380); quitToMenu(); });
 
-        $('#stats-cat').addEventListener('change', function () { renderStats(this.value); });
+        $('#stats-cat').addEventListener('change', function () {
+            statsFocusTs = 0;
+            renderStats(this.value);
+        });
+        Array.prototype.forEach.call(doc.querySelectorAll('.stats-tab'), function (b) {
+            b.addEventListener('click', function () { setStatsView(this.getAttribute('data-stats-view')); });
+        });
+        Array.prototype.forEach.call(doc.querySelectorAll('.stats-filter'), function (b) {
+            b.addEventListener('click', function () { setStatsFilter(this.getAttribute('data-filter')); });
+        });
+        var statsMore = $('#stats-more');
+        if (statsMore) {
+            statsMore.addEventListener('click', function () {
+                statsFeedLimit += STATS_FEED_PAGE;
+                renderStatsFeed(false);
+            });
+        }
+        var statsFeed = $('#stats-feed');
+        if (statsFeed) {
+            var openFromRow = function (row) {
+                if (!row) { return; }
+                var i = Number(row.getAttribute('data-i'));
+                if (isFinite(i)) { openRunDetail(statsFeedShown[i]); }
+            };
+            statsFeed.addEventListener('click', function (e) {
+                openFromRow(e.target.closest ? e.target.closest('.stats-run') : null);
+            });
+            statsFeed.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter' && e.key !== ' ') { return; }
+                e.preventDefault();
+                openFromRow(e.target.closest ? e.target.closest('.stats-run') : null);
+            });
+        }
         bindTap($('#btn-export'), exportStats);
         bindTap($('#btn-clear'), clearStats);
 
