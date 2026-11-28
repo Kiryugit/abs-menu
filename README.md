@@ -3,14 +3,14 @@
     <img src="gh-pages/docs/preview-home.png" width="880" alt="antiBallsheet 中文主菜单">
   </a>
   <br>
-  <sub>四套反应力玩法 · 7:5 满高驾驶舱 · 单文件离线运行</sub>
+  <sub>四套反应力玩法 · REFLEX 主菜单 · 单文件离线运行</sub>
 </p>
 
 <h1 align="center">antiBallsheet · 中文四合一</h1>
 
 <p align="center">
   <a href="https://kiryugit.github.io/abs-menu/"><img alt="在线试玩" src="https://img.shields.io/badge/PLAY-%E5%9C%A8%E7%BA%BF%E8%AF%95%E7%8E%A9-22d3ee?style=flat-square"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-v0.7.6%20beta-f472b6?style=flat-square">
+  <img alt="version" src="https://img.shields.io/badge/version-v0.9.4%20beta-f472b6?style=flat-square">
   <img alt="single file" src="https://img.shields.io/badge/build-single%20HTML-8b5cf6?style=flat-square">
   <img alt="language" src="https://img.shields.io/badge/lang-%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD-38bdf8?style=flat-square">
 </p>
@@ -33,20 +33,22 @@
 | --- | --- | --- |
 | **BALLSHEET** | 固定球数，光标触球即得分，越快吃完越好；支持球数与球径调节 | 总时长、平均 / 最快 / 最慢反应、逐球曲线 |
 | **BALLSHEET · BIGBALL** | 血量随压力持续下降，吃球回血；球色严格跟随原作 `EPS − pressure` 公式 | 存活时长、吃球数、每秒得分、最高秒得分 |
-| **舒尔特方格** | 3×3 – 10×10，9 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等；倒计时支持 0–60000 ms 自定义 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
-| **反应测试** | 点击后才随机等待 1.2–4 秒，屏幕变绿立即点击；支持 1–100 次，默认 5 次 | 平均、最快 / 最慢单次、有效次数、抢跑次数 |
+| **舒尔特方格** | 3×3 – 10×10，14 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等；倒计时支持 0–60000 ms 自定义 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
+| **反应测试** | 点击后才随机等待，默认 1–8 秒，可调 0.5–15 秒；屏幕变绿立即点击，支持 1–100 次，默认 5 次 | 平均、最快 / 最慢单次、有效次数、抢跑次数 |
 
 ## 界面
 
-主菜单固定八项：顶部 **BIGBALL / BALLSHEET** 共用一个外框，标准 BALLSHEET 用青色播放按钮标为主操作；其后是 **舒尔特 / 反应测试 / 数据 / 设置 / 玩法 / 关于**。桌面为 7:5 满高双栏：左栏标题、菜单与按键提示，右栏数据卡与趋势图拉满页面；高度不足时自动回退为正常滚动，不会压住页脚。
+主菜单为四个模式入口：**01 BALLSHEET**（进入第二层后选 BIGBALL 或标准 100 球）、**02 舒尔特**、**03 反应测试**、**04 灵敏度转换**；下方是 **数据 / 设置 / 玩法 / 关于**。桌面为 7:5 满高双栏：左栏标题、菜单与按键提示，右栏数据卡与趋势图拉满页面；高度不足时自动回退为正常滚动，不会压住页脚。≥1500px 且高度足够时 shell 放宽到 1480，并增加跨模式「最近记录」卡。
+
+hero 顶部为呼吸等化器与 **`REFLEX · LOCAL SESSION`**；下方两枚胶囊按 BALLSHEET → BIGBALL → 舒尔特 → 反应测试约每 4.2 秒轮播，显示当前参数与对应 PB，圆点和边框跟随模式色，悬停暂停。
 
 | English | 设置 |
 | --- | --- |
 | <img src="gh-pages/docs/preview-english.png" width="420" alt="English menu"> | <img src="gh-pages/docs/preview-settings.png" width="420" alt="设置页"> |
 
 - **中文 / English**：顶栏 `EN` / `ZH` 一键切换，菜单、设置、HUD、结算、统计、玩法与关于同步换语言。
-- **设置集中在一个入口**：规则 / 外观 / 音效三个页签；规则页再按四套玩法分开，只显示当前模式参数。
-- **数据留在本机**：四套玩法独立存档，趋势图、历史记录、JSON 导出与清除都在「数据」页。
+- **设置集中在一个入口**：主设置只保留辅助 / 外观 / 音效三页；模式规则移到各模式准备页与局内齿轮，不再塞进全局设置。
+- **数据留在本机**：四套玩法独立存档，趋势图、历史记录、JSON 导出与清除都在「数据」页；主菜单「最近记录」跨模式按时间倒序汇总。
 - **外观与音效**：主题色、场地、球色、光标尺寸可调；接球 / 悬停 / 点击三个音效槽位可导入本地音频。
 
 ## 操作
@@ -115,6 +117,6 @@ pwsh -NoProfile -File .\build.ps1
 
 ## 版本
 
-当前 `v0.7.6 (beta)`：舒尔特倒计时改为 0–60000 ms 自定义输入，支持小数秒显示与旧秒数设置迁移；沿用 7:5 满高双栏驾驶舱。
+当前 `v0.9.4 (beta)`：hero 标识改为 `REFLEX`，模式与 PB 胶囊升级为四模式轮播；主菜单合并 BALLSHEET / BIGBALL 入口并新增跨模式最近记录；灵敏度页支持目标 DPI 预选与四项指标反推；反应等待范围可调 0.5–15 秒；局内齿轮、旋转与暂停改为 132px 竖排。
 
 完整版本记录见 [`gh-pages/README.md`](gh-pages/README.md#版本)。

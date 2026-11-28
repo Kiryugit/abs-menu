@@ -5855,6 +5855,42 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     border-color: var(--accent);
     box-shadow: 0 0 0 1px var(--accent-soft);
 }
+.rt-wait-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-family: var(--mono);
+}
+.rt-wait-line label {
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--dim);
+}
+#rt-wait-min,
+#rt-wait-max {
+    width: 78px;
+    padding: 9px 11px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: var(--panel);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    outline: none;
+}
+#rt-wait-min:focus,
+#rt-wait-max:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-soft);
+}
+.rt-wait-dash {
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1;
+}
 .rt-count-unit {
     font-size: 10px;
     letter-spacing: .08em;
@@ -5882,6 +5918,26 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 
     .rt-count-note {
         margin-left: 0;
+        justify-self: end;
+        text-align: right;
+    }
+
+    .rt-wait-line {
+        display: grid;
+        grid-template-columns: 78px 84px 14px 84px 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+    }
+
+    #rt-wait-min,
+    #rt-wait-max {
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
+    .rt-wait-line .rt-count-note {
         justify-self: end;
         text-align: right;
     }
@@ -6031,6 +6087,13 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 14px;
+    --hm-accent: var(--accent);
+    transition: opacity .16s ease, transform .16s ease;
+}
+
+.hero-meta.is-switching {
+    opacity: .35;
+    transform: translateY(2px);
 }
 
 .hm-chip {
@@ -6053,8 +6116,20 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
+    background: var(--hm-accent);
+    box-shadow: 0 0 8px var(--hm-accent);
+    transition: background .2s, box-shadow .2s;
+}
+
+.hm-chip .hm-name {
+    color: var(--hm-accent);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: .09em;
+}
+
+.hm-chip .hm-detail {
+    color: var(--dim);
 }
 
 .hm-chip b {
@@ -6062,7 +6137,9 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     font-weight: 600;
 }
 
-.hm-chip.hm-pb { border-color: color-mix(in srgb, var(--accent) 22%, var(--line)); }
+.hm-chip.hm-pb { border-color: color-mix(in srgb, var(--hm-accent) 22%, var(--line)); }
+
+.hm-chip.hm-mode { min-width: 188px; justify-content: flex-start; }
 
 /* utility buttons: four compact cards in one row */
 .menu-utils {
@@ -6111,6 +6188,111 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
 
 @media (max-width: 700px) {
     .menu-utils { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* recent runs: uses the spare height under the utility row on tall desktops */
+.home-recent {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 104px;
+    max-height: 230px;
+    padding: 11px 14px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-2);
+    background: color-mix(in srgb, var(--panel) 34%, transparent);
+    font-family: var(--mono);
+    overflow: hidden;
+}
+
+.home-recent-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+    color: var(--dim);
+    font-size: 9px;
+    letter-spacing: .16em;
+}
+
+.home-recent-tag {
+    color: var(--faint, var(--dim));
+    font-size: 8px;
+    letter-spacing: .14em;
+}
+
+.home-recent-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.home-recent-row {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 9px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--hairline, var(--line));
+}
+
+.home-recent-row:last-child { border-bottom: 0; }
+.home-recent-row:nth-child(4) { display: none; }
+
+.home-recent-row .rr-i {
+    color: var(--dim);
+    font-size: 8px;
+    letter-spacing: .1em;
+}
+
+.home-recent-row .rr-v {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    min-width: 0;
+    color: var(--ink);
+    font-size: 13px;
+    letter-spacing: .02em;
+}
+.home-recent-row .rr-k {
+    flex: 0 0 auto;
+    color: var(--dim);
+    font-size: 8px;
+    font-style: normal;
+    letter-spacing: .08em;
+    white-space: nowrap;
+}
+.home-recent-row .rr-v b {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.home-recent-row:first-child .rr-v b { color: var(--accent); }
+
+.home-recent-row .rr-d {
+    color: var(--dim);
+    font-size: 8px;
+    letter-spacing: .06em;
+    white-space: nowrap;
+}
+
+.home-recent-empty {
+    margin: 0;
+    padding: 10px 0;
+    color: var(--dim);
+    font-size: 9px;
+    line-height: 1.65;
+    letter-spacing: .05em;
+}
+
+@media (max-width: 880px) {
+    .home-recent { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6720,14 +6902,47 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     letter-spacing: .08em;
     text-transform: uppercase;
 }
-.sens-out b {
+.sens-out b,
+.sens-out .sens-metric {
     display: block;
-    margin-top: 5px;
+    width: 100%;
+    margin-top: 4px;
     color: var(--accent);
     font-family: var(--mono);
     font-size: 16px;
     font-weight: 600;
     white-space: nowrap;
+}
+
+.sens-out .sens-metric {
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    outline: none;
+}
+
+.sens-out .sens-metric:hover {
+    border-bottom-color: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.sens-out .sens-metric:focus {
+    border-bottom-color: var(--accent);
+    color: #fff;
+}
+
+.sens-out > div:last-child .sens-metric {
+    color: #d8ff5a;
+}
+
+.sens-hint {
+    margin: 7px 0 0;
+    color: var(--dim);
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .03em;
 }
 .sens-error {
     min-height: 16px;
@@ -6765,6 +6980,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     .sens-wide { grid-column: span 1; }
     .sens-out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .sens-out b { font-size: 14px; }
+    .sens-out .sens-metric { font-size: 14px; }
 }
 
 /* ---------- sensitivity v2: bidirectional / compact ---------- */
@@ -6882,6 +7098,7 @@ body.ov-live:not(.st-skin) .st-cur.is-hot {
     .sens-bar { margin-bottom: 10px; }
     .sens-out { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .sens-out b { font-size: 14px; }
+    .sens-out .sens-metric { font-size: 14px; }
     .num-pad { left: 10px; right: 10px; bottom: 10px; width: auto; padding: 9px; }
     .num-pad-grid button { height: 46px; font-size: 17px; }
 }
@@ -7788,6 +8005,15 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     backdrop-filter: blur(14px) saturate(.9);
 }
 
+.hud-right .hud-controls {
+    position: static;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+}
+
 .hud-controls #hud-lr-wrap,
 .hud-controls #hud-spin,
 .hud-controls #hud-pause {
@@ -7811,17 +8037,17 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
 .hud-controls #hud-spin.is-visible { display: block; }
 .hud-controls #hud-pause { display: block; }
 
-/* no left/right switch: keep the classic bottom row, clear of the left HUD */
+/* no left/right switch: keep the same vertical dock, just two rows */
 .hud-controls:not(:has(#hud-lr-wrap.is-visible)) {
-    width: auto;
-    flex-direction: row;
-    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
     gap: 6px;
 }
 
 .hud-controls:not(:has(#hud-lr-wrap.is-visible)) #hud-spin,
 .hud-controls:not(:has(#hud-lr-wrap.is-visible)) #hud-pause {
-    width: auto;
+    width: 100%;
 }
 
 .hud-controls #hud-spin,
@@ -7851,7 +8077,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     .hud-controls {
         right: 8px;
         bottom: 8px;
-        width: 168px;
+        width: 100%;
         padding: 5px;
         gap: 5px;
     }
@@ -8650,15 +8876,10 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     z-index: 4;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: stretch;
+    width: 132px;
     gap: 8px;
     pointer-events: none;
-}
-
-.hud-right .hud-controls {
-    position: static;
-    right: auto;
-    bottom: auto;
 }
 
 /* mode accents: classic mint / BIGBALL pink / Schulte lime / reaction amber */
@@ -8692,7 +8913,8 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     align-items: center;
     justify-content: center;
     gap: 7px;
-    width: 84px;
+    width: 100%;
+    box-sizing: border-box;
     height: 38px;
     padding: 0 10px;
     border: 1px solid color-mix(in srgb, var(--ma) 36%, transparent);
@@ -9413,7 +9635,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     }
 
     .hud-mode-settings {
-        width: 74px;
+        width: 100%;
         height: 30px;
         font-size: 8px;
         gap: 5px;
@@ -9431,8 +9653,66 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     }
 
     .hud-mode-settings {
-        width: 78px;
+        width: 100%;
         height: 34px;
+    }
+}
+
+
+@media (min-width: 1500px) and (min-height: 820px) {
+    .shell {
+        max-width: 1480px;
+        padding-left: clamp(28px, 3vw, 52px);
+        padding-right: clamp(28px, 3vw, 52px);
+    }
+
+    .home {
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 420px);
+        gap: clamp(40px, 3.2vw, 64px);
+    }
+
+    .stage {
+        padding-top: clamp(22px, 4vh, 42px);
+    }
+
+    .home .logo {
+        font-size: clamp(62px, 4.4vw, 86px);
+    }
+
+    .home .menu > .mi {
+        flex: 0 0 64px;
+        min-height: 64px;
+        max-height: none;
+        padding: 14px 20px;
+    }
+
+    .menu-duo {
+        flex: 0 0 86px;
+        min-height: 86px;
+        max-height: none;
+    }
+
+    .home-recent {
+        max-height: 290px;
+    }
+
+    .home-recent-row:nth-child(4) {
+        display: grid;
+    }
+
+    .home-side:not(:has(.spark-wrap.is-empty)) .card-current {
+        flex: 1 1 0;
+    }
+
+    .home-side:not(:has(.spark-wrap.is-empty)) .card-current .spark-wrap {
+        flex: 1 1 auto;
+        min-height: 210px;
+    }
+}
+
+@media (max-height: 780px) and (min-width: 881px) {
+    .home-recent {
+        display: none;
     }
 }
 
@@ -9635,15 +9915,15 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                             <div class="hero">
                                 <div class="hero-signal" aria-hidden="true">
                                     <span class="eq"><i></i><i></i><i></i><i></i><i></i></span>
-                                    <span class="hs-label">反应力速通</span>
+                                    <span class="hs-label">REFLEX</span>
                                     <span class="hs-dot"></span>
                                     <span class="hs-en">LOCAL SESSION</span>
                                 </div>
                                 <div class="logo"><span class="logo-anti">anti</span><span
                                         class="logo-rest">BALLSHEET</span></div>
-                                <div class="hero-meta">
-                                    <span class="hm-chip hm-mode"><i></i><span id="home-mode">—</span></span>
-                                    <span class="hm-chip hm-pb">PB <b id="home-pb">—</b></span>
+                                <div class="hero-meta" aria-label="四模式轮换概览" title="约 4 秒轮换一个模式，悬停暂停">
+                                    <span class="hm-chip hm-mode"><i></i><b class="hm-name" id="hero-mode-name">BALLSHEET</b><span class="hm-detail" id="hero-mode-detail">—</span></span>
+                                    <span class="hm-chip hm-pb">PB <b id="hero-pb">—</b></span>
                                 </div>
                             </div>
 
@@ -9710,6 +9990,13 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                     <span class="mi-hint">版本 · 致谢</span>
                                     <span class="mi-go">▶</span>
                                 </button>
+                                </div>
+                                <div class="home-recent" id="home-recent">
+                                    <div class="home-recent-head">
+                                        <span>最近记录</span>
+                                        <span class="home-recent-tag">ALL MODES</span>
+                                    </div>
+                                    <div class="home-recent-list" id="home-recent-list"></div>
                                 </div>
                             </nav>
 
@@ -9903,9 +10190,20 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                         <span class="rt-count-note">自定义 1–100</span>
                                     </div>
                                     <div class="st-chips rt-presets" id="rt-presets"></div>
-                                    <p class="rt-summary" id="rt-summary">5 次 · 每局按有效反应取平均</p>
+                                    <div class="rt-wait-line">
+                                        <label for="rt-wait-min">等待范围</label>
+                                        <input id="rt-wait-min" type="number" min="0.5" max="15" step="0.1" value="1"
+                                            inputmode="decimal" aria-label="随机等待下限，秒">
+                                        <span class="rt-wait-dash">–</span>
+                                        <input id="rt-wait-max" type="number" min="0.5" max="15" step="0.1" value="8"
+                                            inputmode="decimal" aria-label="随机等待上限，秒">
+                                        <span class="rt-count-unit">秒</span>
+                                        <span class="rt-count-note">0.5–15 · 可自定</span>
+                                    </div>
+                                    <div class="st-chips rt-wait-presets" id="rt-wait-presets"></div>
+                                    <p class="rt-summary" id="rt-summary">5 次 · 等待 1–8 秒 · 取平均</p>
                                 </div>
-                                <p class="bs-foot">每次点击后随机等待 <b>1.2–4 秒</b>，变绿再点击；抢跑停在提示页，
+                                <p class="bs-foot">每次点击后随机等待，默认 <b>1–8 秒</b>，可在上方调整；变绿再点击，抢跑停在提示页，
                                     点击重试。N 次结束后按有效单次取平均，成绩单独存档。</p>
                             </div>
                             <p class="sub-foot">参数存在本地，下一局生效。</p>
@@ -10072,8 +10370,15 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 <label class="sens-field"><span>来源 DPI</span><input class="sel sens-num" id="sens-dpi" type="text" inputmode="decimal" autocomplete="off" value="800" data-label="来源 DPI"></label>
                                 <label class="sens-field"><span>目标 DPI</span><input class="sel sens-num" id="sens-tdpi" type="text" inputmode="decimal" autocomplete="off" value="800" data-label="目标 DPI"></label>
                                 <div class="sens-preset-row">
-                                    <span>来源 DPI 预选</span>
+                                    <span>来源 DPI</span>
                                     <div class="sens-presets" id="sens-dpi-presets" role="group" aria-label="来源 DPI 预选">
+                                        <button type="button" data-dpi="400" aria-pressed="false">400</button>
+                                        <button type="button" data-dpi="800" aria-pressed="false">800</button>
+                                        <button type="button" data-dpi="1600" aria-pressed="false">1600</button>
+                                        <button type="button" data-dpi="3200" aria-pressed="false">3200</button>
+                                    </div>
+                                    <span>目标 DPI</span>
+                                    <div class="sens-presets" id="sens-tdpi-presets" role="group" aria-label="目标 DPI 预选">
                                         <button type="button" data-dpi="400" aria-pressed="false">400</button>
                                         <button type="button" data-dpi="800" aria-pressed="false">800</button>
                                         <button type="button" data-dpi="1600" aria-pressed="false">1600</button>
@@ -10084,11 +10389,12 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 <label class="sens-field"><span>目标 sens</span><input class="sel sens-num" id="sens-tvalue" type="text" inputmode="decimal" autocomplete="off" value="0.3143" data-label="目标 sens"></label>
                             </div>
                             <div class="sens-out" id="sens-out">
-                                <div><span>来源 CM/360</span><b id="sens-cm">—</b></div>
-                                <div><span>目标 CM/360</span><b id="sens-tcm">—</b></div>
-                                <div><span>来源 eDPI</span><b id="sens-edpi">—</b></div>
-                                <div><span>目标 eDPI</span><b id="sens-tedpi">—</b></div>
+                                <div><span>来源 CM/360</span><input class="sens-metric" id="sens-cm" type="text" inputmode="decimal" autocomplete="off" value="—" aria-label="来源 CM/360, 可编辑反推 sens"></div>
+                                <div><span>目标 CM/360</span><input class="sens-metric" id="sens-tcm" type="text" inputmode="decimal" autocomplete="off" value="—" aria-label="目标 CM/360, 可编辑反推 sens"></div>
+                                <div><span>来源 eDPI</span><input class="sens-metric" id="sens-edpi" type="text" inputmode="decimal" autocomplete="off" value="—" aria-label="来源 eDPI, 可编辑反推 sens"></div>
+                                <div><span>目标 eDPI</span><input class="sens-metric" id="sens-tedpi" type="text" inputmode="decimal" autocomplete="off" value="—" aria-label="目标 eDPI, 可编辑反推 sens"></div>
                             </div>
+                            <p class="sens-hint">数字可直接改：输入 CM/360 或 eDPI 后，会按对应侧 DPI 反推 sens；另一侧同步换算。</p>
                             <p class="sens-error" id="sens-error"></p>
                             <div class="sens-foot">
                                 <span>公式：cm/360 = 360 × 2.54 ÷ (DPI × sens × yaw)</span>
@@ -10169,7 +10475,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 </section>
                                 <section>
                                     <h3>第四套 · 反应测试</h3>
-                                    <p>每次点击后才开始随机等待 1.2–4 秒，屏幕从红色变成绿色后立刻点击，记录这一次的毫秒数；
+                                    <p>每次点击后才开始随机等待，默认 1–8 秒、可在设置里调整；屏幕从红色变成绿色后立刻点击，记录这一次的毫秒数；
                                        绿色出现前点击算<strong>抢跑</strong>，停在提示页，点击重试且不计入。完成设定的 N 次后，
                                        只按有效单次取平均，可单独查看最好、最快、最慢与抢跑次数。</p>
                                 </section>
@@ -10348,6 +10654,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         '本模式个人最好': 'Personal best · this mode',
         '秒': 's',
         '还没有记录': 'No runs yet',
+        '最近记录': 'Recent runs',
         '上一局': 'Last run',
         '局数': 'Runs',
         '最佳平均反应': 'Best avg reaction',
@@ -10367,7 +10674,6 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
 
         /* home hero */
         '速通系统 · 本地记录': 'SPEEDRUN SYSTEM · LOCAL RECORDS',
-        '反应力速通': 'Reflex speedrun',
         '手快，计时短': 'Quick hands, short clock',
         '生存 · 血量 + 每秒得分': 'Survival · HP + score/sec',
         '方格 · 顺序找数': 'Grid · find in order',
@@ -10525,7 +10831,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         '次': 'trials',
         '自定义 1–100': 'Custom 1–100',
         '次 · 每局按有效反应取平均': 'trials · mean of valid reactions',
-        '屏幕变绿后立刻点击；抢跑会重来且不计入。每次随机等待 1.2–4 秒，N 次结束后按有效单次取平均，成绩单独存档。': 'Click as soon as the screen turns green. A click before green restarts that trial and never enters the mean. Each wait is random 1.2–4 s; after N valid trials the mean is recorded in its own bucket.',
+        '屏幕变绿后立刻点击；抢跑会重来且不计入。每次随机等待，默认 1–8 秒、可在设置里调整，N 次结束后按有效单次取平均，成绩单独存档。': 'Click as soon as the screen turns green. A click before green restarts that trial and never enters the mean. Each wait is random, 1–8 s by default and adjustable in settings; after N valid trials the mean is recorded in its own bucket.',
         '反应测试流程参考': 'Reaction-test flow reference',
         '轮次': 'Round',
         '平均 / 毫秒': 'Avg / ms',
@@ -10658,7 +10964,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
             '</ul></section>',
             '<section><h3>Reading the numbers</h3><p><strong>Time</strong> is the whole run, <strong>avg reaction</strong> is the mean gap between balls, fastest / slowest are the extremes. Fewer balls means every miss costs more.</p></section>',
             '<section><h3>Second ruleset · BIGBALL</h3><p>Menu item 01 is the original ballsheet rules on the same 600 px field: HP starts at 100 and drains as <strong>pressure · ln(1 + t)</strong> from the first touch — the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <strong>r / threshold</strong>. <strong>Score/sec</strong> is the sum of catches in the last five seconds except the newest one, always divided by five. Run ends when HP drops below zero.</p></section>',
-            '<section><h3>Fourth ruleset · Reaction test</h3><p>Each click starts a random 1.2–4 s wait; the screen turns from red to green and you click the moment it does. A click before green is <strong>too soon</strong>: the screen waits at a retry prompt and that trial never enters the mean. After the configured N valid trials, the score is the mean of the individual times, with best, fastest, slowest and early clicks recorded separately.</p></section>',
+            '<section><h3>Fourth ruleset · Reaction test</h3><p>Each click starts a random wait (1–8 s by default, adjustable in settings); the screen turns from red to green and you click the moment it does. A click before green is <strong>too soon</strong>: the screen waits at a retry prompt and that trial never enters the mean. After the configured N valid trials, the score is the mean of the individual times, with best, fastest, slowest and early clicks recorded separately.</p></section>',
             '<section class="full"><h3>Original notes</h3><p>Cursor size is visual only; hit detection always uses ball size. Restarting mid-run discards that run and nothing is saved until the last ball. Records are grouped by balls × ball size, so changing the mode changes the record set.</p></section>'
         ].join(''),
         '[data-screen="about"] .doc': [
@@ -10684,7 +10990,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         '[data-screen="stats"] .sub-foot': 'Four stores: BALLSHEET uses <b>GameStats_&lt;balls&gt;, &lt;size&gt;</b> (original keys), BIGBALL uses <b>BallSheetRuns</b>, Schulte uses <b>schulteRuns</b>, reaction test uses <b>reactionRuns</b>. They never affect each other.',
         '#bs-rules .bs-foot': 'HP drains as <b>pressure · ln(1 + t)</b> from the first touch; the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <b>r / threshold</b>. The two rulesets keep separate parameters.',
         '#st-rules .bs-foot': 'The grid is always <b>425 px</b>; all rules share the same field. Start with <b>Light</b>: tap in order, a wrong tap only adds an <b>error</b> with no time penalty. The clock starts on the first correct tap and stops after the last cell.',
-        '#rt-rules .bs-foot': 'Each click starts a random <b>1.2–4 s</b> wait; click when it turns green. An early click stays on a retry prompt. After N valid trials the mean is recorded in its own bucket.',
+        '#rt-rules .bs-foot': 'Each click starts a random wait you set above (1–8 s by default); click when it turns green. An early click stays on a retry prompt. After N valid trials the mean is recorded in its own bucket.',
         '[data-pane="look"] > .bs-col-note': 'Colours are stored by the browser. The menu uses the same palette — background, accent and target colour stay in sync with the field.',
         '#bs-col-box .bs-col-note': 'Source formula: B = score per second − pressure; ball = rgb(200−B, 150+3B, 0), clamped per channel to 0–255 every frame. Score per second uses the last 5 s only, always divides by 5, and excludes the newest catch — so there is no green flash on a catch; the colour lags by one catch and floats every frame. BALLSHEET only.',
         '#bs-feel-box .bs-col-note': 'X = HP lost 0→100%, Y = colour shift. The preview ball drains and heals on a loop using the current curve; the bar above it mirrors HP.',
@@ -13615,12 +13921,13 @@ const game = new AntiBallsheetGame(
     var LS_SET = 'rtSettings';
     var LS_RUNS = 'reactionRuns';
     var MAX_RUNS = 300;
-    var DEFAULTS = { count: 5 };
+    var DEFAULTS = { count: 5, waitMin: 1000, waitMax: 8000 };
     var PRESETS = [5, 10, 20, 30];
+    var WAIT_PRESETS = [[1000, 4000], [1000, 6000], [1000, 8000], [2000, 12000]];
     var MIN_COUNT = 1;
     var MAX_COUNT = 100;
-    var WAIT_MIN = 1200;
-    var WAIT_MAX = 4000;
+    var MIN_WAIT = 500;
+    var MAX_WAIT = 15000;
     var RESULT_HOLD = 750;
 
     var I18N = window.ABS_I18N || { EN: false, t: function (zh) { return zh; } };
@@ -13631,6 +13938,8 @@ const game = new AntiBallsheetGame(
         paused: false,
         phase: 'idle',
         count: DEFAULTS.count,
+        waitMin: DEFAULTS.waitMin,
+        waitMax: DEFAULTS.waitMax,
         round: 0,
         times: [],
         early: 0,
@@ -13652,11 +13961,27 @@ const game = new AntiBallsheetGame(
         if (!isNum(n)) { n = DEFAULTS.count; }
         return clamp(n, MIN_COUNT, MAX_COUNT);
     }
+    function normWait(v, fallback) {
+        var n = Number(v);
+        if (!isNum(n)) { n = fallback; }
+        return Math.round(clamp(n, MIN_WAIT, MAX_WAIT));
+    }
+    function normWaitRange(min, max) {
+        var lo = normWait(min, DEFAULTS.waitMin);
+        var hi = normWait(max, DEFAULTS.waitMax);
+        if (hi < lo + 500) { hi = Math.min(MAX_WAIT, lo + 500); }
+        if (hi <= lo) { lo = Math.max(MIN_WAIT, hi - 500); }
+        return { waitMin: lo, waitMax: hi };
+    }
     function mean() {
         if (!S.times.length) { return 0; }
         var sum = 0;
         for (var i = 0; i < S.times.length; i++) { sum += S.times[i]; }
         return sum / S.times.length;
+    }
+    function secLabel(ms) {
+        var s = Number(ms) / 1000;
+        return (s % 1 ? s.toFixed(1) : String(Math.round(s)));
     }
     function fastest() {
         return S.times.length ? Math.min.apply(null, S.times) : null;
@@ -13664,11 +13989,16 @@ const game = new AntiBallsheetGame(
 
     /* ---------------- storage ---------------- */
     function readSettings() {
-        var out = { count: DEFAULTS.count };
+        var out = { count: DEFAULTS.count, waitMin: DEFAULTS.waitMin, waitMax: DEFAULTS.waitMax };
         try {
             var raw = localStorage.getItem(LS_SET);
             var p = raw ? JSON.parse(raw) : null;
             if (p && isNum(Number(p.count))) { out.count = normCount(p.count); }
+            if (p) {
+                var wr = normWaitRange(p.waitMin, p.waitMax);
+                out.waitMin = wr.waitMin;
+                out.waitMax = wr.waitMax;
+            }
             if (!localStorage.getItem('rtDefaultMigrated')) {
                 localStorage.setItem('rtDefaultMigrated', 'v071');
                 if (out.count === 10) {
@@ -13685,7 +14015,12 @@ const game = new AntiBallsheetGame(
             for (k in patch) {
                 if (!patch.hasOwnProperty(k)) { continue; }
                 if (k === 'count') { s.count = normCount(patch[k]); }
+                if (k === 'waitMin') { s.waitMin = Number(patch[k]); }
+                if (k === 'waitMax') { s.waitMax = Number(patch[k]); }
             }
+            var wr = normWaitRange(s.waitMin, s.waitMax);
+            s.waitMin = wr.waitMin;
+            s.waitMax = wr.waitMax;
         }
         try { localStorage.setItem(LS_SET, JSON.stringify(s)); } catch (e) { }
         return s;
@@ -13787,8 +14122,8 @@ const game = new AntiBallsheetGame(
             el.kicker.textContent = 'REACTION TEST';
             el.big.textContent = T('点击开始', 'Click to start');
             el.sub.textContent = T('共 ' + S.count + ' 次 · 取平均', S.count + ' trials · average');
-            el.tip.textContent = T('每次点击后随机等待 1.2–4 秒；变绿后立刻点击，抢跑本次重来',
-                'Each click starts a 1.2–4 s random wait; click when green, an early click restarts this trial');
+            el.tip.textContent = T('每次点击后随机等待 ' + secLabel(S.waitMin) + '–' + secLabel(S.waitMax) + ' 秒；变绿后立刻点击，抢跑本次重来',
+                'Each click waits ' + secLabel(S.waitMin) + '–' + secLabel(S.waitMax) + ' s; click on green, an early click restarts the trial');
         } else if (S.phase === 'wait') {
             el.kicker.textContent = T('等待绿色', 'WAIT FOR GREEN');
             el.big.textContent = T('等待绿色…', 'Wait for green…');
@@ -13849,7 +14184,7 @@ const game = new AntiBallsheetGame(
         if (!S.active || S.paused) { return; }
         if (S.round >= S.count) { finish(); return; }
         setPhase('wait');
-        schedule(WAIT_MIN + Math.random() * (WAIT_MAX - WAIT_MIN), go);
+        schedule(S.waitMin + Math.random() * (S.waitMax - S.waitMin), go);
         paint();
     }
 
@@ -13938,6 +14273,8 @@ const game = new AntiBallsheetGame(
         grab();
         var s = readSettings();
         S.count = normCount(s.count);
+        S.waitMin = s.waitMin;
+        S.waitMax = s.waitMax;
         S.active = true;
         S.paused = false;
         S.round = 0;
@@ -13997,6 +14334,7 @@ const game = new AntiBallsheetGame(
     window.Reaction = {
         defaults: DEFAULTS,
         presets: PRESETS,
+        waitPresets: WAIT_PRESETS,
         settings: readSettings,
         saveSettings: saveSettings,
         runs: readRuns,
@@ -14721,6 +15059,187 @@ const game = new AntiBallsheetGame(
         if (side) { side.textContent = values.length + ' 局'; }
     }
 
+    function recentAll() {
+        var items = [];
+        function num(v) { return typeof v === 'number' && isFinite(v); }
+        function add(ts, key, text) {
+            var n = ts instanceof Date ? ts.getTime() : Number(ts);
+            if (!isFinite(n)) { return; }
+            items.push({ ts: n, key: key, text: text });
+        }
+        try {
+            if (bs) {
+                bs.runs().forEach(function (r) {
+                    if (r && num(r.time)) { add(r.t, 'BIGBALL', fmt(r.time) + T(' 秒', ' s')); }
+                });
+            }
+        } catch (e) { }
+        try {
+            if (sch) {
+                sch.runs().forEach(function (r) {
+                    if (r && num(r.time)) {
+                        add(r.t, T('舒尔特 ' + r.size + '×' + r.size, 'Schulte ' + r.size + '×' + r.size), fmt(r.time) + T(' 秒', ' s'));
+                    }
+                });
+            }
+        } catch (e) { }
+        try {
+            if (rt) {
+                rt.runs().forEach(function (r) {
+                    if (r && num(r.avg)) { add(r.t, T('反应 ' + r.count + ' 次', 'Reaction ' + r.count), fmt(r.avg, 1) + T(' 毫秒', ' ms')); }
+                });
+            }
+        } catch (e) { }
+        try {
+            allCats().forEach(function (cat) {
+                var parts = String(cat).split('_');
+                var label = 'BALLSHEET ' + parts[0] + (parts[1] ? ' · ' + parts[1] + '%' : '');
+                scoresOf(cat).forEach(function (entry) {
+                    var v = entry.values || {};
+                    if (v && num(v.time)) { add(entry.timestamp, label, fmt(v.time) + T(' 秒', ' s')); }
+                });
+            });
+        } catch (e) { }
+        items.sort(function (a, b) { return b.ts - a.ts; });
+        return items.slice(0, 4);
+    }
+
+    function paintRecent() {
+        var host = $('#home-recent-list');
+        if (!host) { return; }
+        var recent = recentAll();
+        host.innerHTML = '';
+        if (!recent.length) {
+            var empty = doc.createElement('p');
+            empty.className = 'home-recent-empty';
+            empty.textContent = T('还没有任何成绩。开一局，最近的 BALLSHEET / 舒尔特 / 反应记录会按时间倒序排在这里。',
+                'No runs yet. Play once and the latest BALLSHEET / Schulte / reaction results will appear here, newest first.');
+            host.appendChild(empty);
+            return;
+        }
+        recent.forEach(function (entry, i) {
+            var row = doc.createElement('div');
+            row.className = 'home-recent-row';
+            var idx = doc.createElement('span');
+            idx.className = 'rr-i';
+            idx.textContent = '#' + (i + 1);
+            var val = doc.createElement('span');
+            val.className = 'rr-v';
+            var key = doc.createElement('em');
+            key.className = 'rr-k';
+            key.textContent = entry.key;
+            var num = doc.createElement('b');
+            num.textContent = entry.text;
+            val.appendChild(key);
+            val.appendChild(num);
+            var when = doc.createElement('span');
+            when.className = 'rr-d';
+            when.textContent = fmtWhen(entry.ts);
+            row.appendChild(idx);
+            row.appendChild(val);
+            row.appendChild(when);
+            host.appendChild(row);
+        });
+    }
+
+    /* four-mode hero ticker: BALLSHEET → BIGBALL → SCHULTE → REACTION */
+    var HERO_CYCLE_MS = 4200;
+    var heroCycleAt = 0;
+    var heroCycleTimer = 0;
+    var heroCycleHold = false;
+    var heroCycleSwap = 0;
+
+    function heroCycleList() {
+        var out = [];
+        try {
+            var s = currentMode();
+            var pb = pbOf(modeCat(s));
+            out.push({
+                key: 'speed', name: 'BALLSHEET',
+                detail: modeLabel(s),
+                pb: pb === null ? '—' : fmt(pb) + T(' 秒', ' s'),
+                color: '#5bf2dc'
+            });
+        } catch (e) { }
+        try {
+            var b = bs ? bs.settings() : null;
+            if (b) {
+                var bpb = bs.pb();
+                out.push({
+                    key: 'bigball', name: 'BIGBALL',
+                    detail: T('血量 ' + b.hp + ' · 压力 ' + b.pressure, 'HP ' + b.hp + ' · PRESSURE ' + b.pressure),
+                    pb: bpb === null ? '—' : fmt(bpb) + T(' 秒', ' s'),
+                    color: '#fa96c8'
+                });
+            }
+        } catch (e) { }
+        try {
+            var sc = sch ? sch.settings() : null;
+            if (sc) {
+                var spb = sch.pb(sc.size, sc.type);
+                out.push({
+                    key: 'schulte', name: T('舒尔特', 'SCHULTE'),
+                    detail: sc.size + ' × ' + sc.size + ' · ' + sch.typeName(sc.type),
+                    pb: spb ? fmt(spb.time) + T(' 秒', ' s') : '—',
+                    color: '#d8ff5a'
+                });
+            }
+        } catch (e) { }
+        try {
+            var rs = rt ? rt.settings() : null;
+            if (rs) {
+                var rpb = rt.pb();
+                out.push({
+                    key: 'reaction', name: T('反应测试', 'REACTION'),
+                    detail: T(rs.count + ' 次 · 均分', rs.count + ' TRIALS · MEAN'),
+                    pb: rpb === null ? '—' : fmt(rpb, 1) + T(' 毫秒', ' ms'),
+                    color: '#ffc15a'
+                });
+            }
+        } catch (e) { }
+        return out;
+    }
+
+    function heroCycleApply() {
+        var meta = $('.hero-meta');
+        if (!meta) { return; }
+        var list = heroCycleList();
+        if (!list.length) { return; }
+        var m = list[heroCycleAt % list.length];
+        var name = $('#hero-mode-name'), detail = $('#hero-mode-detail'), pb = $('#hero-pb');
+        if (name) { name.textContent = m.name; }
+        if (detail) { detail.textContent = m.detail; }
+        if (pb) { pb.textContent = m.pb; }
+        meta.setAttribute('data-mode', m.key);
+        meta.style.setProperty('--hm-accent', m.color);
+    }
+
+    function heroCycleStep() {
+        if (heroCycleHold || document.hidden) { return; }
+        if (st.screen !== 'home') { return; }
+        heroCycleAt++;
+        var meta = $('.hero-meta');
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!meta || reduce) { heroCycleApply(); return; }
+        meta.classList.add('is-switching');
+        clearTimeout(heroCycleSwap);
+        heroCycleSwap = setTimeout(function () {
+            heroCycleApply();
+            meta.classList.remove('is-switching');
+        }, 170);
+    }
+
+    function startHeroCycle() {
+        heroCycleApply();
+        var meta = $('.hero-meta');
+        if (!meta || heroCycleTimer) { return; }
+        heroCycleTimer = setInterval(heroCycleStep, HERO_CYCLE_MS);
+        meta.addEventListener('pointerenter', function () { heroCycleHold = true; });
+        meta.addEventListener('pointerleave', function () { heroCycleHold = false; });
+    }
+
+    function refreshHeroCycle() { heroCycleApply(); }
+
     /* ============================================================
        home
        ============================================================ */
@@ -14730,8 +15249,7 @@ const game = new AntiBallsheetGame(
         var scores = scoresOf(cat);
         var pb = pbOf(cat);
 
-        $('#home-mode').textContent = modeLabel(s);
-        $('#home-pb').textContent = pb === null ? '—' : fmt(pb) + ' 秒';
+        refreshHeroCycle();
 
         $('#side-pb').textContent = pb === null ? '—' : fmt(pb);
 
@@ -14779,6 +15297,7 @@ const game = new AntiBallsheetGame(
             rtHint.textContent = T(rcount + ' 次 · 均分', rcount + ' trials · mean');
         }
 
+        paintRecent();
         drawSpark(scores.slice(-12).map(function (x) { return x.values.time; }));
     }
 
@@ -14845,12 +15364,46 @@ const game = new AntiBallsheetGame(
         sensPaint('source');
     }
 
-    function sensSetPreset(value) {
-        var dpi = $('#sens-dpi');
+    function sensSetPreset(id, value) {
+        var dpi = $('#' + id);
         if (!dpi) { return; }
         dpi.value = String(value);
-        sensAnchor = 'source';
-        sensPaint('source');
+        sensPaint();
+    }
+
+    function sensMetric(id) {
+        var from = $('#sens-from'), to = $('#sens-to');
+        var dpiEl = $('#sens-dpi'), tdpiEl = $('#sens-tdpi');
+        var srcEl = $('#sens-value'), tgtEl = $('#sens-tvalue');
+        var node = $('#' + id);
+        if (!from || !to || !dpiEl || !tdpiEl || !srcEl || !tgtEl || !node) { return; }
+        var v = Number(node.value);
+        var dpi = Number(dpiEl.value), tdpi = Number(tdpiEl.value);
+        var f = sensGame(from.value), t = sensGame(to.value);
+        var err = '';
+        if (!isFinite(v) || v <= 0) {
+            err = T('反推数值需要大于 0', 'Reverse value must be > 0');
+        } else if (!isFinite(dpi) || dpi <= 0 || !isFinite(tdpi) || tdpi <= 0) {
+            err = T('两侧 DPI 都需要大于 0', 'Both DPI values must be > 0');
+        }
+        if (err) {
+            var errEl = $('#sens-error');
+            if (errEl) { errEl.textContent = err; }
+            return;
+        }
+        var anchor = 'source';
+        if (id === 'sens-cm') {
+            srcEl.value = sensFormat(360 * 2.54 / (dpi * v * f.yaw));
+        } else if (id === 'sens-tcm') {
+            tgtEl.value = sensFormat(360 * 2.54 / (tdpi * v * t.yaw));
+            anchor = 'target';
+        } else if (id === 'sens-edpi') {
+            srcEl.value = sensFormat(v / dpi);
+        } else {
+            tgtEl.value = sensFormat(v / tdpi);
+            anchor = 'target';
+        }
+        sensPaint(anchor);
     }
 
     function sensPaint(anchor) {
@@ -14890,14 +15443,25 @@ const game = new AntiBallsheetGame(
                 });
             });
             if (swapEl) { swapEl.addEventListener('click', sensSwap); }
-            var presetEl = $('#sens-dpi-presets');
-            if (presetEl) {
+            ['sens-dpi-presets', 'sens-tdpi-presets'].forEach(function (id) {
+                var presetEl = $('#' + id);
+                if (!presetEl) { return; }
+                var targetId = id === 'sens-tdpi-presets' ? 'sens-tdpi' : 'sens-dpi';
                 presetEl.addEventListener('click', function (e) {
                     var btn = e.target.closest('button[data-dpi]');
                     if (!btn || !presetEl.contains(btn)) { return; }
-                    sensSetPreset(Number(btn.getAttribute('data-dpi')));
+                    sensSetPreset(targetId, Number(btn.getAttribute('data-dpi')));
                 });
-            }
+            });
+            ['sens-cm', 'sens-tcm', 'sens-edpi', 'sens-tedpi'].forEach(function (id) {
+                var metric = $('#' + id);
+                if (!metric) { return; }
+                metric.addEventListener('focus', function () { this.select(); });
+                metric.addEventListener('change', function () { sensMetric(id); });
+                metric.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); this.blur(); }
+                });
+            });
         }
         var f = sensGame(from.value), t = sensGame(to.value);
         var dir = $('#sens-dir');
@@ -14937,18 +15501,22 @@ const game = new AntiBallsheetGame(
         for (var id in out) {
             if (out.hasOwnProperty(id)) {
                 var node = $(id);
-                if (node) { node.textContent = out[id]; }
+                if (node) {
+                    if (node.tagName === 'INPUT') { node.value = out[id]; }
+                    else { node.textContent = out[id]; }
+                }
             }
         }
-        var presets = $('#sens-dpi-presets');
-        if (presets) {
+        [['sens-dpi-presets', dpi], ['sens-tdpi-presets', tdpi]].forEach(function (pair) {
+            var presets = $('#' + pair[0]);
+            if (!presets) { return; }
             var presetBtns = presets.querySelectorAll('button[data-dpi]');
             for (var pi = 0; pi < presetBtns.length; pi++) {
-                var on = Number(presetBtns[pi].getAttribute('data-dpi')) === dpi;
+                var on = Number(presetBtns[pi].getAttribute('data-dpi')) === pair[1];
                 presetBtns[pi].classList.toggle('is-on', on);
                 presetBtns[pi].setAttribute('aria-pressed', on ? 'true' : 'false');
             }
-        }
+        });
         var errEl = $('#sens-error');
         if (errEl) { errEl.textContent = err; }
     }
@@ -15130,8 +15698,7 @@ const game = new AntiBallsheetGame(
         var s = currentMode();
         var meta = $('#mode-meta');
         if (meta) { meta.textContent = modeLabel(s); }
-        var chip = $('#home-mode');
-        if (chip) { chip.textContent = modeLabel(s); }
+        refreshHeroCycle();
 
         var playHint = $('#menu-play-hint');
         if (playHint) { playHint.textContent = modeLabel(s); }
@@ -15289,6 +15856,7 @@ const game = new AntiBallsheetGame(
                 } else if (mode === 'rt' && rt) {
                     var rset = rt.settings();
                     prepSummary.appendChild(prepChip(T('次数', 'TRIALS'), rset.count));
+                    prepSummary.appendChild(prepChip(T('等待', 'WAIT'), rtWaitText(rset.waitMin) + '–' + rtWaitText(rset.waitMax) + ' s'));
                     prepSummary.appendChild(prepChip(T('计分', 'SCORING'), T('平均', 'MEAN')));
                 } else {
                     var sm = currentMode();
@@ -15353,7 +15921,7 @@ const game = new AntiBallsheetGame(
             items = [
                 [T('次数', 'TRIALS'), String(rset.count)],
                 [T('计分', 'SCORING'), T('平均', 'MEAN')],
-                [T('等待', 'WAIT'), '1.2–4.0 s'],
+                [T('等待', 'WAIT'), rtWaitText(rset.waitMin) + '–' + rtWaitText(rset.waitMax) + ' s'],
                 [T('抢跑', 'FALSE START'), T('重试', 'RETRY')]
             ];
         } else {
@@ -17284,15 +17852,27 @@ const game = new AntiBallsheetGame(
         var input = $('#rt-count');
         var sum = $('#rt-summary');
         var box = $('#rt-presets');
+        var wmin = $('#rt-wait-min'), wmax = $('#rt-wait-max');
+        var wbox = $('#rt-wait-presets');
         if (input) { input.value = String(cfg.count); }
+        if (wmin && doc.activeElement !== wmin) { wmin.value = String(cfg.waitMin / 1000); }
+        if (wmax && doc.activeElement !== wmax) { wmax.value = String(cfg.waitMax / 1000); }
         if (box) {
             Array.prototype.forEach.call(box.children, function (el) {
                 el.classList.toggle('is-on', Number(el.getAttribute('data-rt')) === cfg.count);
             });
         }
+        if (wbox) {
+            Array.prototype.forEach.call(wbox.children, function (el) {
+                el.classList.toggle('is-on',
+                    Number(el.getAttribute('data-wmin')) === cfg.waitMin &&
+                    Number(el.getAttribute('data-wmax')) === cfg.waitMax);
+            });
+        }
         if (sum) {
-            sum.textContent = T(cfg.count + ' 次 · 每局按有效反应取平均',
-                cfg.count + ' trials · mean of valid reactions');
+            var wtxt = rtWaitText(cfg.waitMin) + '–' + rtWaitText(cfg.waitMax);
+            sum.textContent = T(cfg.count + ' 次 · 等待 ' + wtxt + ' 秒 · 取平均',
+                cfg.count + ' trials · ' + wtxt + ' s wait · mean');
         }
         var hint = $('#menu-rt-hint');
         if (hint) { hint.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
@@ -17300,6 +17880,18 @@ const game = new AntiBallsheetGame(
             var meta = $('#mode-meta');
             if (meta) { meta.textContent = T(cfg.count + ' 次 · 均分', cfg.count + ' trials · mean'); }
         }
+    }
+
+    function rtWaitText(ms) {
+        var s = Number(ms) / 1000;
+        return (s % 1 ? s.toFixed(1) : String(Math.round(s)));
+    }
+
+    function rtCommitWait(lo, hi) {
+        if (!rt) { return; }
+        rt.saveSettings({ waitMin: lo, waitMax: hi });
+        rtPaint();
+        paintOmsMeta();
     }
 
     function rtCommit(value) {
@@ -17327,6 +17919,32 @@ const game = new AntiBallsheetGame(
                 b.textContent = n + T(' 次', ' trials');
                 bindTap(b, function () { rtCommit(n); });
                 box.appendChild(b);
+            });
+        }
+        var wmin = $('#rt-wait-min'), wmax = $('#rt-wait-max');
+        function commitWait() {
+            if (!wmin || !wmax) { return; }
+            rtCommitWait(Number(wmin.value) * 1000, Number(wmax.value) * 1000);
+        }
+        if (wmin) {
+            wmin.addEventListener('change', commitWait);
+            wmin.addEventListener('blur', commitWait);
+        }
+        if (wmax) {
+            wmax.addEventListener('change', commitWait);
+            wmax.addEventListener('blur', commitWait);
+        }
+        var wbox = $('#rt-wait-presets');
+        if (wbox && !wbox.childNodes.length) {
+            (rt.waitPresets || []).forEach(function (pair) {
+                var b = doc.createElement('button');
+                b.type = 'button';
+                b.className = 'st-chip rt-chip';
+                b.setAttribute('data-wmin', String(pair[0]));
+                b.setAttribute('data-wmax', String(pair[1]));
+                b.textContent = rtWaitText(pair[0]) + '–' + rtWaitText(pair[1]) + T(' 秒', ' s');
+                bindTap(b, function () { rtCommitWait(pair[0], pair[1]); });
+                wbox.appendChild(b);
             });
         }
         rtPaint();
@@ -18645,6 +19263,7 @@ const game = new AntiBallsheetGame(
         I18N.attrs();
         I18N.localize();
         I18N.startObserver();
+        startHeroCycle();
 
         var langReturn = '';
         var langTab = 'mode';
