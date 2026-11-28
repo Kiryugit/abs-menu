@@ -607,6 +607,7 @@ body {
 }
 
 .top-actions {
+    position: relative;
     display: flex;
     gap: 8px;
 }
@@ -653,6 +654,155 @@ body {
     border-color: var(--accent);
     background: var(--panel);
 }
+
+.chip.gh.is-open {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.chip.gh b {
+    display: inline-block;
+    transition: transform .2s cubic-bezier(.2, .8, .2, 1);
+}
+
+.chip.gh.is-open b {
+    transform: rotate(135deg);
+}
+
+/* GitHub dropdown — original repositories only */
+.gh-menu {
+    position: absolute;
+    top: calc(100% + 9px);
+    right: 0;
+    z-index: 90;
+    width: min(320px, calc(100vw - 24px));
+    padding: 5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    background: rgba(15, 16, 18, .97);
+    box-shadow:
+        0 24px 64px -24px rgba(0, 0, 0, .92),
+        inset 0 0 0 1px rgba(255, 255, 255, .025);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-7px) scale(.985);
+    transform-origin: top right;
+    transition:
+        opacity .16s ease,
+        transform .22s cubic-bezier(.2, .8, .2, 1),
+        visibility 0s linear .22s;
+}
+
+.gh-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition:
+        opacity .18s ease,
+        transform .24s cubic-bezier(.2, .8, .2, 1),
+        visibility 0s linear 0s;
+}
+
+.gh-menu::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 10px;
+    right: 10px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--target) 62%, transparent);
+    opacity: .78;
+}
+
+.gh-menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 9px 8px;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: .22em;
+    color: var(--dim);
+    text-transform: uppercase;
+}
+
+.gh-menu-head b {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+.gh-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 9px 24px 9px 10px;
+    border-radius: 2px;
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+        opacity .16s ease,
+        transform .16s ease,
+        background .14s ease,
+        color .14s ease;
+}
+
+.gh-item + .gh-item {
+    box-shadow: inset 0 1px 0 var(--line);
+}
+
+.gh-item:hover,
+.gh-item:focus-visible {
+    background: var(--accent-soft);
+    outline: none;
+}
+
+.gh-item-main {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .04em;
+    color: var(--ink);
+}
+
+.gh-item-note {
+    font-size: 9px;
+    line-height: 1.35;
+    color: var(--dim);
+}
+
+.gh-item::after {
+    content: '↗';
+    position: absolute;
+    top: 12px;
+    right: 9px;
+    font-size: 10px;
+    color: var(--accent);
+    opacity: .7;
+    transition: transform .16s ease, opacity .16s ease;
+}
+
+.gh-item:hover::after,
+.gh-item:focus-visible::after {
+    transform: translate(2px, -2px);
+    opacity: 1;
+}
+
+.gh-menu.is-open .gh-item {
+    opacity: 1;
+    transform: none;
+}
+
+.gh-menu.is-open .gh-item:nth-child(2) { transition-delay: .04s; }
+.gh-menu.is-open .gh-item:nth-child(3) { transition-delay: .08s; }
+.gh-menu.is-open .gh-item:nth-child(4) { transition-delay: .12s; }
 
 /* ---------- soft round cursor (menu layer) ---------- */
 /* hide the system arrow from the very first frame, not only after the
@@ -1262,6 +1412,12 @@ html:has(#abs-ui.is-hidden) .mcur {
     border-radius: 999px;
     color: var(--target);
     background: rgba(250, 150, 200, .12);
+}
+
+.mi-tag.mi-credit {
+    font-size: 9px;
+    letter-spacing: .035em;
+    text-transform: none;
 }
 
 .mi-feature:hover,
@@ -2027,6 +2183,24 @@ kbd {
     grid-column: 1 / -1;
 }
 
+/* help reads as a balanced two-column note sheet; about keeps the grid */
+.screen[data-screen="help"] .doc {
+    display: block;
+    columns: 2;
+    column-gap: 34px;
+    column-fill: balance;
+}
+
+.screen[data-screen="help"] .doc section {
+    break-inside: avoid;
+    margin: 0 0 22px;
+}
+
+.screen[data-screen="help"] .doc .full {
+    column-span: all;
+    margin-top: 0;
+}
+
 .link {
     color: var(--accent);
     text-decoration: none;
@@ -2462,6 +2636,11 @@ kbd {
 
     .doc {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .screen[data-screen="help"] .doc {
+        display: block;
+        columns: 1;
     }
 }
 
@@ -3160,8 +3339,15 @@ kbd {
     .ball-hud-a {
         left: 12px;
         bottom: 58px;
-        width: min(252px, calc(100vw - 24px));
+        box-sizing: border-box;
+        width: 190px;
+        padding: 10px 11px 9px;
     }
+
+    .bha-time b { font-size: 29px; }
+    .bha-metric-val b { font-size: 22px; }
+    .bha-grid { gap: 5px 8px; padding-top: 7px; margin-top: 8px; }
+    .bha-foot { margin-top: 8px; padding-top: 7px; }
 }
 
 @media (max-width: 480px) {
@@ -9054,10 +9240,445 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     .pick-head p { display: none; }
     .pick-grid { margin-top: 9px; }
     .pick-card { min-height: 0; padding: 11px 14px 10px; }
-    .pick-desc { display: none; }
     .pick-meta { margin-top: 8px; }
     .pick-go { padding-top: 8px; }
     .pick-note { margin-top: 8px; }
+}
+
+/* ---------- picker v2: source-linked rule cards ---------- */
+.pick-head-line {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.pick-head-stamp {
+    flex: none;
+    padding-bottom: 3px;
+    color: color-mix(in srgb, var(--ink) 30%, transparent);
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: .16em;
+}
+
+.pick-head h3 {
+    font-size: clamp(19px, 1.7vw, 23px);
+    letter-spacing: .07em;
+}
+
+.pick-head p {
+    max-width: none;
+}
+
+.pick-grid {
+    gap: 14px;
+}
+
+.pick-card {
+    min-height: 254px;
+    padding: 17px 20px 16px;
+    overflow: hidden;
+    border-radius: 7px;
+    background:
+        radial-gradient(125% 100% at 100% 0%, color-mix(in srgb, var(--pick-accent) 11%, transparent), transparent 58%),
+        linear-gradient(155deg, color-mix(in srgb, var(--panel) 82%, transparent), color-mix(in srgb, var(--panel) 44%, transparent));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ink) 7%, transparent);
+    isolation: isolate;
+    transition: transform .22s cubic-bezier(.2, .7, .3, 1), border-color .22s, background .22s, box-shadow .22s;
+}
+
+.pick-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--pick-accent) 22%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--pick-accent) 22%, transparent) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: .11;
+    -webkit-mask-image: radial-gradient(92% 92% at 100% 0%, #000, transparent 72%);
+    mask-image: radial-gradient(92% 92% at 100% 0%, #000, transparent 72%);
+    pointer-events: none;
+}
+
+.pick-card::after {
+    height: 2px;
+    background: linear-gradient(90deg, var(--pick-accent), color-mix(in srgb, var(--pick-accent) 12%, transparent) 72%);
+    opacity: .92;
+}
+
+.pick-card:hover,
+.pick-card:focus-within {
+    outline: none;
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--pick-accent) 74%, var(--line));
+    background:
+        radial-gradient(125% 100% at 100% 0%, color-mix(in srgb, var(--pick-accent) 16%, transparent), transparent 60%),
+        linear-gradient(155deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--panel) 52%, transparent));
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, var(--ink) 9%, transparent),
+        0 22px 44px -26px color-mix(in srgb, var(--pick-accent) 55%, transparent);
+}
+
+.pick-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    cursor: pointer;
+}
+
+.pick-hit:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--pick-accent) 85%, transparent);
+    outline-offset: -4px;
+}
+
+.pick-index {
+    position: absolute;
+    top: 11px;
+    right: 14px;
+    z-index: 0;
+    color: color-mix(in srgb, var(--pick-accent) 13%, transparent);
+    font-family: var(--mono);
+    font-size: 62px;
+    font-weight: 700;
+    line-height: .82;
+    letter-spacing: -.04em;
+    pointer-events: none;
+}
+
+.pick-source-row {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 18px;
+    pointer-events: none;
+}
+
+.pick-source {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+    pointer-events: auto;
+}
+
+.pick-card .pick-kicker {
+    margin: 0;
+    color: color-mix(in srgb, var(--pick-accent) 80%, var(--dim));
+    font-size: 9px;
+    letter-spacing: .16em;
+    transition: color .18s;
+}
+
+.pick-source:hover .pick-kicker {
+    color: var(--ink);
+}
+
+.pick-src {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    color: color-mix(in srgb, var(--pick-accent) 72%, var(--ink));
+    border: 1px solid color-mix(in srgb, var(--pick-accent) 27%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--pick-accent) 5%, transparent);
+    font-family: var(--mono);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-decoration: none;
+    pointer-events: auto;
+    transition: border-color .18s, background .18s;
+}
+
+.pick-src b {
+    font-size: 11px;
+    line-height: 1;
+    transition: transform .18s;
+}
+
+.pick-src:hover {
+    border-color: color-mix(in srgb, var(--pick-accent) 62%, transparent);
+    background: color-mix(in srgb, var(--pick-accent) 10%, transparent);
+}
+
+.pick-src:hover b {
+    transform: translate(1px, -1px);
+}
+
+.pick-name {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: 2px;
+    color: var(--ink);
+    font-size: clamp(26px, 2.4vw, 34px);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.025em;
+}
+
+.pick-prefix {
+    color: color-mix(in srgb, var(--pick-accent) 58%, var(--dim));
+    font-family: var(--mono);
+    font-size: .5em;
+    font-weight: 600;
+    letter-spacing: .15em;
+    vertical-align: .28em;
+}
+
+.pick-main {
+    font-weight: 700;
+}
+
+.pick-desc {
+    position: relative;
+    z-index: 1;
+    max-width: 76%;
+    margin-top: 12px;
+    font-size: 11.5px;
+    line-height: 1.62;
+}
+
+.pick-meta {
+    position: relative;
+    z-index: 1;
+    gap: 6px;
+    margin-top: 15px;
+}
+
+.pick-meta span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 5px 8px;
+    border-color: color-mix(in srgb, var(--pick-accent) 18%, var(--line));
+    background: color-mix(in srgb, var(--pick-accent) 3%, transparent);
+    font-size: 8.5px;
+}
+
+.pick-meta span i {
+    color: color-mix(in srgb, var(--pick-accent) 68%, var(--dim));
+    font-family: var(--mono);
+    font-size: 7px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.pick-go {
+    position: relative;
+    z-index: 1;
+    padding-top: 15px;
+    border-top: 1px solid color-mix(in srgb, var(--pick-accent) 15%, var(--hairline));
+    font-size: 10px;
+    letter-spacing: .06em;
+}
+
+.pick-go b {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid color-mix(in srgb, var(--pick-accent) 38%, transparent);
+    border-radius: 50%;
+    font-size: 12px;
+    line-height: 1;
+    transition: transform .18s, border-color .18s, background .18s;
+}
+
+.pick-card:hover .pick-go b,
+.pick-card:focus-within .pick-go b {
+    transform: translateX(3px);
+    border-color: color-mix(in srgb, var(--pick-accent) 75%, transparent);
+    background: color-mix(in srgb, var(--pick-accent) 8%, transparent);
+}
+
+.pick-visual {
+    position: absolute;
+    right: 21px;
+    bottom: 58px;
+    z-index: 0;
+    width: 88px;
+    height: 88px;
+    opacity: .8;
+    pointer-events: none;
+    transition: opacity .22s, transform .22s;
+}
+
+.pick-big .pick-visual {
+    width: 96px;
+    height: 96px;
+}
+
+.pick-card:hover .pick-visual,
+.pick-card:focus-within .pick-visual {
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+.pv-ring {
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in srgb, var(--pick-accent) 38%, transparent);
+    border-radius: 50%;
+}
+
+.pv-ring::after {
+    content: "";
+    position: absolute;
+    inset: 16px;
+    border: 1px dashed color-mix(in srgb, var(--pick-accent) 26%, transparent);
+    border-radius: 50%;
+    animation: pick-ring-spin 18s linear infinite;
+}
+
+.pv-ball {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 32% 27%, #fff, color-mix(in srgb, var(--pick-accent) 55%, #fff) 13%, var(--pick-accent) 42%, color-mix(in srgb, var(--pick-accent) 35%, #061014) 100%);
+    box-shadow:
+        0 0 24px color-mix(in srgb, var(--pick-accent) 38%, transparent),
+        inset -4px -5px 10px rgba(0, 0, 0, .34);
+}
+
+.pick-big .pv-ball {
+    width: 42px;
+    height: 42px;
+    margin: -21px 0 0 -21px;
+}
+
+.pick-visual::before,
+.pick-visual::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+}
+
+.pick-visual::before {
+    top: 50%;
+    left: -10px;
+    right: -10px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--pick-accent) 24%, transparent), transparent);
+}
+
+.pick-visual::after {
+    top: -10px;
+    bottom: -10px;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(transparent, color-mix(in srgb, var(--pick-accent) 24%, transparent), transparent);
+}
+
+.pick-note {
+    margin-top: 14px;
+    font-size: 9.5px;
+    line-height: 1.55;
+}
+
+@keyframes pick-ring-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (min-width: 1500px) {
+    .screen[data-screen="bs-pick"] .sub { max-width: 1180px; }
+    .screen[data-screen="bs-pick"] .pick-panel { max-width: none; }
+}
+
+@media (max-width: 700px) {
+    .pick-head-line { align-items: flex-start; }
+    .pick-head-stamp { display: none; }
+    .pick-head h3 { font-size: 20px; }
+    .pick-card { min-height: 0; padding: 15px 16px 14px; }
+    .pick-head .pick-kicker { margin-bottom: 7px; }
+    .pick-source-row { margin-bottom: 14px; }
+    .pick-name { font-size: 28px; }
+    .pick-desc { max-width: none; }
+    .pick-visual { display: none; }
+    .pick-index { font-size: 50px; }
+    .pick-meta { margin-top: 12px; }
+    .pick-go { padding-top: 12px; }
+}
+
+@media (max-height: 560px) and (max-width: 700px) {
+    .screen[data-screen="bs-pick"] .sub-head {
+        padding-bottom: 6px;
+        border-bottom: 0;
+    }
+    .screen[data-screen="bs-pick"] .sub-head h2,
+    .screen[data-screen="bs-pick"] .sub-meta { display: none; }
+    .pick-panel { padding: 12px 14px 10px; }
+    .pick-head { padding-bottom: 7px; }
+    .pick-head p { display: none; }
+    .pick-head h3 { font-size: 18px; }
+    .pick-head-line { margin-top: 4px; }
+    .pick-grid { margin-top: 8px; gap: 9px; }
+    .pick-card { min-height: 0; padding: 11px 13px 10px; }
+    .pick-source-row { margin-bottom: 8px; }
+    .pick-name { font-size: 24px; }
+    .pick-desc { margin-top: 8px; font-size: 10.5px; line-height: 1.5; }
+    .pick-meta { margin-top: 7px; }
+    .pick-meta span { padding: 4px 6px; }
+    .pick-go { padding-top: 7px; font-size: 9px; }
+    .pick-go b { width: 22px; height: 22px; }
+    .pick-index { font-size: 42px; }
+    .pick-note { display: none; }
+}
+
+@media (min-width: 540px) and (max-width: 700px) and (max-height: 560px) {
+    .pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-height: 560px) and (min-width: 701px) {
+    .pick-card { min-height: 0; padding: 12px 16px 11px; }
+    .pick-source-row { margin-bottom: 10px; }
+    .pick-name { font-size: 25px; }
+    .pick-visual { width: 70px; height: 70px; bottom: 48px; opacity: .65; }
+    .pick-big .pick-visual { width: 76px; height: 76px; }
+    .pick-meta { margin-top: 9px; }
+    .pick-go { padding-top: 8px; }
+    .pick-desc {
+        display: -webkit-box;
+        margin-top: 8px;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-size: 10.5px;
+        line-height: 1.45;
+    }
+    .pick-note { display: none; }
+    .pick-index { font-size: 46px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pick-card,
+    .pick-go b,
+    .pick-source,
+    .pick-src,
+    .pick-src b,
+    .pick-visual { transition: none; }
+    .pv-ring::after { animation: none; }
 }
 
 /* ---------- 准备页 ---------- */
@@ -10210,7 +10831,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         </div>
         <aside id="ball-hud-a" class="ball-hud-a">
             <div class="bha-head">
-                <div class="bha-mode">BALLSHEET <em id="bha-sub">BIGBALL</em></div>
+                <div class="bha-mode">BALLSHEET <em id="bha-sub">BIGBALLS</em></div>
                 <div class="bha-pb" id="bha-pb">PB —</div>
             </div>
             <div class="bha-main">
@@ -10227,7 +10848,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                 <div class="bha-cell"><span class="bha-lab">吃球</span><b id="bha-balls">—</b></div>
                 <div class="bha-cell"><span class="bha-lab">上次反应</span><b id="bha-rt">—</b></div>
             </div>
-            <div class="bha-foot"><span>最高秒得分 <b id="bha-maxeps">—</b></span><span id="bha-tag">BIGBALL</span></div>
+            <div class="bha-foot"><span>最高秒得分 <b id="bha-maxeps">—</b></span><span id="bha-tag">BIGBALLS</span></div>
         </aside>
         <aside id="st-hud-a" class="ball-hud-a st-hud-a">
             <div class="bha-head">
@@ -10303,9 +10924,27 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                     </div>
                 </div>
                 <div class="top-actions">
-                    <a class="chip gh" id="btn-github" href="https://github.com/Kiryugit/abs-menu"
-                        target="_blank" rel="noopener noreferrer" tabindex="-1"
-                        title="GitHub 仓库 · Kiryugit/abs-menu">GitHub <b>↗</b></a>
+                    <button class="chip gh" id="btn-github" type="button"
+                        aria-haspopup="menu" aria-expanded="false" aria-controls="gh-menu"
+                        aria-label="GitHub · 原作仓库" title="GitHub · 原作仓库">GitHub <b>↗</b></button>
+                    <div class="gh-menu" id="gh-menu" role="menu" aria-label="原作仓库" aria-hidden="true">
+                        <div class="gh-menu-head"><span>ORIGINAL REPOS</span><b>03</b></div>
+                        <a class="gh-item" role="menuitem" href="https://github.com/dphdmn/antiBallsheet"
+                            target="_blank" rel="noopener noreferrer">
+                            <span class="gh-item-main">dphdmn / antiBallsheet</span>
+                            <span class="gh-item-note">原作 · 速通引擎</span>
+                        </a>
+                        <a class="gh-item" role="menuitem" href="https://github.com/dphdmn/ballsheet/"
+                            target="_blank" rel="noopener noreferrer">
+                            <span class="gh-item-main">dphdmn / ballsheet</span>
+                            <span class="gh-item-note">前身 · 生存规则</span>
+                        </a>
+                        <a class="gh-item" role="menuitem" href="https://github.com/helloimxtal/BallSheetOGL"
+                            target="_blank" rel="noopener noreferrer">
+                            <span class="gh-item-main">helloimxtal / BallSheetOGL</span>
+                            <span class="gh-item-note">C++ OpenGL 重制 · 对照</span>
+                        </a>
+                    </div>
                     <button class="chip" id="btn-lang" type="button" title="切换语言">EN</button>
                     <button class="chip" id="btn-sound" type="button">音效 <b>开</b></button>
                     <button class="chip" id="btn-fs" type="button">全屏</button>
@@ -10339,7 +10978,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                         <span class="mi-icon ic-bs" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4.5"></circle><path d="M3 17h3l1.6-3.2 2.6 4.4 2-2.6 1.2 1.4H21"></path></svg></span>
                                         <span class="mi-title">
                                             <span class="mi-label">BALLSHEET<em class="mi-en">ARCADE</em></span>
-                                            <span class="mi-tag">BIGBALL · 100 球</span>
+                                            <span class="mi-tag mi-credit">BALLSHEET by dphdmn</span>
                                         </span>
                                         <span class="mi-hint">选择玩法 · 进入准备页</span>
                                         <span class="mi-go">▶</span>
@@ -10385,7 +11024,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                         <aside class="home-side">
                             <section class="card card-current" id="home-current">
                                 <div class="card-head">
-                                    <span class="side-title">最近一局<em id="side-mode">BALLSHEET 100</em></span>
+                                    <span class="side-title">最近一局<em id="side-mode">antiBallsheet</em></span>
                                     <span class="pill" id="side-state">空闲</span>
                                 </div>
                                 <div class="side-stats">
@@ -10443,26 +11082,50 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                         <div class="panel pick-panel">
                             <div class="pick-head">
                                 <span class="prep-kicker">BALLSHEET / MODE</span>
-                                <h3>选一个玩法</h3>
-                                <p>先进入对应准备页确认参数，再开始这一局。两种玩法的 PB 与历史分开记录。</p>
+                                <div class="pick-head-line">
+                                    <h3>选一个玩法</h3>
+                                    <span class="pick-head-stamp">SOURCE RULES / 02</span>
+                                </div>
+                                <p>两套规则，两条独立记录线。点卡片进入准备页；左上角的来源标签会打开原作者页面。</p>
                             </div>
                             <div class="pick-grid">
-                                <button class="pick-card pick-big" data-pick="bs" type="button">
-                                    <span class="pick-kicker">生存 · SURVIVAL</span>
-                                    <span class="pick-name">BIGBALL</span>
-                                    <span class="pick-desc">重心球会随血量变色。球扫归零前尽量多接，漏球会掉血；活得更久、得分更高。</span>
-                                    <span class="pick-meta"><span>HP 100</span><span>压力 60</span><span>得分 35</span></span>
-                                    <span class="pick-go">进入 BIGBALL 准备页 <b>→</b></span>
-                                </button>
-                                <button class="pick-card pick-speed" data-pick="speed" type="button">
-                                    <span class="pick-kicker">速通 · SPRINT</span>
-                                    <span class="pick-name">BALLSHEET 100</span>
-                                    <span class="pick-desc">100 个球 · 球径 10%。碰球开始计时，清完所有球，用时越短越好。</span>
+                                <article class="pick-card pick-big">
+                                    <button class="pick-hit" data-pick="bs" type="button" aria-label="进入 BALLSHEET BIGBALLS 准备页"></button>
+                                    <span class="pick-index" aria-hidden="true">01</span>
+                                    <div class="pick-source-row">
+                                        <a class="pick-source" href="https://helloimxtal.github.io/ballsheet/" target="_blank"
+                                            rel="noopener" title="打开 Big Balls 在线版">
+                                            <span class="pick-kicker">生存 · SURVIVAL</span>
+                                        </a>
+                                        <a class="pick-src" href="https://helloimxtal.github.io/ballsheet/" target="_blank"
+                                            rel="noopener" title="打开 Big Balls 在线版">BIG BALLS <b>↗</b></a>
+                                    </div>
+                                    <span class="pick-name"><span class="pick-prefix">BALLSHEET</span> <span
+                                            class="pick-main">BIGBALLS</span></span>
+                                    <p class="pick-desc">dphdmn/ballsheet 原版生存规则：接球回血，血量随压力持续下降；撑得越久、接得越多，分数越高。</p>
+                                    <span class="pick-meta"><span><i>HP</i> 100</span><span><i>压力</i> 60</span><span><i>得分</i> 35</span></span>
+                                    <span class="pick-go"><span>进入 BALLSHEET BIGBALLS 准备页</span><b>→</b></span>
+                                    <span class="pick-visual" aria-hidden="true"><i class="pv-ring"></i><i class="pv-ball"></i></span>
+                                </article>
+                                <article class="pick-card pick-speed">
+                                    <button class="pick-hit" data-pick="speed" type="button" aria-label="进入 antiBallsheet 准备页"></button>
+                                    <span class="pick-index" aria-hidden="true">02</span>
+                                    <div class="pick-source-row">
+                                        <a class="pick-source" href="https://github.com/dphdmn/antiBallsheet" target="_blank"
+                                            rel="noopener" title="打开 dphdmn/antiBallsheet">
+                                            <span class="pick-kicker">速通 · SPRINT</span>
+                                        </a>
+                                        <a class="pick-src" href="https://github.com/dphdmn/antiBallsheet" target="_blank"
+                                            rel="noopener" title="打开 dphdmn/antiBallsheet">GITHUB <b>↗</b></a>
+                                    </div>
+                                    <span class="pick-name"><span class="pick-main">antiBallsheet</span></span>
+                                    <p class="pick-desc">antiBallsheet 的速通规则：在最短时间内接完设定数量的球；没有压力公式，也没有多余的局内数字。</p>
                                     <span class="pick-meta"><span>100 球</span><span>球径 10%</span><span>计时</span></span>
-                                    <span class="pick-go">进入 100 球准备页 <b>→</b></span>
-                                </button>
+                                    <span class="pick-go"><span>进入 antiBallsheet 准备页</span><b>→</b></span>
+                                    <span class="pick-visual" aria-hidden="true"><i class="pv-ring"></i><i class="pv-ball"></i></span>
+                                </article>
                             </div>
-                            <p class="pick-note">选好后进入准备页；在准备页还能改球数、球径或 BIGBALL 参数。</p>
+                            <p class="pick-note">规则与参数取自原作者仓库；两套玩法分别存档，互不影响。</p>
                         </div>
                     </div>
                 </section>
@@ -10484,7 +11147,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                             <div class="set-block set-speed" data-modecard="speed">
                                 <div class="bs-head">
                                     <div>
-                                        <h3>BALLSHEET</h3>
+                                        <h3>antiBallsheet</h3>
                                         <p>固定球数 · 碰球开始 · 独立记录</p>
                                     </div>
                                     <span class="pill">计时 + 反应</span>
@@ -10506,7 +11169,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                             <div class="bs-rules" id="bs-rules" data-modecard="bs">
                                 <div class="bs-head">
                                     <div>
-                                        <h3>BALLSHEET <em>BIGBALL</em></h3>
+                                        <h3>BALLSHEET <em>BIGBALLS</em></h3>
                                         <p>第二套规则 · 同一块 600 像素场地 · 独立记录</p>
                                     </div>
                                     <span class="pill">血量 + 秒得分</span>
@@ -10816,8 +11479,8 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                             <div class="stats-recent-view" id="stats-recent-view">
                                 <div class="stats-feed-filter" id="stats-filters" role="group" aria-label="模式筛选">
                                     <button class="stats-filter is-on" type="button" data-filter="all">全部</button>
-                                    <button class="stats-filter" type="button" data-filter="speed">BALLSHEET</button>
-                                    <button class="stats-filter" type="button" data-filter="bigball">BIGBALL</button>
+                                    <button class="stats-filter" type="button" data-filter="speed">antiBallsheet</button>
+                                    <button class="stats-filter" type="button" data-filter="bigball">BIGBALLS</button>
                                     <button class="stats-filter" type="button" data-filter="schulte">舒尔特</button>
                                     <button class="stats-filter" type="button" data-filter="reaction">反应</button>
                                 </div>
@@ -10844,8 +11507,8 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 <div class="runs" id="stats-runs"></div>
                             </div>
                         </div>
-                        <div class="sub-foot">四套存档：BALLSHEET 用 <b>GameStats_&lt;球数&gt;, &lt;球径&gt;</b>（原版键名），
-                            BIGBALL 用 <b>BallSheetRuns</b>，舒尔特用 <b>schulteRuns</b>，反应测试用 <b>reactionRuns</b>。各玩法互不影响。</div>
+                        <div class="sub-foot">四套存档：antiBallsheet 用 <b>GameStats_&lt;球数&gt;, &lt;球径&gt;</b>（原版键名），
+                            BALLSHEET BIGBALLS 用 <b>BallSheetRuns</b>，舒尔特用 <b>schulteRuns</b>，反应测试用 <b>reactionRuns</b>。各玩法互不影响。</div>
                     </div>
                 </section>
 
@@ -10854,51 +11517,46 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                     <div class="sub">
                         <div class="sub-head">
                             <button class="back" data-back type="button">← 菜单</button>
-                            <h2>玩法<span class="sub-note">一条规则，一个秒表</span></h2>
-                            <div class="sub-meta">只用鼠标</div>
+                            <h2>玩法<span class="sub-note">两套原作规则 · 本机记录</span></h2>
+                            <div class="sub-meta">鼠标 / 键盘</div>
                         </div>
                         <div class="panel">
                             <div class="doc">
                                 <section>
-                                    <h3>目标</h3>
-                                    <p>尽可能快地接够设定数量的球。计时从第一颗球开始，接完最后一颗停止，就这一条规则。</p>
+                                    <h3>速通 · antiBallsheet</h3>
+                                    <p>在最短时间内接完设定数量的球。没有复杂压力公式，也没有多余的局内数字；
+                                       计时从第一颗球开始，接完最后一颗结束。</p>
+                                </section>
+                                <section>
+                                    <h3>生存 · BALLSHEET BIGBALLS</h3>
+                                    <p>100 点血量开局；从第一次接球起，压力按 <strong>60 × ln(1 + t)</strong> 持续扣血；
+                                       每次接球加 35 分，反应低于 100 毫秒的快球按 <strong>r / 100</strong> 折算；
+                                       血量跌破零，本局结束。</p>
                                 </section>
                                 <section>
                                     <h3>触碰</h3>
-                                    <p>光标悬到球上即可，不用点击。光标<strong>就是</strong>命中范围，半径与球相同，
-                                       所以粉球与光标刚好重合时就算接到。</p>
+                                    <p>光标悬到球上即可，不用点击。光标尺寸只影响观感，判定始终按球径；
+                                       粉球与光标刚好重合时就算接到。</p>
                                 </section>
                                 <section>
                                     <h3>按键</h3>
                                     <ul>
                                         <li><kbd>R</kbd> / <kbd>空格</kbd> — 开始一局、重开一局</li>
-                                        <li><kbd>ESC</kbd> — 局中暂停 / 菜单里返回</li>
+                                        <li><kbd>ESC</kbd> — 停止并回到配置 / 菜单里返回</li>
                                         <li><kbd>↑</kbd><kbd>↓</kbd><kbd>回车</kbd> — 菜单上下选择</li>
                                         <li><kbd>F11</kbd> — 浏览器全屏</li>
                                     </ul>
                                 </section>
                                 <section>
-                                    <h3>怎么看数字</h3>
-                                    <p><strong>用时</strong>是整局时长，<strong>平均反应</strong>是球与球之间的平均间隔，
-                                       最快 / 最慢是两端的极端值。球数越少，一次失误的代价越大。</p>
-                                </section>
-                                <section>
-                                    <h3>第二套规则 · BIGBALL</h3>
-                                    <p>菜单第 01 项是原始 ballsheet 的规则，跑在同一块 600 像素场地上：血量从 100 起，
-                                       从第一次碰到球开始按 <strong>压力 · ln(1 + t)</strong> 持续扣减——首次触碰只启动计时。
-                                       之后每次吃球回分，反应低于快球阈值时只按 <strong>r / 阈值</strong> 结算，
-                                       <strong>每秒得分</strong>是最近五秒内、除最新一颗外的吃分总和，固定除以五。血量跌破零，本局结束。</p>
-                                </section>
-                                <section>
-                                    <h3>第四套 · 反应测试</h3>
-                                    <p>每次点击后才开始随机等待，默认 1–8 秒、可在设置里调整；屏幕从红色变成绿色后立刻点击，记录这一次的毫秒数；
-                                       绿色出现前点击算<strong>抢跑</strong>，停在提示页，点击重试且不计入。完成设定的 N 次后，
-                                       只按有效单次取平均，可单独查看最好、最快、最慢与抢跑次数。</p>
+                                    <h3>舒尔特与反应测试</h3>
+                                    <p>舒尔特按所选规则顺序点击 1 → N²；反应测试在绿灯亮起后点击，抢跑不计入，
+                                       按有效单次取平均。</p>
                                 </section>
                                 <section class="full">
-                                    <h3>原版说明</h3>
-                                    <p>光标尺寸只影响观感，判定始终用球径。局中重开会丢掉这一局，接完最后一颗之前不会写入任何记录。
-                                       成绩按分类存放（球数 × 球径），换模式就是另一份记录。</p>
+                                    <h3>原文口径</h3>
+                                    <p>速通说明取自 <strong>dphdmn/antiBallsheet</strong> README 的 “Simple Speedrun
+                                        Approach”；BALLSHEET BIGBALLS 的参数与计分取自 <strong>dphdmn/ballsheet</strong>
+                                        的 p5 原版，在线版由 helloimxtal 托管。</p>
                                 </section>
                             </div>
                         </div>
@@ -10918,13 +11576,15 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                 <section class="full">
                                     <h3>这是什么</h3>
                                     <p>antiBallsheet 是 <strong>ballsheet</strong> 的反应力速通重制版：尽快接完 N 颗球，
-                                       没有压力公式、没有画布——只有 DOM 和 transform。原版游戏、引擎与成绩系统由
+                                       没有复杂压力公式、没有画布——只有 DOM 和 transform。原版游戏、引擎与成绩系统由
                                        <strong>dph</strong>（dphdmn）制作。</p>
                                     <p>这一版在外面加了一层菜单：标题页、模式与配色面板、历史浏览、暂停与结算页。
                                        玩法代码、命中判定、设置键名、成绩存储全部保持原样。</p>
-                                    <p>可选的 <strong>BIGBALL</strong> 项是把 <strong>helloimxtal</strong> 的 p5 版 ballsheet
-                                        （由 dphdmn 收录进 antiBallsheet 仓库）规则移植到同一块场地和同一套 HUD 上——只有血量、
-                                        压力、每秒得分和快球折扣，成绩单独存档，不会碰 BALLSHEET 的记录。</p>
+                                    <p><strong>BALLSHEET BIGBALLS</strong> 是把 <strong>dphdmn/ballsheet</strong>（p5 原版）
+                                       的生存规则移植到同一块场地和同一套 HUD 上——只有血量、压力、每秒得分和快球折扣，
+                                       成绩单独存档，不会碰 antiBallsheet 的记录。</p>
+                                    <p>Big Balls 的在线版由 <strong>helloimxtal</strong> 托管；<strong>helloimxtal/BallSheetOGL</strong>
+                                       是 ballsheet 的 C++ OpenGL 重制，本项目只把它作为参数与手感的对照，不包含它的代码。</p>
                                     <p>第四项 <strong>反应测试</strong> 按 Human Benchmark 的经典流程重做：随机等待、变绿点击、
                                         抢跑重来，自定义次数后按有效单次取平均。</p>
                                 </section>
@@ -10932,10 +11592,16 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
                                     <h3>来源</h3>
                                     <p><a class="link" href="https://github.com/dphdmn/antiBallsheet"
                                             target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a>
-                                        <span class="sub-note">BALLSHEET 本体</span></p>
-                                    <p><a class="link" href="https://github.com/helloimxtal"
-                                            target="_blank" rel="noopener">github.com/helloimxtal</a>
-                                        <span class="sub-note">BIGBALL 规则原作</span></p>
+                                        <span class="sub-note">速通 · 原作</span></p>
+                                    <p><a class="link" href="https://github.com/dphdmn/ballsheet/"
+                                            target="_blank" rel="noopener">github.com/dphdmn/ballsheet</a>
+                                        <span class="sub-note">生存规则 · p5 原作</span></p>
+                                    <p><a class="link" href="https://helloimxtal.github.io/ballsheet/"
+                                            target="_blank" rel="noopener">helloimxtal.github.io/ballsheet</a>
+                                        <span class="sub-note">Big Balls · 生存规则在线版</span></p>
+                                    <p><a class="link" href="https://github.com/helloimxtal/BallSheetOGL"
+                                            target="_blank" rel="noopener">github.com/helloimxtal/BallSheetOGL</a>
+                                        <span class="sub-note">C++ OpenGL 重制 · 对照</span></p>
                                     <p><a class="link" href="https://humanbenchmark.com/tests/reactiontime"
                                             target="_blank" rel="noopener">humanbenchmark.com/tests/reactiontime</a>
                                         <span class="sub-note">反应测试流程参考</span></p>
@@ -11047,6 +11713,24 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     var DICT = {
         /* nav / chrome */
         '速通': 'Speedrun',
+        '生存 · SURVIVAL': 'SURVIVAL',
+        '速通 · SPRINT': 'SPRINT',
+        '选一个玩法': 'Pick a mode',
+        '两套原作规则 · 本机记录': 'Two source rulesets · local records',
+        '两套原作规则': 'Two source rulesets',
+        '本机记录': 'Local records',
+        '鼠标 / 键盘': 'Mouse / keyboard',
+        '选择玩法': 'Pick a mode',
+        '两种玩法 · 成绩独立': 'Two modes · separate records',
+        '两套规则，两条独立记录线。点卡片进入准备页；左上角的来源标签会打开原作者页面。': 'Two rulesets, two separate record lines. Click a card for its setup page; the source tag at the top opens the original author page.',
+        '进入 BALLSHEET BIGBALLS 准备页': 'Enter BALLSHEET BIGBALLS setup',
+        '进入 antiBallsheet 准备页': 'Enter antiBallsheet setup',
+        'dphdmn/ballsheet 原版生存规则：接球回血，血量随压力持续下降；撑得越久、接得越多，分数越高。': 'Original dphdmn/ballsheet survival rules: catches heal, HP drains under rising pressure; survive longer and catch more for a higher score.',
+        'antiBallsheet 的速通规则：在最短时间内接完设定数量的球；没有压力公式，也没有多余的局内数字。': 'antiBallsheet speedrun rules: catch the set number of balls in the shortest time; no pressure formula and no extra in-run numbers.',
+        '规则与参数取自原作者仓库；两套玩法分别存档，互不影响。': 'Rules and parameters come from the original repositories; both modes keep separate records.',
+        '100 球': '100 balls',
+        '球径 10%': '10% radius',
+        '计时': 'Timer',
         '舒尔特': 'Schulte',
         '反应测试': 'Reaction Test',
         '数据': 'Stats',
@@ -11069,12 +11753,15 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         '已记录': 'Saved',
         '本模式个人最好': 'Personal best · this mode',
         '秒': 's',
+        'TIME / 秒': 'TIME / S',
+        '回车': 'Enter',
+        '参数存本机': 'Saved locally',
+        '参数保存在本机 · 下一局生效': 'Saved locally · applies next run',
         '还没有记录': 'No runs yet',
         '最近记录': 'Recent runs',
         '上一局': 'Last run',
         '局数': 'Runs',
         '最佳平均反应': 'Best avg reaction',
-        'BIGBALL 最好': 'BIGBALL best',
         '舒尔特最好': 'Schulte best',
         '现在': 'now',
         '按键': 'Keys',
@@ -11314,6 +12001,9 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         '生存 · 压力': 'Survival · pressure',
         '第一局基准已记录': 'First benchmark saved',
         '音效': 'Sound',
+        '原作 · 速通引擎': 'Original · speedrun engine',
+        '前身 · 生存规则': 'Predecessor · survival rules',
+        'C++ OpenGL 重制 · 对照': 'C++ OpenGL remake · reference',
         '已删除这条音效': 'Deleted this sound',
         '这里没有找到音频文件': 'No audio files found here',
         '三个槽位都已恢复内置音效': 'All three slots restored to built-in',
@@ -11353,7 +12043,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
         [/^舒尔特 · (.*)$/, 'Schulte · $1'],
         [/^舒尔特方格 · 无记录$/, 'Schulte Grid · no runs'],
         [/^反应测试 · 无记录$/, 'Reaction Test · no runs'],
-        [/^BALLSHEET · BIGBALL(.*)$/, 'BALLSHEET · BIGBALL$1'],
+        [/^BALLSHEET BIGBALLS(.*)$/, 'BALLSHEET BIGBALLS$1'],
         [/^速通 · ([\d]+) 球样本$/, 'Speedrun · $1-ball sample'],
         [/^生存 · 压力 ([\d]+)$/, 'Survival · pressure $1'],
         [/^([\d.]+) 秒 · 错误 ([\d]+)$/, '$1 s · $2 errors'],
@@ -11367,7 +12057,12 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     ];
 
     var ATTR_DICT = {
-        'GitHub 仓库 · Kiryugit/abs-menu': 'GitHub repo · Kiryugit/abs-menu',
+        'GitHub · 原作仓库': 'GitHub · original repos',
+        '原作仓库': 'Original repositories',
+        '打开 Big Balls 在线版': 'Open Big Balls online',
+        '打开 dphdmn/antiBallsheet': 'Open dphdmn/antiBallsheet',
+        '进入 BALLSHEET BIGBALLS 准备页': 'Enter BALLSHEET BIGBALLS setup',
+        '进入 antiBallsheet 准备页': 'Enter antiBallsheet setup',
         '设置分类': 'Settings sections',
         '成绩分类': 'Score category',
         '最近走势': 'Recent trend',
@@ -11378,29 +12073,32 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
     /* whole-block English copy (long prose / inline <strong>) */
     var BLOCKS = {
         '[data-screen="help"] .doc': [
-            '<section><h3>Goal</h3><p>Catch the configured number of balls as fast as you can. The clock starts on the first ball and stops on the last one — that is the whole ruleset.</p></section>',
-            '<section><h3>Touch</h3><p>Hover the cursor over the ball — no click needed. The cursor <strong>is</strong> the hitbox, with the same radius as the ball, so touching the pink ball counts.</p></section>',
+            '<section><h3>Speedrun · antiBallsheet</h3><p>Catch the configured number of balls in the shortest possible time. No pressure formula, no extra in-run numbers: the clock starts on the first ball and stops on the last one.</p></section>',
+            '<section><h3>Survival · BALLSHEET BIGBALLS</h3><p>Start with 100 HP. From the first catch, pressure drains HP as <strong>60 × ln(1 + t)</strong>. Every catch adds 35 points; a reaction under 100 ms is settled as <strong>r / 100</strong>. The run ends when HP drops below zero.</p></section>',
+            '<section><h3>Touch</h3><p>Hover the cursor over the ball — no click needed. Cursor size is visual only; hit detection always uses the ball radius, so the pink ball and cursor must overlap.</p></section>',
             '<section><h3>Keys</h3><ul>',
             '<li><kbd>R</kbd> / <kbd>space</kbd> — start or restart a run</li>',
-            '<li><kbd>ESC</kbd> — pause in game / back in menus</li>',
+            '<li><kbd>ESC</kbd> — stop and return to setup / back in menus</li>',
             '<li><kbd>↑</kbd><kbd>↓</kbd><kbd>Enter</kbd> — move through the menu</li>',
             '<li><kbd>F11</kbd> — browser fullscreen</li>',
             '</ul></section>',
-            '<section><h3>Reading the numbers</h3><p><strong>Time</strong> is the whole run, <strong>avg reaction</strong> is the mean gap between balls, fastest / slowest are the extremes. Fewer balls means every miss costs more.</p></section>',
-            '<section><h3>Second ruleset · BIGBALL</h3><p>Menu item 01 is the original ballsheet rules on the same 600 px field: HP starts at 100 and drains as <strong>pressure · ln(1 + t)</strong> from the first touch — the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <strong>r / threshold</strong>. <strong>Score/sec</strong> is the sum of catches in the last five seconds except the newest one, always divided by five. Run ends when HP drops below zero.</p></section>',
-            '<section><h3>Fourth ruleset · Reaction test</h3><p>Each click starts a random wait (1–8 s by default, adjustable in settings); the screen turns from red to green and you click the moment it does. A click before green is <strong>too soon</strong>: the screen waits at a retry prompt and that trial never enters the mean. After the configured N valid trials, the score is the mean of the individual times, with best, fastest, slowest and early clicks recorded separately.</p></section>',
-            '<section class="full"><h3>Original notes</h3><p>Cursor size is visual only; hit detection always uses ball size. Restarting mid-run discards that run and nothing is saved until the last ball. Records are grouped by balls × ball size, so changing the mode changes the record set.</p></section>'
+            '<section><h3>Schulte & Reaction Test</h3><p>Schulte follows the chosen rule and clicks 1 → N² in order. Reaction Test waits for green, ignores false starts, and scores the mean of valid trials.</p></section>',
+            '<section class="full"><h3>Records</h3><p>Speedrun is stored per balls × ball size; BALLSHEET BIGBALLS has its own store. Neither affects the other, and nothing is written before the last ball.</p></section>',
+            '<section class="full"><h3>Source wording</h3><p>The speedrun description follows the “Simple Speedrun Approach” section of the <strong>dphdmn/antiBallsheet</strong> README. BALLSHEET BIGBALLS uses the parameters and scoring of the p5 <strong>dphdmn/ballsheet</strong> original; the online Big Balls build is hosted by helloimxtal.</p></section>'
         ].join(''),
         '[data-screen="about"] .doc': [
             '<section class="full"><h3>What this is</h3>',
-            '<p>antiBallsheet is a reflex-speedrun remake of <strong>ballsheet</strong>: catch N balls as fast as possible, no pressure formula, no canvas — just DOM and transform. The original game, engine and score system are by <strong>dph</strong> (dphdmn).</p>',
+            '<p>antiBallsheet is a reflex-speedrun remake of <strong>ballsheet</strong>: catch N balls as fast as possible, no complex pressure formula, no canvas — just DOM and transform. The original game, engine and score system are by <strong>dph</strong> (dphdmn).</p>',
             '<p>This build adds a menu layer on top: title screen, mode and colour panels, history browser, pause and results screens. Gameplay code, hit detection, setting keys and score storage are untouched.</p>',
-            '<p>The optional <strong>BIGBALL</strong> item ports <strong>helloimxtal</strong>’s p5 ballsheet rules (as collected by dphdmn in the antiBallsheet repo) onto the same field and HUD — only HP, pressure, score/sec and the fast-ball discount, with separate records that never touch BALLSHEET scores.</p>',
+            '<p>The optional <strong>BALLSHEET BIGBALLS</strong> item ports <strong>dphdmn/ballsheet</strong>’s p5 survival rules onto the same field and HUD — only HP, pressure, score/sec and the fast-ball discount, with separate records that never touch antiBallsheet scores.</p>',
+            '<p>The Big Balls build is hosted online by <strong>helloimxtal</strong>. <strong>helloimxtal/BallSheetOGL</strong> is a C++ OpenGL remake of ballsheet; this build only uses it as a reference for parameters and feel, and contains none of its code.</p>',
             '<p>The fourth item, <strong>Reaction Test</strong>, follows the Human Benchmark idea but each trial waits for your click: random wait, click on green, retry on a false start, and a custom trial count scored by the mean.</p>',
             '</section>',
             '<section><h3>Sources</h3>',
-            '<p><a class="link" href="https://github.com/dphdmn/antiBallsheet" target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a> <span class="sub-note">BALLSHEET original</span></p>',
-            '<p><a class="link" href="https://github.com/helloimxtal" target="_blank" rel="noopener">github.com/helloimxtal</a> <span class="sub-note">BIGBALL original</span></p>',
+            '<p><a class="link" href="https://github.com/dphdmn/antiBallsheet" target="_blank" rel="noopener">github.com/dphdmn/antiBallsheet</a> <span class="sub-note">speedrun · original</span></p>',
+            '<p><a class="link" href="https://github.com/dphdmn/ballsheet/" target="_blank" rel="noopener">github.com/dphdmn/ballsheet</a> <span class="sub-note">survival rules · p5 original</span></p>',
+            '<p><a class="link" href="https://helloimxtal.github.io/ballsheet/" target="_blank" rel="noopener">helloimxtal.github.io/ballsheet</a> <span class="sub-note">Big Balls · survival rules, online</span></p>',
+            '<p><a class="link" href="https://github.com/helloimxtal/BallSheetOGL" target="_blank" rel="noopener">github.com/helloimxtal/BallSheetOGL</a> <span class="sub-note">C++ OpenGL remake · reference</span></p>',
             '<p><a class="link" href="https://humanbenchmark.com/tests/reactiontime" target="_blank" rel="noopener">humanbenchmark.com/tests/reactiontime</a> <span class="sub-note">reaction-test flow reference</span></p>',
             '</section>',
             '<section><h3>Implementation</h3><ul>',
@@ -11411,7 +12109,7 @@ body:has(#ov-mode-settings.is-open) .hud .hud-right {
             '</ul></section>'
         ].join(''),
         '[data-screen="settings"] .sub-foot': 'Parameters are stored locally and apply from the next run.',
-        '[data-screen="stats"] .sub-foot': 'Four stores: BALLSHEET uses <b>GameStats_&lt;balls&gt;, &lt;size&gt;</b> (original keys), BIGBALL uses <b>BallSheetRuns</b>, Schulte uses <b>schulteRuns</b>, reaction test uses <b>reactionRuns</b>. They never affect each other.',
+        '[data-screen="stats"] .sub-foot': 'Four stores: antiBallsheet uses <b>GameStats_&lt;balls&gt;, &lt;size&gt;</b> (original keys), BALLSHEET BIGBALLS uses <b>BallSheetRuns</b>, Schulte uses <b>schulteRuns</b>, reaction test uses <b>reactionRuns</b>. They never affect each other.',
         '#bs-rules .bs-foot': 'HP drains as <b>pressure · ln(1 + t)</b> from the first touch; the first touch only starts the clock. Every catch heals, and a reaction faster than the fast-ball threshold is settled as <b>r / threshold</b>. The two rulesets keep separate parameters.',
         '#st-rules .bs-foot': 'The grid is always <b>425 px</b>; all rules share the same field. Start with <b>Light</b>: tap in order, a wrong tap only adds an <b>error</b> with no time penalty. The clock starts on the first correct tap and stops after the last cell.',
         '#rt-rules .bs-foot': 'Each click starts a random wait you set above (1–8 s by default); click when it turns green. An early click stays on a retry prompt. After N valid trials the mean is recorded in its own bucket.',
@@ -12379,7 +13077,7 @@ const game = new AntiBallsheetGame(
     <script>/* ============================================================
    BallSheet — survival ruleset, second game in the same shell
    ------------------------------------------------------------
-   Rules ported from dphdmn/ballsheet (the p5 build by helloimxtal),
+   Rules ported from dphdmn/ballsheet (the p5 original),
    kept 1:1 in maths, fitted to the 600 px field antiBallsheet uses:
 
      hp      starts at  cfg.hp
@@ -15463,7 +16161,7 @@ const game = new AntiBallsheetGame(
             var balls = cat.split(',')[0].trim();
             take({
                 key: 'speed', ts: runStamp(last), cat: cat,
-                title: 'BALLSHEET ' + balls,
+                title: 'antiBallsheet',
                 count: scores.length, last: last.values, pb: pbOf(cat),
                 series: scores.map(function (x) { return x.values.time; })
             });
@@ -15473,7 +16171,7 @@ const game = new AntiBallsheetGame(
         if (br.length) {
             var bl = br[br.length - 1];
             take({
-                key: 'bigball', ts: runStamp(bl), title: 'BIGBALL',
+                key: 'bigball', ts: runStamp(bl), title: 'BALLSHEET BIGBALLS',
                 count: br.length, last: bl, pb: bs.pb(),
                 bestEaten: Math.max.apply(null, br.map(function (r) { return r.eaten || 0; })),
                 series: br.map(function (r) { return r.time; })
@@ -15507,7 +16205,7 @@ const game = new AntiBallsheetGame(
         if (best) { return best; }
         var s = currentMode(), cat = modeCat(s), scores = scoresOf(cat);
         return {
-            key: 'speed', ts: 0, cat: cat, title: 'BALLSHEET ' + cat.split(',')[0].trim(),
+            key: 'speed', ts: 0, cat: cat, title: 'antiBallsheet',
             count: scores.length, last: null, pb: pbOf(cat), series: []
         };
     }
@@ -15570,7 +16268,7 @@ const game = new AntiBallsheetGame(
         try {
             if (bs) {
                 bs.runs().forEach(function (r) {
-                    if (r && num(r.time)) { add(r.t, 'BIGBALL', fmt(r.time) + T(' 秒', ' s')); }
+                    if (r && num(r.time)) { add(r.t, 'BALLSHEET BIGBALLS', fmt(r.time) + T(' 秒', ' s')); }
                 });
             }
         } catch (e) { }
@@ -15593,7 +16291,7 @@ const game = new AntiBallsheetGame(
         try {
             allCats().forEach(function (cat) {
                 var parts = String(cat).split('_');
-                var label = 'BALLSHEET ' + parts[0] + (parts[1] ? ' · ' + parts[1] + '%' : '');
+                var label = 'antiBallsheet';
                 scoresOf(cat).forEach(function (entry) {
                     var v = entry.values || {};
                     if (v && num(v.time)) { add(entry.timestamp, label, fmt(v.time) + T(' 秒', ' s')); }
@@ -15655,7 +16353,7 @@ const game = new AntiBallsheetGame(
             var s = currentMode();
             var pb = pbOf(modeCat(s));
             out.push({
-                key: 'speed', name: 'BALLSHEET',
+                key: 'speed', name: 'antiBallsheet',
                 detail: modeLabel(s),
                 pb: pb === null ? '—' : fmt(pb) + T(' 秒', ' s'),
                 color: '#5bf2dc'
@@ -15666,7 +16364,7 @@ const game = new AntiBallsheetGame(
             if (b) {
                 var bpb = bs.pb();
                 out.push({
-                    key: 'bigball', name: 'BIGBALL',
+                    key: 'bigball', name: 'BALLSHEET BIGBALLS',
                     detail: T('血量 ' + b.hp + ' · 压力 ' + b.pressure, 'HP ' + b.hp + ' · PRESSURE ' + b.pressure),
                     pb: bpb === null ? '—' : fmt(bpb) + T(' 秒', ' s'),
                     color: '#fa96c8'
@@ -15768,7 +16466,7 @@ const game = new AntiBallsheetGame(
         var last = scores.length ? scores[scores.length - 1] : null;
         var pb = pbOf(cat);
         items.push({
-            key: 'speed', name: 'BALLSHEET',
+            key: 'speed', name: 'antiBallsheet',
             last: last ? fmt(last.values.time) : '—', unit: T('秒', 's'),
             pb: pb === null ? '—' : fmt(pb) + T('秒', 's')
         });
@@ -15777,7 +16475,7 @@ const game = new AntiBallsheetGame(
         var bl = br.length ? br[br.length - 1] : null;
         var bpb = bs ? bs.pb() : null;
         items.push({
-            key: 'bigball', name: 'BIGBALL',
+            key: 'bigball', name: 'BALLSHEET BIGBALLS',
             last: bl ? fmt(bl.time) : '—', unit: T('秒', 's'),
             pb: bpb === null ? '—' : fmt(bpb) + T('秒', 's')
         });
@@ -16330,9 +17028,9 @@ const game = new AntiBallsheetGame(
     function prepInfo(mode) {
         if (mode === 'bs') {
             return {
-                kicker: T('MODE 02 / BIGBALL', 'MODE 02 / BIGBALL'),
-                name: 'BIGBALL',
-                desc: T('重心球会随血量变色。血条归零前接住尽可能多的球，溢出会化成粉色细血条。', 'The core ball shifts colour with HP. Catch as many balls as you can before HP hits zero; overflow becomes a thin pink bar.'),
+                kicker: T('MODE 02 / BALLSHEET BIGBALLS', 'MODE 02 / BALLSHEET BIGBALLS'),
+                name: 'BALLSHEET BIGBALLS',
+                desc: T('100 点血量开局；接球回血，压力随时间持续上升；血量归零结束。', 'Start with 100 HP; catches heal, pressure keeps rising, and the run ends when HP hits zero.'),
                 pill: T('生存', 'SURVIVAL'),
                 sub: T('确认当前参数，再开始', 'Check your setup, then start'),
                 hint: T('血量、压力、得分与旋转可在本页右上角齿轮或局内右下角设置里调整。', 'HP, pressure, score and spin live in the gear at the top right of this page or the settings button at the lower right in-run.')
@@ -16359,12 +17057,12 @@ const game = new AntiBallsheetGame(
             };
         }
         return {
-            kicker: T('MODE 01 / BALLSHEET', 'MODE 01 / BALLSHEET'),
-            name: 'BALLSHEET',
-            desc: T('球数、球径和光标大小沿用当前存档；碰到第一个球才开始计时。', 'Ball count, size and cursor size come from the saved setup; the clock starts on your first touch.'),
-            pill: T('经典', 'CLASSIC'),
+            kicker: T('MODE 01 / antiBallsheet', 'MODE 01 / antiBallsheet'),
+            name: 'antiBallsheet',
+            desc: T('在最短时间内接完设定数量的球，没有复杂压力公式；碰到第一个球才开始计时。', 'Catch the set number of balls in the shortest time; no complex pressure formula. The clock starts on your first touch.'),
+            pill: T('速通', 'SPRINT'),
             sub: T('确认参数，再开始', 'Check your setup, then start'),
-            hint: T('球数、球径与光标大小在局内右下角的 BALLSHEET 设置里调整。', 'Ball count, ball size and cursor size live in the BALLSHEET settings button at the lower right in-run.')
+            hint: T('球数、球径与光标大小在局内右下角的 antiBallsheet 设置里调整。', 'Ball count, size and cursor size live in the antiBallsheet settings button at the lower right in-run.')
         };
     }
 
@@ -16489,10 +17187,10 @@ const game = new AntiBallsheetGame(
     }
 
     function omsName(mode) {
-        if (mode === 'bs') { return 'BIGBALL'; }
+        if (mode === 'bs') { return 'BALLSHEET BIGBALLS'; }
         if (mode === 'st') { return T('舒尔特', 'Schulte'); }
         if (mode === 'rt') { return T('反应测试', 'Reaction'); }
-        return 'BALLSHEET';
+        return 'antiBallsheet';
     }
 
     function omsMetaItems(mode) {
@@ -16757,10 +17455,10 @@ const game = new AntiBallsheetGame(
     }
 
     function modeShort(mode) {
-        if (mode === 'bs') { return 'BIGBALL'; }
+        if (mode === 'bs') { return 'BIGBALLS'; }
         if (mode === 'st') { return T('舒尔特', 'Schulte'); }
         if (mode === 'rt') { return T('反应', 'Reaction'); }
-        return T('经典', 'Classic');
+        return T('速通', 'Speedrun');
     }
 
     function syncHudSpin() {
@@ -16769,8 +17467,8 @@ const game = new AntiBallsheetGame(
             var gm = st.game === 'abs' ? 'speed' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : 'rt'));
             var gname = omsName(gm);
             var glabel = $('#hud-mode-settings-label');
-            gear.title = gname + ' 设置';
-            gear.setAttribute('aria-label', gname + ' 设置');
+            gear.title = gname + T(' 设置', ' settings');
+            gear.setAttribute('aria-label', gname + T(' 设置', ' settings'));
             gear.setAttribute('data-mode', gm);
             if (glabel) { glabel.textContent = modeShort(gm); }
         }
@@ -16779,8 +17477,8 @@ const game = new AntiBallsheetGame(
         var mode = st.game === 'abs' ? 'abs' : (st.game === 'bs' ? 'bs' : (st.game === 'st' ? 'st' : ''));
         btn.classList.toggle('is-visible', !!mode);
         var on = mode ? spinFor(mode) : false;
-        var label = mode === 'st' ? '方格旋转' : '盘面旋转';
-        btn.textContent = label + ' · ' + (on ? '开' : '关');
+        var label = mode === 'st' ? T('方格旋转', 'Grid spin') : T('盘面旋转', 'Board spin');
+        btn.textContent = label + ' · ' + (on ? T('开', 'on') : T('关', 'off'));
         btn.classList.toggle('is-on', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     }
@@ -16793,7 +17491,7 @@ const game = new AntiBallsheetGame(
         wrap.classList.toggle('is-visible', can);
         if (!can) { return; }
         var on = sch ? !!sch.settings().lr : false;
-        btn.textContent = '左右键颜色 · ' + (on ? '开' : '关');
+        btn.textContent = T('左右键颜色', 'L/R colours') + ' · ' + (on ? T('开', 'on') : T('关', 'off'));
         btn.classList.toggle('is-on', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     }
@@ -16810,8 +17508,8 @@ const game = new AntiBallsheetGame(
         var isBs = st.game === 'bs';
         var time = bhaText('timer');
         $('#bha-time').textContent = time === '—' ? '0.00' : time;
-        $('#bha-sub').textContent = isBs ? 'BIGBALL' : '速通';
-        $('#bha-tag').textContent = isBs ? 'BIGBALL' : '速通';
+        $('#bha-sub').textContent = isBs ? 'BIGBALLS' : T('速通', 'Speedrun');
+        $('#bha-tag').textContent = isBs ? 'BIGBALLS' : T('速通', 'Speedrun');
         box.classList.toggle('is-simple', !isBs);
 
         var pb = bhaText('hud-pb');
@@ -16821,7 +17519,7 @@ const game = new AntiBallsheetGame(
         var raw = bhaText('balls-left');
         var metric = raw, suffix = '', maxHp = 100, hpNow = null, over = 0;
         if (isBs) {
-            $('#bha-metric-label').textContent = '血量';
+            $('#bha-metric-label').textContent = T('血量', 'HP');
             metric = raw.replace(/^血量\s*/, '');
             try {
                 var cfg = window.BallSheet && window.BallSheet.settings ? window.BallSheet.settings() : null;
@@ -16831,7 +17529,7 @@ const game = new AntiBallsheetGame(
             if (isFinite(hpNow) && hpNow > maxHp) { over = hpNow - maxHp; }
             suffix = '/' + Math.round(maxHp);
         } else {
-            $('#bha-metric-label').textContent = '球数';
+            $('#bha-metric-label').textContent = T('球数', 'Balls');
         }
         $('#bha-metric').textContent = metric || '—';
         $('#bha-metric-suffix').textContent = suffix;
@@ -17056,7 +17754,7 @@ const game = new AntiBallsheetGame(
         hud.classList.add('is-on');
         hud.classList.remove('is-dim');
         hudLabels('bs');
-        $('#hud-mode').textContent = 'BALLSHEET · BIGBALL';
+        $('#hud-mode').textContent = 'BALLSHEET BIGBALLS';
         var pb = bs.pb();
         $('#hud-pb').textContent = pb === null ? '最好 —' : '最好 ' + fmt(pb) + ' 秒';
         $('#hud-bar-fill').style.width = '100%';
@@ -17448,7 +18146,7 @@ const game = new AntiBallsheetGame(
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局完成';
         tag.classList.toggle('gold', isPB);
-        setResMode('BALLSHEET', game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%');
+        setResMode('antiBallsheet', game.ballToCatch + ' 球 · 球径 ' + game.ballSizeP + '%');
         setResUnit(T('秒', 's'));
         showResChart(true);
         $('#res-time').textContent = fmt(total);
@@ -17508,7 +18206,7 @@ const game = new AntiBallsheetGame(
         var tag = $('#res-tag');
         tag.textContent = isPB ? '新的个人最好' : '本局结束';
         tag.classList.toggle('gold', isPB);
-        setResMode('BALLSHEET · BIGBALL', '血量 · 每秒得分');
+        setResMode('BALLSHEET BIGBALLS', '血量 · 每秒得分');
         setResUnit(T('秒', 's'));
         showResChart(true);
         $('#res-time').textContent = fmt(run.time);
@@ -17766,7 +18464,7 @@ const game = new AntiBallsheetGame(
                 if (!s || !s.values || typeof s.values.time !== 'number' || !isFinite(s.values.time)) { return; }
                 out.push({
                     key: 'speed', cat: cat, ts: runStamp(s),
-                    label: 'BALLSHEET ' + balls,
+                    label: 'antiBallsheet',
                     detail: T(balls + ' 球 · 球径 ' + size + '%', balls + ' balls · ' + size + '% radius') +
                         (pb === null ? '' : ' · ' + feedDiff(s.values.time - pb, 2)),
                     score: fmt(s.values.time), unit: T('秒', 's'), decimals: 2,
@@ -17781,7 +18479,7 @@ const game = new AntiBallsheetGame(
             if (!r || typeof r.time !== 'number' || !isFinite(r.time)) { return; }
             out.push({
                 key: 'bigball', cat: '__BS__', ts: runStamp(r),
-                label: 'BIGBALL',
+                label: 'BALLSHEET BIGBALLS',
                 detail: T('存活 · 吃 ' + (r.eaten || 0) + ' 球', 'survival · ' + (r.eaten || 0) + ' eaten') +
                     (bpb === null ? '' : ' · ' + feedDiff(bpb - r.time, 2)),
                 score: fmt(r.time), unit: T('秒', 's'), decimals: 2,
@@ -17935,7 +18633,7 @@ const game = new AntiBallsheetGame(
         var br = bs ? bs.runs() : [];
         var sr = sch ? sch.runs() : [];
         var rr = rt ? rt.runs() : [];
-        out.push({ key: '__BS__', label: 'BALLSHEET · BIGBALL', ts: lastRunStamp(br), has: br.length > 0 });
+        out.push({ key: '__BS__', label: 'BALLSHEET BIGBALLS', ts: lastRunStamp(br), has: br.length > 0 });
         out.push({ key: '__ST__', label: T('舒尔特方格', 'SCHULTE'), ts: lastRunStamp(sr), has: sr.length > 0 });
         out.push({ key: '__RT__', label: T('反应测试', 'REACTION'), ts: lastRunStamp(rr), has: rr.length > 0 });
         out.forEach(function (e, i) { e.order = i; });
@@ -18463,7 +19161,7 @@ const game = new AntiBallsheetGame(
         var cat = $('#stats-cat').value;
         if (!cat) { return; }
         if (cat === '__BS__' && bs) {
-            if (!window.confirm(T('确定清除所有 BIGBALL 记录？', 'Clear all BIGBALL records?'))) { return; }
+            if (!window.confirm(T('确定清除所有 BALLSHEET BIGBALLS 记录？', 'Clear all BALLSHEET BIGBALLS records?'))) { return; }
             try { localStorage.removeItem('BallSheetRuns'); } catch (e) { }
             renderBsStats();
             fillCats();
@@ -19524,9 +20222,83 @@ const game = new AntiBallsheetGame(
         }, { passive: true });
     }
 
+    function initGithubMenu() {
+        var btn = $('#btn-github');
+        var menu = $('#gh-menu');
+        if (!btn || !menu) { return; }
+
+        function setOpen(open) {
+            menu.classList.toggle('is-open', !!open);
+            btn.classList.toggle('is-open', !!open);
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(!menu.classList.contains('is-open'));
+        });
+
+        menu.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('a')) { setOpen(false); }
+        });
+
+        doc.addEventListener('click', function (e) {
+            if (!menu.classList.contains('is-open')) { return; }
+            if (menu.contains(e.target) || btn.contains(e.target)) { return; }
+            setOpen(false);
+        }, true);
+
+        window.addEventListener('keydown', function (e) {
+            var open = menu.classList.contains('is-open');
+            if (open && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                var items = [].slice.call(menu.querySelectorAll('.gh-item'));
+                if (!items.length) { return; }
+                var at = items.indexOf(doc.activeElement);
+                var next = e.key === 'ArrowDown'
+                    ? (at < 0 ? 0 : (at + 1) % items.length)
+                    : (at <= 0 ? items.length - 1 : at - 1);
+                items[next].focus();
+                return;
+            }
+            if (open && (e.key === 'Enter' || e.key === ' ') &&
+                doc.activeElement && doc.activeElement.classList &&
+                doc.activeElement.classList.contains('gh-item')) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                doc.activeElement.click();
+                setOpen(false);
+                return;
+            }
+            if (e.key === 'ArrowDown' && !open && doc.activeElement === btn) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                setOpen(true);
+                var first = menu.querySelector('.gh-item');
+                if (first) { setTimeout(function () { first.focus(); }, 30); }
+                return;
+            }
+            if (e.key !== 'Escape' || !open) { return; }
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            setOpen(false);
+            btn.focus();
+        }, true);
+
+        menu.addEventListener('focusout', function (e) {
+            if (!e.relatedTarget || menu.contains(e.relatedTarget) || e.relatedTarget === btn) { return; }
+            setOpen(false);
+        });
+    }
+
     function bindUI() {
         doc.addEventListener('pointerdown', initAudio, { once: true, passive: true });
         doc.addEventListener('keydown', initAudio, { once: true });
+
+        initGithubMenu();
 
         var langBtn = $('#btn-lang');
         if (langBtn) {
@@ -19542,7 +20314,7 @@ const game = new AntiBallsheetGame(
             });
         });
 
-        $$('.pick-card', ui).forEach(function (btn) {
+        $$('.pick-hit', ui).forEach(function (btn) {
             bindTap(btn, function () {
                 var mode = btn.getAttribute('data-pick');
                 if (mode !== 'bs' && mode !== 'speed') { return; }

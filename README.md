@@ -17,7 +17,11 @@
 
 > 浏览器里的反应力训练场：速通、生存、舒尔特、反应测试，四套玩法装进一个 HTML。无需安装、无需联网，双击即玩，手机也能用。
 
-这是对 [dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet) 的非官方中文重构版：保留原作的速通手感与成绩系统，新增中文主菜单、生存模式、舒尔特方格、反应测试，以及双语、统计、主题、音效和小屏适配。
+这是对 [dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet) 的非官方中文重构版：保留原作的速通规则与成绩系统，并把 [dphdmn/ballsheet](https://github.com/dphdmn/ballsheet) p5 原版的生存规则做成 **BALLSHEET BIGBALLS**；另加舒尔特方格、反应测试、双语、统计、主题、音效和小屏适配。
+
+## 关于这个页面
+
+本 HTML 网页由 AI 编写，目的很直接：把 **antiBallsheet**（速通）、**BALLSHEET BIGBALLS**（生存）、舒尔特方格和反应测试放进同一个打开即玩的页面，省去安装和切换成本；同时把每局成绩留在本机，方便回看趋势、历史记录和 PB。界面、交互和响应式布局也按更清爽、更适合桌面与手机的方向重做。
 
 **在线试玩**：<https://kiryugit.github.io/abs-menu/>
 
@@ -31,23 +35,25 @@
 
 | 模式 | 玩法 | 主要记录 |
 | --- | --- | --- |
-| **BALLSHEET** | 固定球数，光标触球即得分，越快吃完越好；支持球数与球径调节 | 总时长、平均 / 最快 / 最慢反应、逐球曲线 |
-| **BALLSHEET · BIGBALL** | 血量随压力持续下降，吃球回血；球色严格跟随原作 `EPS − pressure` 公式 | 存活时长、吃球数、每秒得分、最高秒得分 |
+| **antiBallsheet** | 固定球数，光标触球即得分；在最短时间内接完设定数量的球，没有复杂压力公式 | 总时长、平均 / 最快 / 最慢反应、逐球曲线 |
+| **BALLSHEET BIGBALLS** | 100 HP 开局，压力按 `60 × ln(1 + t)` 持续扣血，接球回血；血量归零结束 | 存活时长、吃球数、每秒得分、最高秒得分 |
 | **舒尔特方格** | 3×3 – 10×10，14 种规则：顺序、倒序、隐藏、记忆、字母、颜色、Gorbow 等；倒计时支持 0–60000 ms 自定义 | 用时、错误数、每格均时、分尺寸 / 分规则最好 |
 | **反应测试** | 点击后才随机等待，默认 1–8 秒，可调 0.5–15 秒；屏幕变绿立即点击，支持 1–100 次，默认 5 次 | 平均、最快 / 最慢单次、有效次数、抢跑次数 |
 
 ## 界面
 
-主菜单为四个模式入口：**01 BALLSHEET**（进入第二层后选 BIGBALL 或标准 100 球）、**02 舒尔特**、**03 反应测试**、**04 灵敏度转换**；右下角固定 **数据 / 设置 / 玩法 / 关于**。桌面为 7:5 满高双栏：左栏标题、菜单与按键提示，右栏为「最近一局」焦点卡、其余模式的三行队列与单行工具 dock；高度不足时自动回退为正常滚动，不会压住页脚。≥1500px 且高度足够时 shell 放宽到 1480，并增加跨模式「最近记录」卡。
+主菜单为四个入口：**01 BALLSHEET**（进入「选一个玩法」：antiBallsheet 速通 / BALLSHEET BIGBALLS 生存）、**02 舒尔特**、**03 反应测试**、**04 灵敏度转换**；右下角固定 **数据 / 设置 / 玩法 / 关于**。桌面为 7:5 满高双栏：左栏标题、菜单与按键提示，右栏为「最近一局」焦点卡、其余模式的三行队列与单行工具 dock；高度不足时自动回退为正常滚动，不会压住页脚。≥1500px 且高度足够时 shell 放宽到 1480，并增加跨模式「最近记录」卡。
 
-hero 顶部为呼吸等化器与 **`REFLEX · LOCAL SESSION`**；下方两枚胶囊按 BALLSHEET → BIGBALL → 舒尔特 → 反应测试约每 4.2 秒轮播，显示当前参数与对应 PB，圆点和边框跟随模式色，悬停暂停。
+hero 顶部为呼吸等化器与 **`REFLEX · LOCAL SESSION`**；下方两枚胶囊按 antiBallsheet → BALLSHEET BIGBALLS → 舒尔特 → 反应测试约每 4.2 秒轮播，显示当前参数与对应 PB，圆点和边框跟随模式色，悬停暂停。
 
-右栏「最近一局」不再固定为 BALLSHEET 100，而是汇总四套存档中时间最新的一局：卡头、指标、PB 单位、差值说明与趋势标题都随模式切换；无记录时才回退当前 BALLSHEET 配置。焦点卡下方用三行常驻列出其余模式（模式名、最近成绩、PB），不再出现「任何时刻只看到一个模式」的空档；工具入口压成一条四列 dock，短横屏只显示四枚带 `title` 的图标。
+右栏「最近一局」不再固定为单一模式，而是汇总四套存档中时间最新的一局：卡头、指标、PB 单位、差值说明与趋势标题都随模式切换；无记录时才回退 antiBallsheet 配置。焦点卡下方用三行常驻列出其余模式（模式名、最近成绩、PB），不再出现「任何时刻只看到一个模式」的空档；工具入口压成一条四列 dock，短横屏只显示四枚带 `title` 的图标。
 
 | English | 设置 |
 | --- | --- |
 | <img src="gh-pages/docs/preview-english.png" width="420" alt="English menu"> | <img src="gh-pages/docs/preview-settings.png" width="420" alt="设置页"> |
 
+- **选一个玩法**：两张规则卡分别指向 **BALLSHEET BIGBALLS**（生存，`helloimxtal.github.io/ballsheet/`）与 **antiBallsheet**（速通，`github.com/dphdmn/antiBallsheet`）；卡片顶部的模式标签与右侧来源胶囊都会在新标签打开原作页面，点卡片其余区域进入对应准备页。卡面用大号编号、模式色渐变线、球体与虚线环区分两套规则，短横屏自动切成双列紧凑布局。
+- **顶栏 GitHub**：右上角 GitHub 按钮点击后展开下拉菜单，只链接三个原作仓库——`dphdmn/antiBallsheet`、`dphdmn/ballsheet`、`helloimxtal/BallSheetOGL`，不显示本仓库自己的地址。
 - **中文 / English**：顶栏 `EN` / `ZH` 一键切换，菜单、设置、HUD、结算、统计、玩法与关于同步换语言。
 - **设置集中在一个入口**：主设置只保留辅助 / 外观 / 音效三页；模式规则移到各模式准备页与局内齿轮，不再塞进全局设置。
 - **数据留在本机**：四套玩法独立存档，趋势图、历史记录、JSON 导出与清除都在「数据」页。数据页默认是**跨四模式最近流**，按时间倒序、每页 12 局，可切模式筛选并「加载更早」直到全部记录；点任意一条会进入对应**模式详情**并高亮那一局。模式详情保留 PB、均值、走势图与完整历史表（不限 12 条，表内滚动）。主菜单「最近记录」仍单独汇总最近 4 条。
@@ -110,8 +116,8 @@ pwsh -NoProfile -File .\build.ps1
 
 ## 来源与致谢
 
-- 原作：[dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet)，基于 [ballsheet](https://github.com/dphdmn/ballsheet) 的速通改版。
-- BallSheet 生存玩法与球色公式参考 [helloimxtal](https://github.com/helloimxtal) 的 p5 版 ballsheet。
+- 原作：[dphdmn/antiBallsheet](https://github.com/dphdmn/antiBallsheet)，基于 [dphdmn/ballsheet](https://github.com/dphdmn/ballsheet/) 的速通改版；速通说明采用其 README 的 “Simple Speedrun Approach” 口径。
+- BALLSHEET BIGBALLS 的生存参数与计分取自 [dphdmn/ballsheet](https://github.com/dphdmn/ballsheet/) 的 p5 原版；在线版是 [helloimxtal.github.io/ballsheet](https://helloimxtal.github.io/ballsheet/)（页面标题 “BallSheet Big Balls”），[helloimxtal/BallSheetOGL](https://github.com/helloimxtal/BallSheetOGL) 是该玩法的 C++ OpenGL 重制，本页面只作参数与手感对照，不包含其代码。
 - 舒尔特方格参考 [schulte-table.com](https://schulte-table.com/)；反应测试流程参考 [Human Benchmark](https://humanbenchmark.com/tests/reactiontime)。
 - 中文菜单、四套玩法的整合、双语层、统计与响应式界面为本仓库新增内容。
 
@@ -119,6 +125,6 @@ pwsh -NoProfile -File .\build.ps1
 
 ## 版本
 
-当前 `v0.9.4 (beta)`：hero 标识改为 `REFLEX`，模式与 PB 胶囊升级为四模式轮播；主菜单右栏改为**焦点 + 队列**——最新一局保留大卡与趋势，其余三模式压成三行常驻，数据 / 设置 / 玩法 / 关于收成右下单行 dock；数据页改为**最近流 + 模式详情**双层，最近流跨四模式倒序、可筛选、可加载到全部记录，点记录可跳转并高亮对应历史行，模式详情历史表不再截断；主菜单合并 BALLSHEET / BIGBALL 入口并新增跨模式最近记录；灵敏度页支持目标 DPI 预选与四项指标反推；反应等待范围可调 0.5–15 秒；局内齿轮、旋转与暂停改为 132px 竖排。
+当前 `v0.9.4 (beta)`：hero 标识改为 `REFLEX`，模式与 PB 胶囊升级为四模式轮播；主菜单右栏改为**焦点 + 队列**——最新一局保留大卡与趋势，其余三模式压成三行常驻，数据 / 设置 / 玩法 / 关于收成右下单行 dock；数据页改为**最近流 + 模式详情**双层，最近流跨四模式倒序、可筛选、可加载到全部记录，点记录可跳转并高亮对应历史行，模式详情历史表不再截断；主菜单合并两条 BALLSHEET 规则入口并新增跨模式最近记录；灵敏度页支持目标 DPI 预选与四项指标反推；反应等待范围可调 0.5–15 秒；局内齿轮、旋转与暂停改为 132px 竖排。主菜单 BALLSHEET 副标签改为 **BALLSHEET by dphdmn**；右上角 GitHub 改为点击展开的下拉菜单，只列出三个原作仓库。本轮「选一个玩法」页重做：生存卡命名 **BALLSHEET BIGBALLS** 并链到 `https://helloimxtal.github.io/ballsheet/`，速通卡命名 **antiBallsheet** 并链到 `https://github.com/dphdmn/antiBallsheet`；两卡采用大号编号、模式色渐变线、球体与虚线环的新卡面，点卡片进入准备页，点左上标签打开原作页面；准备页、HUD、结算、数据筛选、右栏队列、帮助与关于同步改用新名称与原作规则口径。
 
 完整版本记录见 [`gh-pages/README.md`](gh-pages/README.md#版本)。
